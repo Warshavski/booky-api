@@ -6,6 +6,10 @@ Rails.application.routes.draw do
       resources :publishers, only: [] do
         resources :shops, only: [:index]
       end
+
+      resources :shops, only: [] do
+        resources :sales, only: [:create]
+      end
     end
   end
 end
