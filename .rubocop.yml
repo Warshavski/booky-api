@@ -1,0 +1,22 @@
+#inherit_from: .rubocop_todo.yml
+AllCops:
+  Include:
+    - Rakefile
+    - config.ru
+    - lib/**/*.rake
+  Exclude:
+    - db/schema.rb
+  TargetRubyVersion: 2.4
+
+#################### Style ####################
+
+AsciiComments:
+  Description: Use only ascii symbols in comments.
+  Enabled: false
+
+AsciiIdentifiers:
+  Description: Use only ascii symbols in identifiers.
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
