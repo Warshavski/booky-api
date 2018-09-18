@@ -12,4 +12,20 @@ RSpec.describe Publisher, type: :model do
 
     it { should { have_many(:shops_with_books).through(:books_in_stock).source(:shops) } }
   end
+
+  describe '.search' do
+    let(:publisher) { create(:publisher, name: 'wat publisher') }
+
+    it 'returns publisher with a matching name' do
+      expect(described_class.search(publisher.name)).to eq([publisher])
+    end
+
+    it 'returns publisher with a partially matching name' do
+      expect(described_class.search(publisher.name[0..2])).to eq([publisher])
+    end
+
+    it 'returns publisher with a matching name regardless of the casing' do
+      expect(described_class.search(publisher.name.upcase)).to eq([publisher])
+    end
+  end
 end

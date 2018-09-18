@@ -12,4 +12,8 @@ FactoryBot.define do
       create_list(:book, evaluator.books_count, publisher: publisher)
     end
   end
+
+  factory :publisher_seq, class: Publisher, parent: :publisher do
+    sequence(:name, (1..10).cycle) { |n| "v#{n}" }
+  end
 end
