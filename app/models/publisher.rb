@@ -6,7 +6,7 @@ class Publisher < ApplicationRecord
   include Sortable
   include SQL::Pattern
 
-  has_many :books
+  has_many :books, dependent: :destroy
 
   has_many :books_in_stock, -> { in_stock },
            source: :books,

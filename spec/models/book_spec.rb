@@ -37,4 +37,20 @@ RSpec.describe Book, type: :model do
       expect(described_class.in_stock).to eq([stock_non_zero_qnt.book])
     end
   end
+
+  describe '.search' do
+    let(:book) { create(:book, title: 'wat book') }
+
+    it 'returns book with a matching title' do
+      expect(described_class.search(book.title)).to eq([book])
+    end
+
+    it 'returns book with a partially matching title' do
+      expect(described_class.search(book.title[0..2])).to eq([book])
+    end
+
+    it 'returns book with a matching title regardless of the casing' do
+      expect(described_class.search(book.title.upcase)).to eq([book])
+    end
+  end
 end

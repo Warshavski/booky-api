@@ -5,4 +5,8 @@ FactoryBot.define do
 
     association :publisher, factory: :publisher
   end
+
+  factory :book_seq, class: Book, parent: :book do
+    sequence(:title, (1..10).cycle) { |n| "v#{n}" }
+  end
 end
