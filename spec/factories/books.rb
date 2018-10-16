@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :book, class: Book do
     title { Faker::Book.title }
+    pages_count { Faker::Number.positive.to_i }
     published_at { Faker::Date.between('2018-01-01', '2018-12-31') }
 
     association :publisher, factory: :publisher

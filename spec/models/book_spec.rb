@@ -10,6 +10,12 @@ RSpec.describe Book, type: :model do
 
     it { should validate_presence_of(:published_at) }
 
+    it { should validate_presence_of(:pages_count) }
+
+    it { should validate_numericality_of(:pages_count).only_integer.is_greater_than_or_equal_to(1) }
+
+    it { should validate_numericality_of(:weight).is_greater_than_or_equal_to(0.0).allow_nil }
+
     it { should validate_length_of(:isbn_10).is_equal_to(10) }
 
     it { should validate_length_of(:isbn_13).is_equal_to(13) }

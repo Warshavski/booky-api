@@ -18,7 +18,11 @@ class Book < ApplicationRecord
   scope :order_title_asc,   -> { reorder(title: :asc) }
   scope :order_title_desc,  -> { reorder(title: :desc) }
 
-  validates :title, :publisher, :published_at, presence: true
+  validates :title, :publisher, :published_at, :pages_count, presence: true
+
+  validates :pages_count, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :weight, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true
+
 
   validates :isbn_10, length: { is: 10, allow_nil: true }
   validates :isbn_13, length: { is: 13, allow_nil: true }

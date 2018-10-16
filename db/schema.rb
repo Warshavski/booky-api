@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20181004175259) do
     t.string "isbn_13", limit: 10
     t.string "isbn_10", limit: 13
     t.date "published_at", null: false
+    t.decimal "weight"
+    t.integer "pages_count", default: 0, null: false
     t.index ["publisher_id"], name: "index_books_on_publisher_id"
   end
 
