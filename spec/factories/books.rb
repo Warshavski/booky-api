@@ -10,4 +10,8 @@ FactoryBot.define do
   factory :book_seq, class: Book, parent: :book do
     sequence(:title, (1..10).cycle) { |n| "v#{n}" }
   end
+
+  factory :book_params, class: Hash do
+    initialize_with { attributes_for(:book) }
+  end
 end
