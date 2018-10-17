@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180805133451) do
+ActiveRecord::Schema.define(version: 20181004175259) do
 
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
@@ -18,6 +18,11 @@ ActiveRecord::Schema.define(version: 20180805133451) do
     t.integer "publisher_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "isbn_13", limit: 10
+    t.string "isbn_10", limit: 13
+    t.date "published_at", null: false
+    t.decimal "weight"
+    t.integer "pages_count", default: 0, null: false
     t.index ["publisher_id"], name: "index_books_on_publisher_id"
   end
 

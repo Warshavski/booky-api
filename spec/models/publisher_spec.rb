@@ -6,7 +6,7 @@ RSpec.describe Publisher, type: :model do
   end
 
   describe 'associations' do
-    it { should { have_many(:books) } }
+    it { should { have_many(:books).dependent(:destroy) } }
 
     it { should { have_many(:books_in_shops).class_name('Book').source(:books) } }
 

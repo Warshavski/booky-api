@@ -3,7 +3,9 @@ require 'rails_helper'
 RSpec.describe PublishersFinder do
 
   describe '#execute' do
-    before { create_list(:publisher_seq, 10) }
+    before(:all) { create_list(:publisher_seq, 10) }
+
+    after(:all) { Publisher.delete_all }
 
     context 'sort only' do
       it 'sorts by recently_created' do
