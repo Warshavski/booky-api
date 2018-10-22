@@ -106,6 +106,54 @@ RSpec.describe BooksFinder do
         expect(result.first.title).to eq('v1')
         expect(result.count).to be(1)
       end
+
+      it 'filters books by author' do
+        author = create(:author)
+        books[0..4].each { |b| b.update!(authors: [author]) }
+
+        books_finder = described_class.new(author_id: author.id)
+        result = books_finder.execute
+
+        expect(result.first.title).to eq('v1')
+        expect(result.count).to be(5)
+      end
+
+      it 'filters books by author and book title' do
+        author = create(:author)
+        books[0..4].each { |b| b.update!(authors: [author]) }
+
+        books_finder = described_class.new(author_id: author.id, search: 'v3')
+        result = books_finder.execute
+
+        expect(result.first.title).to eq('v3')
+        expect(result.count).to be(1)
+      end
+
+      it 'does not finds any book by given author' do
+        author = create(:author)
+
+        books_finder = described_class.new(author_id: author.id)
+        result = books_finder.execute
+
+        expect(result.count).to be(0)
+      end
+
+      it 'does not finds any book by existed author and not existed book' do
+        author = create(:author)
+        books.sample.update!(authors: [author])
+
+        books_finder = described_class.new(author_id: author.id, search: 'wat_book')
+        result = books_finder.execute
+
+        expect(result.count).to be(0)
+      end
+
+      it 'does not finds any book by not existed author' do
+        books_finder = described_class.new(author_id: 'wat_author?')
+        result = books_finder.execute
+
+        expect(result.count).to be(0)
+      end
     end
 
     context 'filter and sort' do
@@ -150,6 +198,17 @@ RSpec.describe BooksFinder do
 
         expect(result.first.title).to eq('v10')
         expect(result.count).to be(2)
+      end
+
+      it 'filters books by author and sort by title desc' do
+        author = create(:author)
+        books[0..4].each { |b| b.update!(authors: [author]) }
+
+        books_finder = described_class.new(author_id: author.id, sort: 'title_desc')
+        result = books_finder.execute
+
+        expect(result.first.title).to eq('v5')
+        expect(result.count).to be(5)
       end
     end
   end
