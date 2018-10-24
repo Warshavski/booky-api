@@ -30,6 +30,8 @@ RSpec.describe Book, type: :model do
 
     it { should { have_and_belong_to_many(:authors) } }
 
+    it { should { have_and_belong_to_many(:genres) } }
+
     it { should { have_many(:stocks) } }
 
     it { should { have_many(:shops).through(:stocks) } }

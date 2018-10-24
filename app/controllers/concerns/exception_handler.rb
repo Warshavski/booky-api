@@ -19,6 +19,12 @@ module ExceptionHandler
       render json: { error: e.message }, status: :unprocessable_entity
     end
 
+    # Return 422 - Unprocessable Entity (on duplicate create)
+    #
+    rescue_from ActiveRecord::RecordNotUnique do |e|
+      render json: { error: e.message }, status: :unprocessable_entity
+    end
+
     # Return 400 - Bad Request
     #
     rescue_from ActionController::ParameterMissing do |e|
