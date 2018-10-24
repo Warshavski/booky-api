@@ -149,7 +149,7 @@ RSpec.describe 'Authors management', type: :request do
       end
 
       it 'returns created model' do
-        expect(JSON.parse(response.body)['data']['first_name']).to eq(author_params.dig(:author,:first_name))
+        expect(JSON.parse(response.body)['data']['first_name']).to eq(author_params.dig(:author, :first_name))
       end
     end
 
