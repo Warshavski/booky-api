@@ -154,6 +154,46 @@ RSpec.describe BooksFinder do
 
         expect(result.count).to be(0)
       end
+
+      it 'filters books by one genre' do
+        genre = create(:genre)
+        books[0..2].each { |b| b.update!(genres: [genre]) }
+
+        books_finder = described_class.new(genre_ids: [genre.id])
+        result = books_finder.execute
+
+        expect(result.count).to be(3)
+      end
+
+      it 'filters books by multiple genres' do
+        genres = create_list(:genre, 2)
+        books[0..2].each { |b| b.update!(genres: genres) }
+
+        books_finder = described_class.new(genre_ids: genres.map(&:id))
+        result = books_finder.execute
+
+        expect(result.count).to be(3)
+      end
+
+      it 'ignores non existed genre' do
+        genre = create(:genre)
+        books[0..2].each { |b| b.update!(genres: [genre]) }
+
+        books_finder = described_class.new(genre_ids: [genre.id, 0])
+        result = books_finder.execute
+
+        expect(result.count).to be(3)
+      end
+
+      it 'does not finds any book with not existed genre' do
+        genre = create(:genre)
+        books[0..2].each { |b| b.update!(genres: [genre]) }
+
+        books_finder = described_class.new(genre_ids: [0])
+        result = books_finder.execute
+
+        expect(result.count).to be(0)
+      end
     end
 
     context 'filter and sort' do

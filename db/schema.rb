@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181017192227) do
+ActiveRecord::Schema.define(version: 20181024120408) do
 
   create_table "authors", force: :cascade do |t|
     t.string "first_name", null: false
@@ -41,6 +41,19 @@ ActiveRecord::Schema.define(version: 20181017192227) do
     t.decimal "weight"
     t.integer "pages_count", default: 0, null: false
     t.index ["publisher_id"], name: "index_books_on_publisher_id"
+  end
+
+  create_table "books_genres", id: false, force: :cascade do |t|
+    t.integer "book_id", null: false
+    t.integer "genre_id", null: false
+    t.index ["book_id", "genre_id"], name: "index_books_genres_on_book_id_and_genre_id", unique: true
+    t.index ["genre_id"], name: "index_books_genres_on_genre_id"
+  end
+
+  create_table "genres", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "publishers", force: :cascade do |t|

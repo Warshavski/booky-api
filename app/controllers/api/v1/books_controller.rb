@@ -73,7 +73,7 @@ module Api
       end
 
       def filter_params
-        params.permit(:search, :sort, :isbn, :publisher_id, :publish_date)
+        params.permit(:search, :sort, :isbn, :publisher_id, :publish_date, genre_ids: [])
       end
 
       def books_params
