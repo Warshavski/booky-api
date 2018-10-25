@@ -48,7 +48,7 @@ class BooksFinder
   def filter_by_author(items)
     return items if params[:author_id].blank?
 
-    items.joins(:authors).where(authors: { id: params[:author_id] })
+    items.joins(:authors).merge(Author.where(id: params[:author_id]))
   end
 
   def filter_by_publish_date(items)
