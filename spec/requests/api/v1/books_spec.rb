@@ -24,13 +24,18 @@ RSpec.describe 'Books management', type: :request do
         expect(JSON.parse(response.body)['data'].count).to be(10)
       end
 
-      it 'returns correct data format' do
-        actual_keys = JSON.parse(response.body)['data'].first.keys
+      it 'responds with json-api format' do
+        actual_keys = body_as_json[:data].first.keys
+
+        expect(response.body).to look_like_json
+        expect(actual_keys).to match_array(%w[id type attributes])
+      end
+
+      it 'returns with correct attributes' do
+        actual_keys = body_as_json[:data].first[:attributes].keys
         expected_keys = %w[
-          id
           title
           description
-          publisher_id
           created_at
           updated_at
           isbn_13
@@ -48,8 +53,10 @@ RSpec.describe 'Books management', type: :request do
       it 'returns filtered collection by search' do
         get "#{base_url}?search=v7"
 
-        expect(JSON.parse(response.body)['data'].count).to be(1)
-        expect(JSON.parse(response.body)['data'].last['title']).to eq('v7')
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(1)
+        expect(actual_data.first[:attributes][:title]).to eq('v7')
       end
 
       it 'returns filtered collection by isbn' do
@@ -58,8 +65,10 @@ RSpec.describe 'Books management', type: :request do
 
         get "#{base_url}?isbn=1234567890"
 
-        expect(JSON.parse(response.body)['data'].count).to be(1)
-        expect(JSON.parse(response.body)['data'].last['title']).to eq(book.title)
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(1)
+        expect(actual_data.last[:attributes][:title]).to eq(book.title)
       end
 
       it 'returns filtered collection by isbn' do
@@ -68,10 +77,10 @@ RSpec.describe 'Books management', type: :request do
 
         get "#{base_url}?publisher_id=#{new_publisher.id}"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(1)
-        expect(actual_data.last['title']).to eq(book.title)
+        expect(actual_data.last[:attributes][:title]).to eq(book.title)
       end
 
       it 'returns filtered collection by exact publish date' do
@@ -79,10 +88,10 @@ RSpec.describe 'Books management', type: :request do
 
         get "#{base_url}?publish_date=2016-10-06"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(1)
-        expect(actual_data.first['title']).to eq('v1')
+        expect(actual_data.first[:attributes][:title]).to eq('v1')
       end
 
       it 'returns filtered collection by publish year' do
@@ -91,10 +100,10 @@ RSpec.describe 'Books management', type: :request do
 
         get "#{base_url}?publish_date=2000"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(2)
-        expect(actual_data.first['title']).to eq('v1')
+        expect(actual_data.first[:attributes][:title]).to eq('v1')
       end
 
       it 'returns filtered collection by genre' do
@@ -103,10 +112,10 @@ RSpec.describe 'Books management', type: :request do
 
         get "#{base_url}?genre_ids[]=#{genre.id}"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(1)
-        expect(actual_data.first['title']).to eq('v1')
+        expect(actual_data.first[:attributes][:title]).to eq('v1')
       end
 
       it 'returns filtered collection by multiple genres' do
@@ -116,16 +125,16 @@ RSpec.describe 'Books management', type: :request do
 
         get "#{base_url}?#{genres.map { |g| "genre_ids[]=#{g.id}" }.join('&')}"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(2)
-        expect(actual_data.first['title']).to eq('v1')
+        expect(actual_data.first[:attributes][:title]).to eq('v1')
       end
 
       it 'returns empty collection on not existed genre' do
         get "#{base_url}?genre_ids[]=0"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(0)
       end
@@ -135,25 +144,25 @@ RSpec.describe 'Books management', type: :request do
       it 'returns sorted collection by recently_created' do
         get "#{base_url}?sort=created_asc"
 
-        expect(JSON.parse(response.body)['data'].last['title']).to eq('v10')
+        expect(body_as_json[:data].last[:attributes][:title]).to eq('v10')
       end
 
       it 'returns sorted collection by last_created' do
         get "#{base_url}?sort=created_desc"
 
-        expect(JSON.parse(response.body)['data'].last['title']).to eq('v1')
+        expect(body_as_json[:data].last[:attributes][:title]).to eq('v1')
       end
 
       it 'returns sorted collection by name ascending' do
         get "#{base_url}?sort=title_asc"
 
-        expect(JSON.parse(response.body)['data'].last['title']).to eq('v9')
+        expect(body_as_json[:data].last[:attributes][:title]).to eq('v9')
       end
 
       it 'returns sorted collection by name descending' do
         get "#{base_url}?sort=title_desc"
 
-        expect(JSON.parse(response.body)['data'].last['title']).to eq('v1')
+        expect(body_as_json[:data].last[:attributes][:title]).to eq('v1')
       end
     end
 
@@ -161,37 +170,37 @@ RSpec.describe 'Books management', type: :request do
       it 'filters books by title and sorts by recently_created' do
         get "#{base_url}?sort=created_desc&search=v"
 
-        result = JSON.parse(response.body)['data']
+        result = body_as_json[:data]
 
         expect(result.count).to be(10)
-        expect(result.last['title']).to eq('v1')
+        expect(result.last[:attributes][:title]).to eq('v1')
       end
 
       it 'filters books by title and sorts by last_created' do
         get "#{base_url}?sort=created_asc&search=v"
 
-        result = JSON.parse(response.body)['data']
+        result = body_as_json[:data]
 
         expect(result.count).to be(10)
-        expect(result.last['title']).to eq('v10')
+        expect(result.last[:attributes][:title]).to eq('v10')
       end
 
       it 'filters books by title and sorts by title descending' do
         get "#{base_url}?sort=title_desc&search=v"
 
-        result = JSON.parse(response.body)['data']
+        result = body_as_json[:data]
 
         expect(result.count).to be(10)
-        expect(result.first['title']).to eq('v9')
+        expect(result.first[:attributes][:title]).to eq('v9')
       end
 
       it 'filters books by title and sorts by title ascending' do
         get "#{base_url}?sort=title_asc&search=v"
 
-        result = JSON.parse(response.body)['data']
+        result = body_as_json[:data]
 
         expect(result.count).to be(10)
-        expect(result.first['title']).to eq('v1')
+        expect(result.first[:attributes][:title]).to eq('v1')
       end
 
       it 'filters books by publish year and sort by title desc' do
@@ -200,10 +209,10 @@ RSpec.describe 'Books management', type: :request do
 
         get "#{base_url}?sort=title_desc&publish_date=2000"
 
-        result = JSON.parse(response.body)['data']
+        result = body_as_json[:data]
 
         expect(result.count).to be(2)
-        expect(result.first['title']).to eq('v10')
+        expect(result.first[:attributes][:title]).to eq('v10')
       end
     end
   end
@@ -215,18 +224,23 @@ RSpec.describe 'Books management', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    it 'responds with json-api format' do
+      actual_keys = body_as_json[:data].keys
+
+      expect(response.body).to look_like_json
+      expect(actual_keys).to match_array(%w[id type attributes])
+    end
+
     it 'returns correct data format' do
-      actual_keys = JSON.parse(response.body)['data'].keys
+      actual_keys = body_as_json[:data][:attributes].keys
       expected_keys = %w[
-        id
         title
         description
-        publisher_id
+        published_at
         created_at
         updated_at
         isbn_13
         isbn_10
-        published_at
         weight
         pages_count
       ]
@@ -235,7 +249,7 @@ RSpec.describe 'Books management', type: :request do
     end
 
     it 'returns correct expected data' do
-      expect(JSON.parse(response.body)['data']['title']).to eq(book.title)
+      expect(body_as_json[:data][:attributes][:title]).to eq(book.title)
     end
 
     context 'requests with errors' do
@@ -254,18 +268,23 @@ RSpec.describe 'Books management', type: :request do
       expect(response).to have_http_status(:created)
     end
 
-    it 'responds with a correct model format' do
-      actual_keys = JSON.parse(response.body)['data'].keys
+    it 'responds with json-api format' do
+      actual_keys = body_as_json[:data].keys
+
+      expect(response.body).to look_like_json
+      expect(actual_keys).to match_array(%w[id type attributes])
+    end
+
+    it 'returns correct data format' do
+      actual_keys = body_as_json[:data][:attributes].keys
       expected_keys = %w[
-        id
         title
         description
-        publisher_id
+        published_at
         created_at
         updated_at
         isbn_13
         isbn_10
-        published_at
         weight
         pages_count
       ]
@@ -274,7 +293,7 @@ RSpec.describe 'Books management', type: :request do
     end
 
     it 'returns created model' do
-      expect(JSON.parse(response.body)['data']['title']).to eq(book_params[:title])
+      expect(body_as_json[:data][:attributes][:title]).to eq(book_params[:title])
     end
 
     context 'book presence' do

@@ -3,6 +3,7 @@
 #   Used as base controller
 #
 class ApplicationController < ActionController::API
+  include Responder
   include ExceptionHandler
 
   before_action :set_content_type

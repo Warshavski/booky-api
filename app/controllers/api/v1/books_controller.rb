@@ -6,6 +6,8 @@ module Api
     #
     class BooksController < ApplicationController
 
+      set_default_serializer BookSerializer
+
       # GET : api/v1/books
       #
       # Get a list of the books
@@ -13,7 +15,7 @@ module Api
       def index
         books = filter_books(filter_params)
 
-        render json: { data: books }, status: :ok
+        render_json books, is_collection: true, status: :ok
       end
 
       # GET : api/v1/books/{:id}
@@ -24,7 +26,7 @@ module Api
         book = filter_books.find_by(id: params[:id])
 
         process_record(book) do |b|
-          render json: { data: b }, status: :ok
+          render_json b, status: :ok
         end
       end
 
@@ -35,7 +37,7 @@ module Api
       def create
         book = Book.create!(books_params)
 
-        render json: { data: book }, status: :created
+        render_json book, status: :created
       end
 
       # PATCH/PUT : api/v1/books/{:id}

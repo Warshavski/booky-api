@@ -19,12 +19,17 @@ RSpec.describe 'Authors management', type: :request do
       end
 
       it 'returns correct quantity' do
-        expect(JSON.parse(response.body)['data'].count).to be(10)
+        expect(body_as_json[:data].count).to be(10)
       end
 
-      it 'returns correct data format' do
-        actual_keys = JSON.parse(response.body)['data'].first.keys
-        expected_keys = %w[id biography first_name last_name born_in died_in created_at updated_at]
+      it 'responds with json-api format' do
+        expect(response.body).to look_like_json
+        expect(body_as_json[:data].first.keys).to match_array(%w[id type attributes])
+      end
+
+      it 'returns correct attributes collection' do
+        actual_keys = body_as_json[:data].first[:attributes].keys
+        expected_keys = %w[biography first_name last_name born_in died_in created_at updated_at]
 
         expect(actual_keys).to match_array(expected_keys)
       end
@@ -36,28 +41,28 @@ RSpec.describe 'Authors management', type: :request do
       it 'returns filtered collection by search' do
         get "#{base_url}?search=ln-v7"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(1)
-        expect(actual_data.last['last_name']).to eq('ln-v7')
+        expect(actual_data.last[:attributes][:last_name]).to eq('ln-v7')
       end
 
       it 'returns filtered collection by book' do
         get "#{base_url}?book_id=#{book.id}"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(3)
-        expect(actual_data.last['last_name']).to eq('ln-v3')
+        expect(actual_data.last[:attributes][:last_name]).to eq('ln-v3')
       end
 
       it 'returns filtered collection by book and search' do
         get "#{base_url}?book_id=#{book.id}&search=ln-v2"
 
-        actual_data = JSON.parse(response.body)['data']
+        actual_data = body_as_json[:data]
 
         expect(actual_data.count).to be(1)
-        expect(actual_data.first['last_name']).to eq('ln-v2')
+        expect(actual_data.first[:attributes][:last_name]).to eq('ln-v2')
       end
     end
 
@@ -65,37 +70,37 @@ RSpec.describe 'Authors management', type: :request do
       it 'returns sorted collection by recently_created' do
         get "#{base_url}?sort=created_asc"
 
-        expect(JSON.parse(response.body)['data'].last['first_name']).to eq('fn-v10')
+        expect(body_as_json[:data].last[:attributes][:first_name]).to eq('fn-v10')
       end
 
       it 'returns sorted collection by last_created' do
         get "#{base_url}?sort=created_desc"
 
-        expect(JSON.parse(response.body)['data'].last['first_name']).to eq('fn-v1')
+        expect(body_as_json[:data].last[:attributes][:first_name]).to eq('fn-v1')
       end
 
       it 'returns sorted collection by first_name ascending' do
         get "#{base_url}?sort=first_name_asc"
 
-        expect(JSON.parse(response.body)['data'].last['first_name']).to eq('fn-v9')
+        expect(body_as_json[:data].last[:attributes][:first_name]).to eq('fn-v9')
       end
 
       it 'returns sorted collection by first_name descending' do
         get "#{base_url}?sort=first_name_desc"
 
-        expect(JSON.parse(response.body)['data'].last['first_name']).to eq('fn-v1')
+        expect(body_as_json[:data].last[:attributes][:first_name]).to eq('fn-v1')
       end
 
       it 'returns sorted collection by last_name ascending' do
         get "#{base_url}?sort=last_name_asc"
 
-        expect(JSON.parse(response.body)['data'].last['last_name']).to eq('ln-v9')
+        expect(body_as_json[:data].last[:attributes][:last_name]).to eq('ln-v9')
       end
 
       it 'returns sorted collection by last_name descending' do
         get "#{base_url}?sort=last_name_desc"
 
-        expect(JSON.parse(response.body)['data'].last['last_name']).to eq('ln-v1')
+        expect(body_as_json[:data].last[:attributes][:last_name]).to eq('ln-v1')
       end
     end
   end
@@ -109,14 +114,14 @@ RSpec.describe 'Authors management', type: :request do
       end
 
       it 'returns correct data format' do
-        actual_keys = JSON.parse(response.body)['data'].keys
-        expected_keys = %w[id biography first_name last_name born_in died_in created_at updated_at]
+        actual_keys = body_as_json[:data][:attributes].keys
+        expected_keys = %w[biography first_name last_name born_in died_in created_at updated_at]
 
         expect(actual_keys).to match_array(expected_keys)
       end
 
       it 'returns correct expected data' do
-        expect(JSON.parse(response.body)['data']['last_name']).to eq(author.last_name)
+        expect(body_as_json[:data][:attributes][:last_name]).to eq(author.last_name)
       end
     end
 
@@ -142,14 +147,14 @@ RSpec.describe 'Authors management', type: :request do
       end
 
       it 'responds with a correct model format' do
-        actual_keys = JSON.parse(response.body)['data'].keys
-        expected_keys = %w[id biography first_name last_name born_in died_in created_at updated_at]
+        actual_keys = body_as_json[:data][:attributes].keys
+        expected_keys = %w[biography first_name last_name born_in died_in created_at updated_at]
 
         expect(actual_keys).to match_array(expected_keys)
       end
 
       it 'returns created model' do
-        expect(JSON.parse(response.body)['data']['first_name']).to eq(author_params.dig(:author, :first_name))
+        expect(body_as_json[:data][:attributes][:first_name]).to eq(author_params.dig(:author, :first_name))
       end
     end
 

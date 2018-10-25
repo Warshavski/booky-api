@@ -6,6 +6,8 @@ module Api
     #
     class PublishersController < ApplicationController
 
+      set_default_serializer PublisherSerializer
+
       # GET : api/v1/publishers
       #
       # Get a list of publishers
@@ -13,7 +15,7 @@ module Api
       def index
         publishers = filter_publishers(filter_params)
 
-        render json: { data: publishers }, status: :ok
+        render_json publishers, is_collection: true, status: :ok
       end
 
       # GET : api/v1/publishers/{:id}
@@ -24,7 +26,7 @@ module Api
         publisher = filter_publishers.find_by(id: params[:id])
 
         process_record(publisher) do |p|
-          render json: { data: p }, status: :ok
+          render_json p, status: :ok
         end
       end
 
@@ -35,7 +37,7 @@ module Api
       def create
         publisher = Publisher.create!(publishers_params)
 
-        render json: { data: publisher }, status: :created
+        render_json publisher, status: :created
       end
 
       # PATCH/PUT : api/v1/publishers/{:id}
