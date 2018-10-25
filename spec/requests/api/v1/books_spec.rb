@@ -96,6 +96,39 @@ RSpec.describe 'Books management', type: :request do
         expect(actual_data.count).to be(2)
         expect(actual_data.first['title']).to eq('v1')
       end
+
+      it 'returns filtered collection by genre' do
+        genre = create(:genre)
+        books.first.update!(genres: [genre])
+
+        get "#{base_url}?genre_ids[]=#{genre.id}"
+
+        actual_data = JSON.parse(response.body)['data']
+
+        expect(actual_data.count).to be(1)
+        expect(actual_data.first['title']).to eq('v1')
+      end
+
+      it 'returns filtered collection by multiple genres' do
+        genres = create_list(:genre, 2)
+        books.first.update!(genres: [genres.first])
+        books.last.update!(genres: [genres.last])
+
+        get "#{base_url}?#{genres.map { |g| "genre_ids[]=#{g.id}" }.join('&')}"
+
+        actual_data = JSON.parse(response.body)['data']
+
+        expect(actual_data.count).to be(2)
+        expect(actual_data.first['title']).to eq('v1')
+      end
+
+      it 'returns empty collection on not existed genre' do
+        get "#{base_url}?genre_ids[]=0"
+
+        actual_data = JSON.parse(response.body)['data']
+
+        expect(actual_data.count).to be(0)
+      end
     end
 
     context 'sorted books collection' do

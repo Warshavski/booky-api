@@ -14,12 +14,13 @@ class BooksFinder
 
   # @param [Hash] params (optional, default: {}) filter and sort parameters
   #
-  # @option params [Integer]   :publisher_id   Publisher identity
-  # @option params [Integer]   :author_id      Book author identity
-  # @option params [String]    :publish_date   Date when book was published(year or exact date)
-  # @option params [String]    :search         Search pattern(part of the name)
-  # @option params [String]    :isbn           The International Standard Book Number (ISBN)
-  # @option params [String]    :sort           Sort type(attribute and sort direction)
+  # @option params [Integer]        :publisher_id   Publisher identity
+  # @option params [Integer]        :author_id      Book author identity
+  # @option params [Array<Integer>] :genre_ids      Collection of genre identities
+  # @option params [String]         :publish_date   Date when book was published(year or exact date)
+  # @option params [String]         :search         Search pattern(part of the name)
+  # @option params [String]         :isbn           The International Standard Book Number (ISBN)
+  # @option params [String]         :sort           Sort type(attribute and sort direction)
   #
   def initialize(params = {})
     @params = params
@@ -30,6 +31,7 @@ class BooksFinder
 
     collection = filter_by_publisher(collection)
     collection = filter_by_author(collection)
+    collection = filter_by_genre(collection)
 
     collection = filter_by_publish_date(collection)
 
@@ -49,6 +51,12 @@ class BooksFinder
     return items if params[:author_id].blank?
 
     items.joins(:authors).where(authors: { id: params[:author_id] })
+  end
+
+  def filter_by_genre(items)
+    return items if params[:genre_ids].blank?
+
+    items.joins(:genres).merge(Genre.where(id: params[:genre_ids])).distinct
   end
 
   def filter_by_publish_date(items)
