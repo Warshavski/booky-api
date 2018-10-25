@@ -23,7 +23,7 @@ module Api
       def show
         book = filter_books.find_by(id: params[:id])
 
-        execute_action(book) do |b|
+        process_record(book) do |b|
           render json: { data: b }, status: :ok
         end
       end
@@ -45,7 +45,7 @@ module Api
       def update
         book = filter_books.find_by(id: params[:id])
 
-        execute_action(book) do |p|
+        process_record(book) do |p|
           p.update!(books_params)
 
           head :no_content
@@ -59,7 +59,7 @@ module Api
       def destroy
         book = filter_books.find_by(id: params[:id])
 
-        execute_action(book) do |p|
+        process_record(book) do |p|
           p.destroy!
 
           head :no_content
@@ -72,26 +72,14 @@ module Api
         BooksFinder.new(filters).execute
       end
 
-      def filter_params
-        params.permit(:search, :sort, :isbn, :publisher_id, :publish_date, genre_ids: [])
+      def specific_filters
+        [:isbn, :publisher_id, :publish_date, genre_ids: []]
       end
 
       def books_params
         params
           .require(:book)
           .permit(:title, :description, :published_at, :isbn_10, :isbn_13, :publisher_id, :weight, :pages_count)
-      end
-
-      def execute_action(book)
-        if book.nil?
-          render_not_found
-        else
-          yield(book)
-        end
-      end
-
-      def render_not_found
-        render json: { error: 'Book not found' }, status: :not_found
       end
     end
   end
