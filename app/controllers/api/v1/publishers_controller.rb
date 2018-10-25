@@ -23,7 +23,7 @@ module Api
       def show
         publisher = filter_publishers.find_by(id: params[:id])
 
-        execute_action(publisher) do |p|
+        process_record(publisher) do |p|
           render json: { data: p }, status: :ok
         end
       end
@@ -45,7 +45,7 @@ module Api
       def update
         publisher = filter_publishers.find_by(id: params[:id])
 
-        execute_action(publisher) do |p|
+        process_record(publisher) do |p|
           p.update!(publishers_params)
 
           head :no_content
@@ -59,7 +59,7 @@ module Api
       def destroy
         publisher = filter_publishers.find_by(id: params[:id])
 
-        execute_action(publisher) do |p|
+        process_record(publisher) do |p|
           p.destroy!
 
           head :no_content
@@ -72,24 +72,8 @@ module Api
         PublishersFinder.new(filters).execute
       end
 
-      def filter_params
-        params.permit(:search, :sort)
-      end
-
       def publishers_params
         params.require(:publisher).permit(:name, :description, :email, :phone, :address, :postcode)
-      end
-
-      def execute_action(publisher)
-        if publisher.nil?
-          render_not_found
-        else
-          yield(publisher)
-        end
-      end
-
-      def render_not_found
-        render json: { error: 'Publisher not found' }, status: :not_found
       end
     end
   end

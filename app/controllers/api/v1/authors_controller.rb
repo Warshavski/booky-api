@@ -23,7 +23,7 @@ module Api
       def show
         author = filter_authors.find_by(id: params[:id])
 
-        execute_action(author) do |p|
+        process_record(author) do |p|
           render json: { data: p }, status: :ok
         end
       end
@@ -45,7 +45,7 @@ module Api
       def update
         author = filter_authors.find_by(id: params[:id])
 
-        execute_action(author) do |p|
+        process_record(author) do |p|
           p.update!(authors_params)
 
           head :no_content
@@ -59,7 +59,7 @@ module Api
       def destroy
         author = filter_authors.find_by(id: params[:id])
 
-        execute_action(author) do |p|
+        process_record(author) do |p|
           p.destroy!
 
           head :no_content
@@ -72,24 +72,12 @@ module Api
         AuthorsFinder.new(filters).execute
       end
 
-      def filter_params
-        params.permit(:search, :sort, :book_id)
+      def specific_filters
+        [:book_id]
       end
 
       def authors_params
         params.require(:author).permit(:last_name, :first_name, :biography, :born_in, :died_id)
-      end
-
-      def execute_action(author)
-        if author.nil?
-          render_not_found
-        else
-          yield(author)
-        end
-      end
-
-      def render_not_found
-        render json: { error: 'Author not found' }, status: :not_found
       end
     end
   end
