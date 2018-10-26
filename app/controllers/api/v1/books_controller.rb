@@ -6,11 +6,27 @@ module Api
     #
     class BooksController < ApplicationController
 
-      set_default_serializer BookSerializer
+      set_default_serializer Books::CoreSerializer
 
       # GET : api/v1/books
       #
-      # Get a list of the books
+      #   optional query parameters :
+      #
+      #     - standard filters (@see filter_params)
+      #
+      #     - isbn          filter by The International Standard Book Number (ISBN)
+      #                       example: ?isbn=1234567890
+      #
+      #     - publisher_id  filter by publisher
+      #                       example: ?publisher_id=1
+      #
+      #     - publish_date  filter by publish date(filter by year or by specific date)
+      #                       example: ?publish_date=2018  |  ?publish_date=2018-10-29
+      #
+      #     - genre_ids     filter by genres
+      #                       example: ?genre_ids[]=1&genre_ids[]=2
+      #
+      # Get a list of the books (books preview)
       #
       def index
         books = filter_books(filter_params)
@@ -23,10 +39,15 @@ module Api
       # Get a specific book identified by id (detailed info)
       #
       def show
-        book = filter_books.find_by(id: params[:id])
+        book = filter_books
+                 .preload(:authors, :genres)
+                 .find_by(id: params[:id])
 
-        process_record(book) do |b|
-          render_json b, status: :ok
+        process_record(book) do |book_record|
+          render_json book_record,
+                      serializer: Books::DetailedSerializer,
+                      include: %i[authors genres],
+                      status: :ok
         end
       end
 
@@ -47,8 +68,8 @@ module Api
       def update
         book = filter_books.find_by(id: params[:id])
 
-        process_record(book) do |p|
-          p.update!(books_params)
+        process_record(book) do |book_record|
+          book_record.update!(books_params)
 
           head :no_content
         end
@@ -61,8 +82,8 @@ module Api
       def destroy
         book = filter_books.find_by(id: params[:id])
 
-        process_record(book) do |p|
-          p.destroy!
+        process_record(book) do |book_record|
+          book_record.destroy!
 
           head :no_content
         end

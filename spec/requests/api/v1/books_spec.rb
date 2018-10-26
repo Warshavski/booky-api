@@ -224,11 +224,21 @@ RSpec.describe 'Books management', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    it 'responds with root json-api keys' do
+      expect(body_as_json.keys).to match_array(%w[data included])
+    end
+
     it 'responds with json-api format' do
       actual_keys = body_as_json[:data].keys
 
       expect(response.body).to look_like_json
-      expect(actual_keys).to match_array(%w[id type attributes])
+      expect(actual_keys).to match_array(%w[id type attributes relationships])
+    end
+
+    it 'responds with correct relationships' do
+      actual_keys = body_as_json[:data][:relationships].keys
+
+      expect(actual_keys).to match_array(%w[authors genres])
     end
 
     it 'returns correct data format' do
