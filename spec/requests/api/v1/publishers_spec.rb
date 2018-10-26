@@ -13,23 +13,24 @@ RSpec.describe 'Publishers management', type: :request do
     before { create_list(:publisher_seq, 10) }
 
     context 'unsorted publishers collection' do
-      it 'responds with a 200 status' do
-        get base_url
+      before(:each) { get base_url }
 
+      it 'responds with a 200 status' do
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns correct quantity' do
-        get base_url
-
-        expect(JSON.parse(response.body)['data'].count).to eq(10)
+        expect(body_as_json[:data].count).to be(10)
       end
 
-      it 'returns correct data format' do
-        get base_url
+      it 'responds with json-api format' do
+        expect(response.body).to look_like_json
+        expect(body_as_json[:data].first.keys).to match_array(%w[id type attributes])
+      end
 
-        actual_keys = JSON.parse(response.body)['data'].first.keys
-        expected_keys = %w[id name description phone address email postcode created_at updated_at]
+      it 'responds with a correct attributes collection' do
+        actual_keys = body_as_json[:data].first[:attributes].keys
+        expected_keys = %w[name description phone address email postcode created_at updated_at]
 
         expect(actual_keys).to match_array(expected_keys)
       end
@@ -39,8 +40,8 @@ RSpec.describe 'Publishers management', type: :request do
       it 'returns filtered collection by search' do
         get "#{base_url}?search=v7"
 
-        expect(JSON.parse(response.body)['data'].count).to eq(1)
-        expect(JSON.parse(response.body)['data'].last['name']).to eq('v7')
+        expect(body_as_json[:data].count).to eq(1)
+        expect(body_as_json[:data].last[:attributes][:name]).to eq('v7')
       end
     end
 
@@ -48,138 +49,150 @@ RSpec.describe 'Publishers management', type: :request do
       it 'returns sorted collection by recently_created' do
         get "#{base_url}?sort=created_asc"
 
-        expect(JSON.parse(response.body)['data'].last['name']).to eq('v10')
+        expect(body_as_json[:data].last[:attributes][:name]).to eq('v10')
       end
 
       it 'returns sorted collection by last_created' do
         get "#{base_url}?sort=created_desc"
 
-        expect(JSON.parse(response.body)['data'].last['name']).to eq('v1')
+        expect(body_as_json[:data].last[:attributes][:name]).to eq('v1')
       end
 
       it 'returns sorted collection by name ascending' do
         get "#{base_url}?sort=name_asc"
 
-        expect(JSON.parse(response.body)['data'].last['name']).to eq('v9')
+        expect(body_as_json[:data].last[:attributes][:name]).to eq('v9')
       end
 
       it 'returns sorted collection by name descending' do
         get "#{base_url}?sort=name_desc"
 
-        expect(JSON.parse(response.body)['data'].last['name']).to eq('v1')
+        expect(body_as_json[:data].last[:attributes][:name]).to eq('v1')
       end
     end
   end
 
   describe 'GET #show' do
-    it 'responds with a 200 status' do
-      get publisher_url
+    context 'valid request' do
+      before(:each) { get publisher_url }
 
-      expect(response).to have_http_status(:ok)
+      it 'responds with a 200 status' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'responds with json-api format' do
+        expect(response.body).to look_like_json
+        expect(body_as_json[:data].keys).to match_array(%w[id type attributes])
+      end
+
+      it 'responds with a correct attributes collection' do
+        actual_keys = body_as_json[:data][:attributes].keys
+        expected_keys = %w[name description phone address email postcode created_at updated_at]
+
+        expect(actual_keys).to match_array(expected_keys)
+      end
+
+      it 'returns correct expected data' do
+        expect(body_as_json[:data][:attributes][:name]).to eq(publisher.name)
+      end
     end
 
-    it 'returns correct data format' do
-      get publisher_url
+    context 'invalid request' do
+      it 'returns 404 response on not existed publisher' do
+        get "#{base_url}/wat_publisher?"
 
-      actual_keys = JSON.parse(response.body)['data'].keys
-      expected_keys = %w[id name description phone address email postcode created_at updated_at]
-
-      expect(actual_keys).to match_array(expected_keys)
-    end
-
-    it 'returns correct expected data' do
-      get publisher_url
-
-      expect(JSON.parse(response.body)['data']['name']).to eq(publisher.name)
-    end
-
-    it 'returns 404 response on not existed publisher' do
-      get "#{base_url}/wat_publisher?"
-
-      expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
   describe 'POST #create' do
-    it 'responds with a 201 status' do
-      post base_url, params: publisher_params
+    context 'valid request parameters' do
+      before(:each) { post base_url, params: publisher_params }
 
-      expect(response).to have_http_status(:created)
+      it 'responds with a 201 status' do
+        expect(response).to have_http_status(:created)
+      end
+
+      it 'responds with json-api format' do
+        expect(response.body).to look_like_json
+        expect(body_as_json[:data].keys).to match_array(%w[id type attributes])
+      end
+
+      it 'responds with a correct attributes collection' do
+        actual_keys = body_as_json[:data][:attributes].keys
+        expected_keys = %w[name description phone address email postcode created_at updated_at]
+
+        expect(actual_keys).to match_array(expected_keys)
+      end
+
+      it 'returns created model' do
+        expect(body_as_json[:data][:attributes][:name]).to eq('some publisher')
+      end
     end
 
-    it 'responds with a correct model format' do
-      post base_url, params: publisher_params
+    context 'invalid request parameters' do
+      it 'responds with a 400 status on not presented params' do
+        post base_url, params: nil
 
-      actual_keys = JSON.parse(response.body)['data'].keys
-      expected_keys = %w[id name description phone address email postcode created_at updated_at]
+        expect(response).to have_http_status(:bad_request)
+      end
 
-      expect(actual_keys).to match_array(expected_keys)
+      it 'responds with a 400 status on not request without params' do
+        post base_url
+
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it 'responds with a 422 status on invalid params' do
+        post base_url, params: { publisher: { name: nil } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
 
-    it 'returns created model' do
-      post base_url, params: publisher_params
-
-      expect(JSON.parse(response.body)['data']['name']).to eq('some publisher')
-    end
-
-    it 'responds with a 400 status on not presented params' do
-      post base_url, params: nil
-
-      expect(response).to have_http_status(:bad_request)
-    end
-
-    it 'responds with a 400 status on not request without params' do
-      post base_url
-
-      expect(response).to have_http_status(:bad_request)
-    end
-
-    it 'responds with a 422 status on invalid params' do
-      post base_url, params: { publisher: { name: nil } }
-
-      expect(response).to have_http_status(:unprocessable_entity)
-    end
-
-    it 'creates a model' do
-      expect { post base_url, params: publisher_params }.to change(Publisher, :count).by(1)
+    context 'publisher presence' do
+      it { expect { post base_url, params: publisher_params }.to change(Publisher, :count).by(1) }
     end
   end
 
   describe 'PUT #update' do
-    it 'responds with a 204 status' do
-      put publisher_url, params: publisher_params
+    context 'valid request parameters' do
+      before(:each) { put publisher_url, params: publisher_params }
 
-      expect(response).to have_http_status(:no_content)
+      it 'responds with a 204 status' do
+        expect(response).to have_http_status(:no_content)
+      end
+
+      it 'updates a model' do
+        expect(publisher.reload.name).to eq('some publisher')
+      end
     end
 
-    it 'responds with a 404 status not existed publisher' do
-      put "#{base_url}/wat_publisher?", params: publisher_params
+    context 'invalid request parameters' do
+      it 'responds with a 404 status not existed publisher' do
+        put "#{base_url}/wat_publisher?", params: publisher_params
 
-      expect(response).to have_http_status(:not_found)
-    end
+        expect(response).to have_http_status(:not_found)
+      end
 
-    it 'responds with a 400 status on request with empty params' do
-      put publisher_url, params: nil
+      it 'responds with a 400 status on request with empty params' do
+        put publisher_url, params: nil
 
-      expect(response).to have_http_status(:bad_request)
-    end
+        expect(response).to have_http_status(:bad_request)
+      end
 
-    it 'responds with a 400 status on request without params' do
-      put publisher_url
+      it 'responds with a 400 status on request without params' do
+        put publisher_url
 
-      expect(response).to have_http_status(:bad_request)
-    end
+        expect(response).to have_http_status(:bad_request)
+      end
 
-    it 'responds with a 422 status on request with not valid params' do
-      put publisher_url, params: { publisher: { name: nil } }
+      it 'responds with a 422 status on request with not valid params' do
+        put publisher_url, params: { publisher: { name: nil } }
 
-      expect(response).to have_http_status(:unprocessable_entity)
-    end
-
-    it 'updates a model' do
-      put publisher_url, params: publisher_params
-
-      expect(publisher.reload.name).to eq('some publisher')
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
   end
 

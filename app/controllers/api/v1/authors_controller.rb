@@ -6,6 +6,8 @@ module Api
     #
     class AuthorsController < ApplicationController
 
+      set_default_serializer AuthorSerializer
+
       # GET : api/v1/authors
       #
       # Get a list of authors
@@ -13,7 +15,7 @@ module Api
       def index
         authors = filter_authors(filter_params)
 
-        render json: { data: authors }, status: :ok
+        render_json authors, is_collection: true, status: :ok
       end
 
       # GET : api/v1/authors/{:id}
@@ -23,8 +25,8 @@ module Api
       def show
         author = filter_authors.find_by(id: params[:id])
 
-        process_record(author) do |p|
-          render json: { data: p }, status: :ok
+        process_record(author) do |a|
+          render_json a, status: :ok
         end
       end
 
@@ -35,7 +37,7 @@ module Api
       def create
         author = Author.create!(authors_params)
 
-        render json: { data: author }, status: :created
+        render_json author, status: :created
       end
 
       # PATCH/PUT : api/v1/authors/{:id}
