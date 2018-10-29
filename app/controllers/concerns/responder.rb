@@ -1,6 +1,6 @@
 # Responder
 #
-#   Used to
+#   Used to represent the requested data using a serializer
 #
 module Responder
   extend ActiveSupport::Concern
@@ -16,14 +16,12 @@ module Responder
     end
 
     def render_json(resource, options = {})
-      serializer  = options[:serializer] || self.class.default_serializer
-      status      = options[:status] || :ok
-
+      serializer, status = process_render_options(options)
       serializer_options = process_serializer_options(options)
 
       data = serializer
                .new(resource, serializer_options)
-               .serializable_hash
+               .serialized_json
 
       render json: data, status: status
     end
@@ -36,5 +34,12 @@ module Responder
       options_keys.each_with_object({}) { |key, hash| hash[key] = options[key] }
     end
 
+    def process_render_options(options)
+      serializer  = options[:serializer] || self.class.default_serializer
+      status      = options[:status] || :ok
+
+      [serializer, status]
+    end
   end
+
 end
