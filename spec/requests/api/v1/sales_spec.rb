@@ -42,7 +42,7 @@ RSpec.describe 'Shops management', type: :request do
   it 'responds with expected not found error message' do
     post '/api/v1/shops/wat_shop_id/sales', params: sale_params
 
-    expect(JSON.parse(response.body)['error']).to eq("Couldn't find Shop with 'id'=wat_shop_id")
+    expect(body_as_json['errors'].first['detail']).to eq("Couldn't find Shop with 'id'=wat_shop_id")
   end
 
   it 'responds 400 status code on invalid quantity params' do

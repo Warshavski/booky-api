@@ -11,39 +11,34 @@ module ExceptionHandler
     #
     rescue_from ActionController::ParameterMissing do |e|
       log_exception(e)
-      bad_request(e.message)
+      render json: { errors: [{ status: 400, detail: e.message, source: { pointer: e.param }}] },
+             status: :bad_request
     end
 
     # Return 404 - Not Found
     #
     rescue_from ActiveRecord::RecordNotFound do |e|
       log_exception(e)
-      not_found(e.message)
+      render json: { errors: [{ status: 404, detail: e.message}] },
+             status: :not_found
     end
 
     # Return 422 - Unprocessable Entity (validation|duplicate record)
     #
     rescue_from ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique do |e|
       log_exception(e)
-      unprocessable_entity(e.message)
-    end
-
-    def bad_request(message)
-      render_error(message, :bad_request)
+      render_error(e.record, :unprocessable_entity)
     end
 
     def not_found(message = 'Record not found')
-      render_error(message, :not_found)
-    end
-
-    def unprocessable_entity(message)
-      render_error(message, :unprocessable_entity)
+      render json: { errors: [{status: 404, detail: message }] },
+             status: :not_found
     end
 
     private
 
-    def render_error(message, status)
-      render json: { error: message }, status: status
+    def render_error(object, status)
+      render json: { errors: ErrorSerializer.serialize(object, status) }, status: status
     end
 
     def log_exception(exception)

@@ -25,7 +25,7 @@ RSpec.describe 'Shops management', type: :request do
   it 'responds with expected not found error message' do
     get '/api/v1/publishers/wat_publisher_id/shops'
 
-    expect(JSON.parse(response.body)['error']).to eq("Couldn't find Publisher with 'id'=wat_publisher_id")
+    expect(body_as_json['errors'].first['detail']).to eq("Couldn't find Publisher with 'id'=wat_publisher_id")
   end
 
   it 'responds with Array' do
