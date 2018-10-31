@@ -17,8 +17,12 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore some config files
+/config/secrets.yml
+
 .byebug_history
 
+# Ignore IDE files
 .idea/
 
 .ruby-version
