@@ -18,6 +18,12 @@ Bundler.require(*Rails.groups)
 
 module Booky
   class Application < Rails::Application
+
+    Rails.application.routes.default_url_options = {
+      host: Rails.application.secrets.domain_name,
+      tld_length: 1
+    }
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 
