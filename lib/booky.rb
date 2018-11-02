@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-# BookyApi
+# Booky
 #
 #   Used for the core app settings
 #
 #     - version | revision
 #     - ? settings ?
 #
-module BookyApi
+module Booky
 
   def self.root
     Pathname.new(File.expand_path('..', __dir__))

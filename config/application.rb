@@ -16,7 +16,7 @@ require "action_cable/engine"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Booky
+module BookyApi
   class Application < Rails::Application
 
     Rails.application.routes.default_url_options = {
