@@ -5,8 +5,8 @@
 class ApiController < ApplicationController
   def show
     api_info = {
-      version: BookyApi.version,
-      revision: BookyApi.revision
+      version: Booky.version,
+      revision: Booky.revision
     }
 
     render json: { data: api_info }, status: :ok
