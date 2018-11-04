@@ -126,6 +126,7 @@ GEM
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
     ruby_dep (1.5.0)
+    settingslogic (2.0.9)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
     spring (2.0.2)
@@ -163,6 +164,7 @@ DEPENDENCIES
   puma (~> 3.7)
   rails (~> 5.1.5)
   rspec-rails
+  settingslogic
   shoulda-matchers
   spring
   spring-watcher-listen (~> 2.0.0)
@@ -170,4 +172,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.16.6
+   1.17.1

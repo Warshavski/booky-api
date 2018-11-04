@@ -13,6 +13,10 @@ module Booky
     Pathname.new(File.expand_path('..', __dir__))
   end
 
+  def self.config
+    Settings
+  end
+
   def self.migrations_hash
     @_migrations_hash ||= Digest::MD5.hexdigest(ActiveRecord::Migrator.get_all_versions.to_s)
   end
