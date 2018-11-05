@@ -23,7 +23,7 @@ module Booky
     @_revision ||=
       if File.exist?(path)
         begin
-          File.open(path, 'r', &:readline).strip.freeze
+          File.read(path).strip.freeze
         rescue EOFError
           'Unknown'
         end
