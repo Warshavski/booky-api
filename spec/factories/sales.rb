@@ -3,6 +3,6 @@ FactoryBot.define do
     association :shop, factory: :shop
     association :book, factory: :book
 
-    quantity 1
+    quantity { 1 }
   end
 end

@@ -5,7 +5,7 @@ FactoryBot.define do
 
   factory :publisher_with_books, class: Publisher, parent: :publisher do
     transient do
-      books_count 2
+      books_count { 2 }
     end
 
     after(:create) do |publisher, evaluator|
