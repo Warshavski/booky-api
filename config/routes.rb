@@ -5,11 +5,11 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
-      resources :authors
+      resources :authors, except: %i[new edit]
 
-      resources :books
+      resources :books, except: %i[new edit]
 
-      resources :publishers do
+      resources :publishers, except: %i[new edit] do
         resources :shops, only: [:index]
       end
 
