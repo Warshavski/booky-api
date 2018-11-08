@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   root to: 'api#show'
 
-  namespace :api, defaults: { format: 'json' } do
+  namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :authors
 

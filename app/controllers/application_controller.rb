@@ -6,8 +6,6 @@ class ApplicationController < ActionController::API
   include Responder
   include ExceptionHandler
 
-  before_action :set_content_type
-
   def process_record(record)
     record.nil? ? not_found : yield(record)
   end
@@ -18,11 +16,5 @@ class ApplicationController < ActionController::API
 
   def specific_filters
     []
-  end
-
-  private
-
-  def set_content_type
-    headers['Content-Type'] = 'application/json; charset=utf-8'
   end
 end
