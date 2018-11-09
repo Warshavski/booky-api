@@ -5,18 +5,28 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# https://github.com/Netflix/fast_jsonapi
+# A lightning fast JSON:API serializer for Ruby Objects.
 gem 'fast_jsonapi'
+
+# https://github.com/ohler55/oj
+# A fast JSON parser and Object marshaller as a Ruby gem.
 gem 'oj'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.5'
+
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
+# https://github.com/binarylogic/settingslogic
+# Settingslogic is a simple configuration / settings solution that uses an ERB enabled YAML file.
 gem 'settingslogic'
 
-# Use Puma as the app server
+# A Ruby/Rack web server built for concurrency
+# https://github.com/puma/puma
 gem 'puma', '~> 3.7'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
