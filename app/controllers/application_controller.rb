@@ -5,6 +5,7 @@
 class ApplicationController < ActionController::API
   include Responder
   include ExceptionHandler
+  include JsonApi::RestifyParams
 
   def process_record(record)
     record.nil? ? not_found : yield(record)
