@@ -11,13 +11,15 @@ module ExceptionHandler
     #
     rescue_from ActionController::ParameterMissing do |e|
       log_exception(e)
-      bad_request(e.message)
+
+      render_errors([{ status: 400, detail: e.message, source: { pointer: e.param }}], :bad_request)
     end
 
     # Return 404 - Not Found
     #
     rescue_from ActiveRecord::RecordNotFound do |e|
       log_exception(e)
+
       not_found(e.message)
     end
 
@@ -25,29 +27,25 @@ module ExceptionHandler
     #
     rescue_from ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique do |e|
       log_exception(e)
-      unprocessable_entity(e.message)
-    end
 
-    def bad_request(message)
-      render_error(message, :bad_request)
+      render_errors(ErrorSerializer.serialize(e.record, 422), :unprocessable_entity)
     end
 
     def not_found(message = 'Record not found')
-      render_error(message, :not_found)
-    end
-
-    def unprocessable_entity(message)
-      render_error(message, :unprocessable_entity)
+      render_errors([{status: 404, detail: message }], :not_found)
     end
 
     private
 
-    def render_error(message, status)
-      render json: { error: message }, status: status
+    def render_errors(object, status)
+      render json: { errors: object }, status: status
     end
 
     def log_exception(exception)
-      application_trace = ActionDispatch::ExceptionWrapper.new(ActiveSupport::BacktraceCleaner.new, exception).application_trace
+      application_trace = ActionDispatch::ExceptionWrapper
+                            .new(ActiveSupport::BacktraceCleaner.new, exception)
+                            .application_trace
+
       application_trace.map! { |t| "  #{t}\n" }
 
       logger.error "\n#{exception.class.name} (#{exception.message}):\n#{application_trace.join}"
