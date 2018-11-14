@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181114182538) do
+ActiveRecord::Schema.define(version: 20181114191821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,4 +96,9 @@ ActiveRecord::Schema.define(version: 20181114182538) do
     t.index ["shop_id"], name: "index_stocks_on_shop_id"
   end
 
+  add_foreign_key "authors_books", "authors", on_delete: :cascade
+  add_foreign_key "authors_books", "books", on_delete: :cascade
+  add_foreign_key "books", "publishers", on_delete: :nullify
+  add_foreign_key "books_genres", "books", on_delete: :cascade
+  add_foreign_key "books_genres", "genres", on_delete: :cascade
 end
