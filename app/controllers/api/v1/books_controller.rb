@@ -39,9 +39,7 @@ module Api
       # Get a specific book identified by id (detailed info)
       #
       def show
-        book = filter_books
-                 .preload(:authors, :genres)
-                 .find_by(id: params[:id])
+        book = filter_books.preload(:authors, :genres).find_by(id: params[:id])
 
         process_record(book) do |book_record|
           render_json book_record,
