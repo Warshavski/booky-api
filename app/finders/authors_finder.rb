@@ -36,7 +36,7 @@ class AuthorsFinder
   def filter_by_book(items)
     return items if params[:book_id].blank?
 
-    items.joins(:books).where(books: { id: params[:book_id] })
+    items.joins(:books).merge(Book.where(id: params[:book_id]))
   end
 
   def filter_by_search(items)
