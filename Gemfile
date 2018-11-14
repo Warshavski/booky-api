@@ -27,6 +27,10 @@ gem 'settingslogic'
 # https://github.com/puma/puma
 gem 'puma', '~> 3.7'
 
+# A Ruby interface to the PostgreSQL RDBMS.
+# https://github.com/ged/ruby-pg
+gem 'pg'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

@@ -20,6 +20,7 @@
 # Ignore some config files
 /config/secrets.yml
 /config/booky.yml
+/config/database.yml
 
 .byebug_history
 

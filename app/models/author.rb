@@ -30,8 +30,8 @@ class Author < ApplicationRecord
 
     order = <<~SQL.squish
       CASE
-        WHEN authors.last_name = :query THEN 0
-        WHEN authors.first_name = :query THEN 1
+        WHEN authors.last_name = %{query} THEN 0
+        WHEN authors.first_name = %{query} THEN 1
         ELSE 3
       END
     SQL
