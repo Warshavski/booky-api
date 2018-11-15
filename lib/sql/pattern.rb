@@ -19,8 +19,8 @@ module SQL
         query.length >= MIN_CHARS_FOR_PARTIAL_MATCHING
       end
 
-      def sanitize_sql_like(string, escape_character = "\\")
-        pattern = Regexp.union(escape_character, "%", "_")
+      def sanitize_sql_like(string, escape_character = '\\')
+        pattern = Regexp.union(escape_character, '%', '_')
         string.gsub(pattern) { |x| [escape_character, x].join }
       end
     end
