@@ -31,6 +31,10 @@ gem 'puma', '~> 3.7'
 # https://github.com/ged/ruby-pg
 gem 'pg'
 
+# A Scope & Engine based, clean, powerful, customizable and sophisticated paginator
+# https://github.com/kaminari/kaminari
+gem 'kaminari'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
