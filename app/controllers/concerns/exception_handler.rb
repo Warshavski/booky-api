@@ -32,7 +32,7 @@ module ExceptionHandler
     end
 
     def not_found(message = 'Record not found')
-      render_errors([{status: 404, detail: message }], :not_found)
+      render_errors([{ status: 404, detail: message }], :not_found)
     end
 
     private
@@ -43,8 +43,8 @@ module ExceptionHandler
 
     def log_exception(exception)
       application_trace = ActionDispatch::ExceptionWrapper
-                            .new(ActiveSupport::BacktraceCleaner.new, exception)
-                            .application_trace
+                          .new(ActiveSupport::BacktraceCleaner.new, exception)
+                          .application_trace
 
       application_trace.map! { |t| "  #{t}\n" }
 

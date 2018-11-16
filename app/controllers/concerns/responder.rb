@@ -20,8 +20,8 @@ module Responder
       serializer_options = process_serializer_options(options)
 
       data = serializer
-               .new(resource, serializer_options)
-               .serialized_json
+             .new(resource, serializer_options)
+             .serialized_json
 
       render json: data, status: status
     end
