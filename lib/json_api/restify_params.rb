@@ -119,9 +119,18 @@ module JsonApi
     def preprocess_params(value)
       value = params.clone[:data] if value == params
 
+      ensure!(value, :data)
+      ensure!(value.key?(:type), :type)
+      ensure!(value.key?(:attributes), :attributes)
+
       value.delete(:type)
 
       value
+    end
+
+    def ensure!(condition, type)
+      message = I18n.t(type, scope: %i[restify errors missing])
+      raise ActionController::ParameterMissing, message unless condition
     end
 
     def data_present?(data)
