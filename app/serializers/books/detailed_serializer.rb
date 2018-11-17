@@ -7,6 +7,8 @@ module Books
   #     (detailed information)
   #
   class DetailedSerializer < CoreSerializer
+    set_type :book
+
     has_many :authors, serializer: AuthorSerializer
     has_many :genres, serializer: GenreSerializer
   end
