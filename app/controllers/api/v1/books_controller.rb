@@ -98,7 +98,7 @@ module Api
       end
 
       def books_params
-        params
+        restify_param(:book)
           .require(:book)
           .permit(:title, :description, :published_at, :isbn_10, :isbn_13, :publisher_id, :weight, :pages_count)
       end

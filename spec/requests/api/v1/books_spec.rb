@@ -272,7 +272,7 @@ RSpec.describe 'Books management', type: :request do
   end
 
   describe 'POST #create' do
-    before(:each) { post base_url, params: { book: book_params } }
+    before(:each) { post base_url, params: { data: book_params } }
 
     it 'responds with a 201 status' do
       expect(response).to have_http_status(:created)
@@ -303,11 +303,11 @@ RSpec.describe 'Books management', type: :request do
     end
 
     it 'returns created model' do
-      expect(body_as_json[:data][:attributes][:title]).to eq(book_params[:title])
+      expect(body_as_json[:data][:attributes][:title]).to eq(book_params[:attributes][:title])
     end
 
     context 'book presence' do
-      it { expect { post base_url, params: { book: book_params } }.to change(Book, :count).by(1) }
+      it { expect { post base_url, params: { data: book_params } }.to change(Book, :count).by(1) }
     end
 
     context 'request with not valid params' do
@@ -324,7 +324,8 @@ RSpec.describe 'Books management', type: :request do
       end
 
       it 'responds with a 422 status on invalid params' do
-        post base_url, params: { book: { title: nil } }
+        book_params[:attributes][:title] = nil
+        post base_url, params: { data: book_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -332,14 +333,14 @@ RSpec.describe 'Books management', type: :request do
   end
 
   describe 'PUT #update' do
-    before(:each) { put book_url, params: { book: book_params} }
+    before(:each) { put book_url, params: { data: book_params} }
 
     it 'responds with a 204 status' do
       expect(response).to have_http_status(:no_content)
     end
 
     it 'updates a book model' do
-      expect(book.reload.title).to eq(book_params[:title])
+      expect(book.reload.title).to eq(book_params[:attributes][:title])
     end
 
     context 'response with errors' do
@@ -362,7 +363,8 @@ RSpec.describe 'Books management', type: :request do
       end
 
       it 'responds with a 422 status on request with not valid params' do
-        put book_url, params: { book: { title: nil } }
+        book_params[:attributes][:title] = nil
+        put book_url, params: { data: book_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
