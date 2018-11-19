@@ -79,7 +79,9 @@ module Api
       end
 
       def authors_params
-        params.require(:author).permit(:last_name, :first_name, :biography, :born_in, :died_id)
+        restify_param(:author)
+          .require(:author)
+          .permit(:last_name, :first_name, :biography, :born_in, :died_id)
       end
     end
   end

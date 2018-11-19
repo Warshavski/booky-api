@@ -6,7 +6,7 @@ RSpec.describe 'Authors management', type: :request do
 
   let(:author)        { create(:author) }
   let(:author_url)    { "#{base_url}/#{author.id}" }
-  let(:author_params) { { author: build(:author_params) } }
+  let(:author_params) { build(:author_params) }
 
   describe 'GET #index' do
     let!(:authors) { create_list(:author_seq, 10) }
@@ -136,11 +136,11 @@ RSpec.describe 'Authors management', type: :request do
 
   describe 'POST #create' do
     context 'author presence' do
-      it { expect { post base_url, params: author_params }.to change(Author, :count).by(1) }
+      it { expect { post base_url, params: { data: author_params } }.to change(Author, :count).by(1) }
     end
 
     context 'valid request' do
-      before(:each) { post base_url, params: author_params }
+      before(:each) { post base_url, params: { data: author_params } }
 
       it 'responds with a 201 status' do
         expect(response).to have_http_status(:created)
@@ -154,7 +154,7 @@ RSpec.describe 'Authors management', type: :request do
       end
 
       it 'returns created model' do
-        expect(body_as_json[:data][:attributes][:first_name]).to eq(author_params.dig(:author, :first_name))
+        expect(body_as_json[:data][:attributes][:first_name]).to eq(author_params.dig(:attributes, :first_name))
       end
     end
 
@@ -172,13 +172,15 @@ RSpec.describe 'Authors management', type: :request do
       end
 
       it 'responds with a 422 status on invalid first_name' do
-        post base_url, params: { author: { first_name: nil } }
+        author_params[:attributes][:first_name] = nil
+        post base_url, params: { data: author_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'responds with a 422 status on invalid last_name' do
-        post base_url, params: { author: { last_name: nil } }
+        author_params[:attributes][:last_name] = nil
+        post base_url, params: { data: author_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -187,20 +189,20 @@ RSpec.describe 'Authors management', type: :request do
 
   describe 'PUT #update' do
     context 'valid request' do
-      before(:each) { put author_url, params: author_params }
+      before(:each) { put author_url, params: { data: author_params } }
 
       it 'responds with a 204 status' do
         expect(response).to have_http_status(:no_content)
       end
 
       it 'updates a model' do
-        expect(author.reload.last_name).to eq(author_params.dig(:author,:last_name))
+        expect(author.reload.last_name).to eq(author_params.dig(:attributes,:last_name))
       end
     end
 
     context 'invalid request' do
       it 'responds with a 404 status not existed author' do
-        put "#{base_url}/wat-author?", params: author_params
+        put "#{base_url}/wat-author?", params: { data: author_params }
 
         expect(response).to have_http_status(:not_found)
       end
@@ -218,13 +220,15 @@ RSpec.describe 'Authors management', type: :request do
       end
 
       it 'responds with a 422 status on request with not valid last_name' do
-        put author_url, params: { author: { last_name: nil } }
+        author_params[:attributes][:last_name] = nil
+        put author_url, params: { data: author_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'responds with a 422 status on request with not valid first_name' do
-        put author_url, params: { author: { first_name: nil } }
+        author_params[:attributes][:first_name] = nil
+        put author_url, params: { data: author_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
