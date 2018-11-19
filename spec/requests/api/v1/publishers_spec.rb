@@ -7,7 +7,7 @@ RSpec.describe 'Publishers management', type: :request do
   let(:publisher)     { create(:publisher) }
   let(:publisher_url) { "#{base_url}/#{publisher.id}" }
 
-  let(:publisher_params) { { publisher: { name: 'some publisher' } } }
+  let(:publisher_params) { build(:publisher_params) }
 
   describe 'GET #index' do
     before { create_list(:publisher_seq, 10) }
@@ -108,7 +108,7 @@ RSpec.describe 'Publishers management', type: :request do
 
   describe 'POST #create' do
     context 'valid request parameters' do
-      before(:each) { post base_url, params: publisher_params }
+      before(:each) { post base_url, params: { data: publisher_params } }
 
       it 'responds with a 201 status' do
         expect(response).to have_http_status(:created)
@@ -127,7 +127,7 @@ RSpec.describe 'Publishers management', type: :request do
       end
 
       it 'returns created model' do
-        expect(body_as_json[:data][:attributes][:name]).to eq('some publisher')
+        expect(body_as_json[:data][:attributes][:name]).to eq(publisher_params[:attributes][:name])
       end
     end
 
@@ -145,33 +145,34 @@ RSpec.describe 'Publishers management', type: :request do
       end
 
       it 'responds with a 422 status on invalid params' do
-        post base_url, params: { publisher: { name: nil } }
+        publisher_params[:attributes][:name] = nil
+        post base_url, params: { data: publisher_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
     context 'publisher presence' do
-      it { expect { post base_url, params: publisher_params }.to change(Publisher, :count).by(1) }
+      it { expect { post base_url, params: { data: publisher_params } }.to change(Publisher, :count).by(1) }
     end
   end
 
   describe 'PUT #update' do
     context 'valid request parameters' do
-      before(:each) { put publisher_url, params: publisher_params }
+      before(:each) { put publisher_url, params: { data: publisher_params } }
 
       it 'responds with a 204 status' do
         expect(response).to have_http_status(:no_content)
       end
 
       it 'updates a model' do
-        expect(publisher.reload.name).to eq('some publisher')
+        expect(publisher.reload.name).to eq(publisher_params[:attributes][:name])
       end
     end
 
     context 'invalid request parameters' do
       it 'responds with a 404 status not existed publisher' do
-        put "#{base_url}/wat_publisher?", params: publisher_params
+        put "#{base_url}/wat_publisher?", params: { data: publisher_params }
 
         expect(response).to have_http_status(:not_found)
       end
@@ -189,7 +190,8 @@ RSpec.describe 'Publishers management', type: :request do
       end
 
       it 'responds with a 422 status on request with not valid params' do
-        put publisher_url, params: { publisher: { name: nil } }
+        publisher_params[:attributes][:name] = nil
+        put publisher_url, params: { data: publisher_params }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
