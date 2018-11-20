@@ -10,6 +10,13 @@ module Api
 
       # GET : api/v1/authors
       #
+      #   optional query parameters :
+      #
+      #     - standard filters (@see filter_params)
+      #
+      #     - book_id   filter by book
+      #                   example: ?book_id=1
+      #
       # Get a list of authors
       #
       def index
