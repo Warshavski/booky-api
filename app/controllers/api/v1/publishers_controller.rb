@@ -10,6 +10,10 @@ module Api
 
       # GET : api/v1/publishers
       #
+      #   optional query parameters :
+      #
+      #     - standard filters (@see filter_params)
+      #
       # Get a list of publishers
       #
       def index
