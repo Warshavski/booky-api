@@ -9,6 +9,7 @@
 #   params: optional search, filter and sort parameters
 #
 class BooksFinder
+  include PaginationFilters
 
   attr_reader :params
 
@@ -21,6 +22,8 @@ class BooksFinder
   # @option params [String]         :search         Search pattern(part of the name)
   # @option params [String]         :isbn           The International Standard Book Number (ISBN)
   # @option params [String]         :sort           Sort type(attribute and sort direction)
+  # @option params [Integer]        :page           Page number
+  # @option params [Integer]        :limit          Quantity of items per page
   #
   def initialize(params = {})
     @params = params
@@ -37,6 +40,9 @@ class BooksFinder
 
     collection = filter_by_search(collection)
     collection = filter_by_isbn(collection)
+
+    collection = filter_by_limit(collection)
+    collection = paginate_items(collection)
 
     sort(collection)
   end

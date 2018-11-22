@@ -9,6 +9,7 @@
 #   params: optional search, filter and sort parameters
 #
 class PublishersFinder
+  include PaginationFilters
 
   attr_reader :params
 
@@ -16,6 +17,8 @@ class PublishersFinder
   #
   # @option params [String]   :sort     sort type(attribute and sort direction)
   # @option params [String]   :search   search pattern(part of the name)
+  # @option params [Integer]  :page     page number
+  # @option params [Integer]  :limit    quantity of items per page
   #
   def initialize(params = {})
     @params = params
@@ -25,6 +28,9 @@ class PublishersFinder
     collection = Publisher
 
     collection = filter_by_search(collection)
+
+    collection = filter_by_limit(collection)
+    collection = paginate_items(collection)
 
     sort(collection)
   end

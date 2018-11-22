@@ -52,6 +52,45 @@ RSpec.describe PublishersFinder do
 
         expect(result.count).to eq(0)
       end
+
+      it 'filters publishers by limit' do
+        publishers_finder = described_class.new(limit: 5)
+        result = publishers_finder.execute
+
+        expect(result.count).to be(5)
+      end
+
+      it 'filters publishers by page' do
+        allow(Booky.config.pagination).to receive(:limit).and_return(5)
+
+        publishers_finder = described_class.new(page: 2)
+        result = publishers_finder.execute
+
+        expect(result.count).to be(5)
+        expect(result.first.name).to eq('v6')
+      end
+
+      it 'filters publishers by page and limit' do
+        publishers_finder = described_class.new(page: 1, limit: 5)
+        result = publishers_finder.execute
+
+        expect(result.count).to be(5)
+        expect(result.last.name).to eq('v5')
+      end
+
+      it 'does not finds any publisher by page of range' do
+        publishers_finder = described_class.new(page: 100)
+        result = publishers_finder.execute
+
+        expect(result.count).to be(0)
+      end
+
+      it 'does not returns any publisher by zero limit' do
+        publishers_finder = described_class.new(limit: 0)
+        result = publishers_finder.execute
+
+        expect(result.count).to be(0)
+      end
     end
 
     context 'filter and sort' do
@@ -87,6 +126,14 @@ RSpec.describe PublishersFinder do
 
         expect(result.first.name).to eq('v1')
         expect(result.count).to eq(10)
+      end
+
+      it 'filters publishers by page and limit and sorts by name ascending' do
+        publishers_finder = described_class.new(sort: 'name_asc', page: 2, limit: 5)
+        result = publishers_finder.execute
+
+        expect(result.first.name).to eq('v4')
+        expect(result.count).to eq(5)
       end
     end
   end

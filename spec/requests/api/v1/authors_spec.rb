@@ -64,6 +64,34 @@ RSpec.describe 'Authors management', type: :request do
         expect(actual_data.count).to be(1)
         expect(actual_data.first[:attributes][:last_name]).to eq('ln-v2')
       end
+
+      it 'returns filtered collection by page' do
+        allow(Booky.config.pagination).to receive(:limit).and_return(5)
+
+        get "#{base_url}?page=2"
+
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(5)
+        expect(actual_data.first[:attributes][:last_name]).to eq('ln-v6')
+      end
+
+      it 'returns filtered collection by limit' do
+        get "#{base_url}?limit=5"
+
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(5)
+      end
+
+      it 'returns filtered collection by limit and page' do
+        get "#{base_url}?limit=5&page=2"
+
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(5)
+        expect(actual_data.first[:attributes][:last_name]).to eq('ln-v6')
+      end
     end
 
     context 'sorted authors collection' do

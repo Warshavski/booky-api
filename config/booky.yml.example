@@ -1,1 +1,12 @@
--- TODO : add settings
+production: &base
+  pagination:
+    limit: 25
+
+development:
+  <<: *base
+
+test:
+  <<: *base
+
+staging:
+  <<: *base

@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
   end
 
   def filter_params
-    params.permit(*(%i[search sort] + specific_filters))
+    params.permit(*(%i[search sort page limit] + specific_filters))
   end
 
   def specific_filters
