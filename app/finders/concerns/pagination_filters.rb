@@ -6,7 +6,7 @@
 #
 module PaginationFilters
   def paginate_items(items)
-    items.page(params[:page] || 1).per(params[:limit] || Booky.config.pagination.limit)
+    items.page(params[:page]).per(params[:limit] || Booky.config.pagination.limit)
   end
 
   def filter_by_limit(items)

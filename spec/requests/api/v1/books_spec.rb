@@ -138,6 +138,34 @@ RSpec.describe 'Books management', type: :request do
 
         expect(actual_data.count).to be(0)
       end
+
+      it 'returns filtered collection by page' do
+        allow(Booky.config.pagination).to receive(:limit).and_return(5)
+
+        get "#{base_url}?page=2"
+
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(5)
+        expect(actual_data.first[:attributes][:title]).to eq('v6')
+      end
+
+      it 'returns filtered collection by limit' do
+        get "#{base_url}?limit=5"
+
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(5)
+      end
+
+      it 'returns filtered collection by limit and page' do
+        get "#{base_url}?limit=5&page=2"
+
+        actual_data = body_as_json[:data]
+
+        expect(actual_data.count).to be(5)
+        expect(actual_data.first[:attributes][:title]).to eq('v6')
+      end
     end
 
     context 'sorted books collection' do
@@ -213,6 +241,15 @@ RSpec.describe 'Books management', type: :request do
 
         expect(result.count).to be(2)
         expect(result.first[:attributes][:title]).to eq('v10')
+      end
+
+      it 'filters books by page and limit and sorts by title ascending' do
+        get "#{base_url}?sort=title_asc&page=2&limit=5"
+
+        result = body_as_json[:data]
+
+        expect(result.count).to be(5)
+        expect(result.first[:attributes][:title]).to eq('v5')
       end
     end
   end
