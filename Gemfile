@@ -40,8 +40,13 @@ gem 'kaminari'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
+# Rack middleware for blocking & throttling
+# https://github.com/kickstarter/rack-attack
+gem 'rack-attack'
+
+# Rack Middleware for handling Cross-Origin Resource Sharing (CORS), which makes cross-origin AJAX possible.
+# https://github.com/cyu/rack-cors
+gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

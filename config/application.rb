@@ -36,6 +36,30 @@ module BookyApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.autoload_paths += %W[#{config.root}/lib]
+    config.eager_load_paths.push(*%W[#{config.root}/lib])
+
+    # TODO : Fix uninitialized constant problem
+    #
+    # This middleware needs to precede ActiveRecord::QueryCache and
+    # other middlewares that connect to the database.
+    #
+    # config.middleware.insert_after(Rails::Rack::Logger, ::Middleware::HealthCheck)
+
+    #
+    # Allow access to Booky API from other domains
+    #
+    config.middleware.insert_before(0, Rack::Cors) do
+      #
+      # Cross-origin requests must not have the session cookie available
+      #
+      allow do
+        origins '*'
+        resource '/api/*',
+                 credentials: false,
+                 headers: :any,
+                 methods: :any,
+                 expose: %w[Link X-Total X-Total-Pages X-Per-Page X-Page X-Next-Page X-Prev-Page]
+      end
+    end
   end
 end
