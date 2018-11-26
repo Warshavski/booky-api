@@ -5,6 +5,11 @@
 class Book < ApplicationRecord
   include Sortable
   include SQL::Pattern
+  include OrderQuery
+
+  order_query :test,
+              [:created_at, [true, false]], # First sort by :pinned over t/f in :desc order
+              [:published_at, :desc] # Next sort :published_at in :desc order
 
   belongs_to :publisher
 
