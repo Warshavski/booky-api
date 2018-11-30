@@ -16,8 +16,10 @@ require "action_cable/engine"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module BookyApi
+module Booky
   class Application < Rails::Application
+    require_relative Rails.root.join('lib/booky/redis/wrapper')
+    require_relative Rails.root.join('lib/booky/redis/cache')
 
     Rails.application.routes.default_url_options = {
       host: Rails.application.secrets.domain_name,
@@ -61,5 +63,18 @@ module BookyApi
                  expose: %w[Link X-Total X-Total-Pages X-Per-Page X-Page X-Next-Page X-Prev-Page]
       end
     end
+
+    #
+    # Use caching across all environments
+    #
+    caching_config_hash = ::Booky::Redis::Cache.params
+    caching_config_hash[:namespace] = ::Booky::Redis::Cache::CACHE_NAMESPACE
+
+    #
+    # Limit cache grow
+    #
+    caching_config_hash[:expires_in] = 2.weeks
+
+    config.cache_store = :redis_store, caching_config_hash
   end
 end
