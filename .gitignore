@@ -21,6 +21,7 @@
 /config/secrets.yml
 /config/booky.yml
 /config/database.yml
+/config/redis.cache.yml
 
 .byebug_history
 

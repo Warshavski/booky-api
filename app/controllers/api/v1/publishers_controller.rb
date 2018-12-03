@@ -79,7 +79,9 @@ module Api
       end
 
       def publishers_params
-        params.require(:publisher).permit(:name, :description, :email, :phone, :address, :postcode)
+        restify_param(:publisher)
+          .require(:publisher)
+          .permit(:name, :description, :email, :phone, :address, :postcode)
       end
     end
   end

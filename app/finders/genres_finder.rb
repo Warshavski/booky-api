@@ -8,9 +8,11 @@
 #
 #   params: optional search, filter and sort parameters
 #
-class GenresFinder
+class GenresFinder < BaseFinder
 
-  attr_reader :params
+  filter(:search) do |items, params|
+    params[:search].present? ? items.search(params[:search]) : items
+  end
 
   # @param [Hash] params (optional, default: {}) filter and sort parameters
   #
@@ -18,24 +20,7 @@ class GenresFinder
   # @option params [String]   :sort     Sort type(attribute and sort direction)
   #
   def initialize(params = {})
-    @params = params
-  end
-
-  def execute
-    collection = Genre
-
-    collection = filter_by_search(collection)
-
-    sort(collection)
-  end
-
-  private
-
-  def filter_by_search(items)
-    params[:search].present? ? items.search(params[:search]) : items
-  end
-
-  def sort(items)
-    params[:sort].present? ? items.order_by(params[:sort]) : items.order_by(:created_asc)
+    super
+    @collection = Genre
   end
 end

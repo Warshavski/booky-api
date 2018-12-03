@@ -1,1 +1,35 @@
--- TODO : add settings
+production: &base
+  pagination:
+    limit: 25
+
+  # Built in monitoring settings
+  monitoring:
+    # IP whitelist to access monitoring endpoints
+    ip_whitelist:
+      - 127.0.0.0/8
+
+  rack_attack:
+    # Rack Attack IP banning enabled
+    enabled: true
+    #
+    # Whitelist requests from 127.0.0.1 for web proxies (NGINX/Apache) with incorrect headers
+    ip_whitelist:
+      - 127.0.0.1
+    #
+    # Limit the number of Git HTTP authentication attempts per IP
+    maxretry: 10
+    #
+    # Reset the auth attempt counter per IP after 60 seconds
+    findtime: 60
+    #
+    # Ban an IP for one hour (3600s) after too many auth attempts
+    bantime: 3600
+
+development:
+  <<: *base
+
+test:
+  <<: *base
+
+staging:
+  <<: *base

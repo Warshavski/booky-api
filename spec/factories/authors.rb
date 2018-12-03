@@ -10,6 +10,15 @@ FactoryBot.define do
   end
 
   factory :author_params, class: Hash do
-    initialize_with { attributes_for(:author) }
+    initialize_with do
+      {
+        id: 1,
+        type: 'author',
+        attributes: {
+          first_name: Faker::Name.first_name,
+          last_name: Faker::Name.last_name
+        }
+      }
+    end
   end
 end
