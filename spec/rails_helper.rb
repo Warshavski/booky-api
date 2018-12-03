@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'database_cleaner'
 require 'spec_helper'
 require 'support/restify_helper'
 
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 
@@ -36,6 +38,10 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+Dir[Rails.root.join('spec/support/helpers/*.rb')].each(&method(:require))
+Dir[Rails.root.join('spec/support/shared_examples/*.rb')].each(&method(:require))
+Dir[Rails.root.join('spec/support/**/*.rb')].each(&method(:require))
 
 RSpec.configure do |config|
   config.include RestifyHelper
@@ -79,4 +85,21 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  #
+  config.around(:each, :use_clean_rails_memory_store_caching) do |example|
+    caching_store = Rails.cache
+    Rails.cache = ActiveSupport::Cache::MemoryStore.new
+
+    example.run
+
+    Rails.cache = caching_store
+  end
+
+  config.around(:each, :clean_gitlab_redis_cache) do |example|
+    redis_cache_cleanup!
+
+    example.run
+
+    redis_cache_cleanup!
+  end
 end
