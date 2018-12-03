@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   root to: 'about#show'
 
+  devise_for :users
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :authors, except: %i[new edit]

@@ -5,6 +5,10 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# https://github.com/plataformatec/devise
+# Flexible authentication solution for Rails with Warden.
+gem 'devise'
+
 # https://github.com/Netflix/fast_jsonapi
 # A lightning fast JSON:API serializer for Ruby Objects.
 gem 'fast_jsonapi'
@@ -31,9 +35,6 @@ gem 'pg'
 # A Scope & Engine based, clean, powerful, customizable and sophisticated paginator
 # https://github.com/kaminari/kaminari
 gem 'kaminari'
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
