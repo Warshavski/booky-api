@@ -3,6 +3,7 @@
 #   Represents a registered user
 #
 class User < ApplicationRecord
+  include Avatarable
   include Sortable
   include CaseSensitivity
   include SQL::Pattern

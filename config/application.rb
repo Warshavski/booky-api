@@ -76,5 +76,7 @@ module Booky
     caching_config_hash[:expires_in] = 2.weeks
 
     config.cache_store = :redis_store, caching_config_hash
+
+    config.middleware.use(BatchLoader::Middleware)
   end
 end

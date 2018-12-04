@@ -17,6 +17,8 @@
 !/log/.keep
 !/tmp/.keep
 
+/public/uploads
+
 # Ignore some config files
 /config/secrets.yml
 /config/booky.yml

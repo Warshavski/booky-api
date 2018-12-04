@@ -1,3 +1,5 @@
+include ActionDispatch::TestProcess
+
 FactoryBot.define do
   factory :user, class: User do
     email     { Faker::Internet.email }
@@ -13,6 +15,10 @@ FactoryBot.define do
 
     trait :banned do
       after(:build) { |user, _| user.update!(banned_at: Time.now) }
+    end
+
+    trait :with_avatar do
+      avatar { fixture_file_upload('spec/fixtures/dk.png') }
     end
 
     factory :admin, traits: [:admin]

@@ -5,6 +5,18 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# https://github.com/exAspArk/batch-loader
+# Powerful tool to avoid N+1 DB or HTTP queries
+gem 'batch-loader'
+
+# https://github.com/carrierwaveuploader/carrierwave
+# Provides a simple and extremely flexible way to upload files from Ruby applications
+gem 'carrierwave'
+
+# https://github.com/minimagick/minimagick
+# Mini replacement for RMagick
+gem 'mini_magick'
+
 # https://github.com/plataformatec/devise
 # Flexible authentication solution for Rails with Warden.
 gem 'devise'
@@ -57,6 +69,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails'
+  gem 'rspec-parameterized', require: false
 end
 
 group :development do
@@ -76,7 +89,12 @@ group :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'shoulda-matchers'
+<<<<<<< HEAD
   gem 'simplecov', require: false
+=======
+  gem 'rspec-sqlimit'
+  gem 'webmock'
+>>>>>>> Added: basic uploaders and avatar uploader
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

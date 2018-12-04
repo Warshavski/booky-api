@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181203124659) do
+ActiveRecord::Schema.define(version: 20181204152253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,9 +96,27 @@ ActiveRecord::Schema.define(version: 20181203124659) do
     t.index ["shop_id"], name: "index_stocks_on_shop_id"
   end
 
+  create_table "uploads", force: :cascade do |t|
+    t.bigint "size", null: false
+    t.string "path", limit: 511, null: false
+    t.string "checksum", limit: 64
+    t.string "model_type"
+    t.bigint "model_id"
+    t.string "uploader", null: false
+    t.string "mount_point"
+    t.string "secret"
+    t.integer "store"
+    t.datetime "created_at", null: false
+    t.index ["checksum"], name: "index_uploads_on_checksum"
+    t.index ["model_id", "model_type"], name: "index_uploads_on_model_id_and_model_type"
+    t.index ["model_type", "model_id"], name: "index_uploads_on_model_type_and_model_id"
+    t.index ["path"], name: "index_uploads_on_path"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "bio", limit: 255
+    t.string "avatar"
     t.boolean "admin", default: false, null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false

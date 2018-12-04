@@ -5,6 +5,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
     create_table :users do |t|
       t.string :username
       t.string :bio, limit: 255
+      t.string :avatar
 
       t.boolean :admin, default: false, null: false
 
