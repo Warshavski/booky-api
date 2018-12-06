@@ -1,8 +1,10 @@
-# ApplicationController
+# frozen_string_literal: true
+
+# AboutController
 #
 #   Used to represent core information about API
 #
-class ApiController < ApplicationController
+class AboutController < ApplicationController
   def show
     api_info = {
       version: Booky.version,
