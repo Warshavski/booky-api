@@ -88,13 +88,10 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'faker'
-  gem 'shoulda-matchers'
-<<<<<<< HEAD
-  gem 'simplecov', require: false
-=======
   gem 'rspec-sqlimit'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
   gem 'webmock'
->>>>>>> Added: basic uploaders and avatar uploader
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
