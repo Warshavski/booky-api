@@ -14,6 +14,7 @@ require File.expand_path('../config/environment', __dir__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 
 require 'rspec/rails'
+require 'rspec-parameterized'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -35,6 +36,9 @@ require 'rspec/rails'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+Dir[Rails.root.join("spec/support/helpers/*.rb")].each(&method(:require))
+Dir[Rails.root.join("spec/support/**/*.rb")].each(&method(:require))
+
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
@@ -48,6 +52,10 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each(&method(:require))
 
 RSpec.configure do |config|
   config.include RestifyHelper
+  config.include FixtureHelpers
+  config.include ConfigurationHelpers
+  config.include ObjectStorageHelpers
+
   config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
@@ -59,6 +67,10 @@ RSpec.configure do |config|
     DatabaseCleaner.cleaning do
       example.run
     end
+  end
+
+  config.after do
+    BatchLoader::Executor.clear_current
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

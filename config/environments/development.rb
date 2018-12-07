@@ -17,12 +17,17 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  #
+  # we recommend you use mailcatcher https://github.com/sj26/mailcatcher
+  #
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
-
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

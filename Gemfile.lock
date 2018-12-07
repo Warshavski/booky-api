@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    abstract_type (0.0.7)
     actioncable (5.1.6)
       actionpack (= 5.1.6)
       nio4r (~> 2.0)
@@ -38,7 +39,17 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    adamantium (0.2.0)
+      ice_nine (~> 0.11.0)
+      memoizable (~> 0.4.0)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
+    ast (2.4.0)
+    batch-loader (1.2.2)
+    bcrypt (3.1.12)
+    binding_of_caller (0.8.0)
+      debug_inspector (>= 0.0.1)
     builder (3.2.3)
     bullet (5.9.0)
       activesupport (>= 3.0.0)
@@ -47,10 +58,29 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.2)
+    carrierwave (1.2.3)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+    coderay (1.1.2)
+    concord (0.1.5)
+      adamantium (~> 0.2.0)
+      equalizer (~> 0.0.9)
+    concurrent-ruby (1.0.5)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
     crass (1.0.4)
     database_cleaner (1.7.0)
+    debug_inspector (0.0.3)
+    devise (4.5.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0, < 6.0)
+      responders
+      warden (~> 1.2.3)
     diff-lcs (1.3)
     docile (1.3.1)
+    equalizer (0.0.11)
     erubi (1.7.1)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -64,9 +94,11 @@ GEM
     ffi (1.9.25)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    hashdiff (0.3.7)
     i18n (1.1.1)
       concurrent-ruby (~> 1.0)
     json (2.1.0)
+    ice_nine (0.11.2)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
@@ -88,7 +120,13 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.9.1)
+    mime-types (3.2.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2018.0812)
+    mini_magick (4.9.2)
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -96,12 +134,21 @@ GEM
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     oj (3.7.0)
+    orm_adapter (0.5.0)
+    parser (2.5.3.0)
+      ast (~> 2.4.0)
     pg (1.1.3)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     pry-rails (0.3.8)
       pry (>= 0.10.4)
+    proc_to_ast (0.1.0)
+      coderay
+      parser
+      unparser
+    procto (0.0.3)
+    public_suffix (3.0.3)
     puma (3.12.0)
     rack (2.0.6)
     rack-attack (5.4.2)
@@ -155,6 +202,13 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.6.0)
       redis (>= 2.2, < 5)
+    responders (2.4.0)
+      actionpack (>= 4.2.0, < 5.3)
+      railties (>= 4.2.0, < 5.3)
+    rspec (3.8.0)
+      rspec-core (~> 3.8.0)
+      rspec-expectations (~> 3.8.0)
+      rspec-mocks (~> 3.8.0)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.2)
@@ -163,6 +217,12 @@ GEM
     rspec-mocks (3.8.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
+    rspec-parameterized (0.4.0)
+      binding_of_caller
+      parser
+      proc_to_ast
+      rspec (>= 2.13, < 4)
+      unparser
     rspec-rails (3.8.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
@@ -171,8 +231,12 @@ GEM
       rspec-expectations (~> 3.8.0)
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
+    rspec-sqlimit (0.0.2)
+      rails (> 4.0, < 6.0)
+      rspec (~> 3.0)
     rspec-support (3.8.0)
     ruby_dep (1.5.0)
+    safe_yaml (1.0.4)
     settingslogic (2.0.9)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
@@ -198,6 +262,20 @@ GEM
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uniform_notifier (1.12.1)
+    unparser (0.4.1)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2.0)
+      concord (~> 0.1.5)
+      diff-lcs (~> 1.3)
+      equalizer (~> 0.0.9)
+      parser (>= 2.3.1.2, < 2.6)
+      procto (~> 0.0.2)
+    warden (1.2.8)
+      rack (>= 2.0.6)
+    webmock (3.4.2)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -206,15 +284,19 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  batch-loader
   bullet
   byebug
   connection_pool
+  carrierwave
   database_cleaner
+  devise
   factory_bot_rails
   faker
   fast_jsonapi
   kaminari
   listen (>= 3.0.5, < 3.2)
+  mini_magick
   oj
   pg
   pry-rails
@@ -225,13 +307,16 @@ DEPENDENCIES
   redis
   redis-namespace
   redis-rails
+  rspec-parameterized
   rspec-rails
+  rspec-sqlimit
   settingslogic
   shoulda-matchers
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
+  webmock
 
 BUNDLED WITH
    1.17.1
