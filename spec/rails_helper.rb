@@ -36,8 +36,8 @@ require 'rspec-parameterized'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-Dir[Rails.root.join("spec/support/helpers/*.rb")].each(&method(:require))
-Dir[Rails.root.join("spec/support/**/*.rb")].each(&method(:require))
+Dir[Rails.root.join('spec/support/helpers/*.rb')].each(&method(:require))
+Dir[Rails.root.join('spec/support/**/*.rb')].each(&method(:require))
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
