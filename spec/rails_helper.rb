@@ -110,7 +110,7 @@ RSpec.configure do |config|
     Rails.cache = caching_store
   end
 
-  config.around(:each, :clean_gitlab_redis_cache) do |example|
+  config.around(:each, :clean_booky_redis_cache) do |example|
     redis_cache_cleanup!
 
     example.run
