@@ -20,6 +20,7 @@ module Booky
   class Application < Rails::Application
     require_relative Rails.root.join('lib/booky/redis/wrapper')
     require_relative Rails.root.join('lib/booky/redis/cache')
+    require_relative Rails.root.join('lib/middleware/health_check')
 
     Rails.application.routes.default_url_options = {
       host: Rails.application.secrets.domain_name,
@@ -40,12 +41,11 @@ module Booky
 
     config.eager_load_paths.push("#{config.root}/lib")
 
-    # TODO : Fix uninitialized constant problem
     #
     # This middleware needs to precede ActiveRecord::QueryCache and
     # other middlewares that connect to the database.
     #
-    # config.middleware.insert_after(Rails::Rack::Logger, ::Middleware::HealthCheck)
+    config.middleware.insert_after(Rails::Rack::Logger, ::Middleware::HealthCheck)
 
     #
     # Allow access to Booky API from other domains
