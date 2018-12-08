@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Author
 #
 #   Represents the creator or originator of the book
