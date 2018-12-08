@@ -4,7 +4,7 @@
 #
 #   Concern for querying columns with specific case sensitivity handling.
 #
-module CaseSensitivity
+module CaseSensible
   extend ActiveSupport::Concern
 
   module ClassMethods

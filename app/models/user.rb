@@ -6,8 +6,9 @@
 #
 class User < ApplicationRecord
   include Avatarable
+  include CaseSensible
   include Sortable
-  include CaseSensitivity
+
   include Booky::SQL::Pattern
 
   #
