@@ -1,8 +1,8 @@
 require 'rails_helper'
-require 'sql/pattern'
+require 'booky/sql/pattern'
 
-describe SQL::Pattern do
-  let(:dummy) { Class.new { include SQL::Pattern } }
+describe Booky::SQL::Pattern do
+  let(:dummy) { Class.new { include Booky::SQL::Pattern } }
 
   describe '.to_pattern' do
     context 'when a query is shorter than 3 chars' do

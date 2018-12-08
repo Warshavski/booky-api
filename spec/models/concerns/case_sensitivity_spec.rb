@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe CaseSensitivity do
+describe CaseSensible do
   describe '.iwhere' do
     let(:connection) { ActiveRecord::Base.connection }
 
     let(:model) do
       Class.new(ActiveRecord::Base) do
-        include CaseSensitivity
+        include CaseSensible
 
         self.table_name = 'users'
       end

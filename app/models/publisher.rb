@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # Publisher
 #
 #   Represents a publisher of books
 #
 class Publisher < ApplicationRecord
   include Sortable
-  include SQL::Pattern
+  include Booky::SQL::Pattern
 
   has_many :books, dependent: :destroy
 

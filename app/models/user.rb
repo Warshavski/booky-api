@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 # User
 #
 #   Represents a registered user
 #
 class User < ApplicationRecord
   include Avatarable
+  include CaseSensible
   include Sortable
-  include CaseSensitivity
-  include SQL::Pattern
+
+  include Booky::SQL::Pattern
 
   #
   # Include default devise modules. Others available are:
@@ -39,7 +42,7 @@ class User < ApplicationRecord
   scope :order_recent_sign_in, -> { reorder(Booky::Database.nulls_last_order('current_sign_in_at', 'DESC')) }
   scope :order_oldest_sign_in, -> { reorder(Booky::Database.nulls_last_order('current_sign_in_at', 'ASC')) }
 
-  scope :by_username, -> (usernames) { iwhere(username: Array(usernames).map(&:to_s)) }
+  scope :by_username, ->(usernames) { iwhere(username: Array(usernames).map(&:to_s)) }
 
   class << self
     #
@@ -119,7 +122,7 @@ class User < ApplicationRecord
     def by_login(login)
       return nil unless login
 
-      if login.include?('@'.freeze)
+      if login.include?('@')
         unscoped.iwhere(email: login).take
       else
         unscoped.iwhere(username: login).take
