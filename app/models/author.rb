@@ -4,7 +4,7 @@
 #
 class Author < ApplicationRecord
   include Sortable
-  include SQL::Pattern
+  include Booky::SQL::Pattern
 
   has_and_belongs_to_many :books
 
