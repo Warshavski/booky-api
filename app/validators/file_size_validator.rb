@@ -5,7 +5,6 @@
 #   Used to validate uploaded file size
 #
 class FileSizeValidator < ActiveModel::EachValidator
-
   class Helper
     include Singleton
     include ActionView::Helpers::NumberHelper
@@ -14,7 +13,7 @@ class FileSizeValidator < ActiveModel::EachValidator
   MESSAGES  = { is: :wrong_size, minimum: :size_too_small, maximum: :size_too_big }.freeze
   CHECKS    = { is: :==, minimum: :>=, maximum: :<= }.freeze
 
-  DEFAULT_TOKENIZER = lambda { |value| value.split(//) }
+  DEFAULT_TOKENIZER = ->(value) { value.split(//) }
   RESERVED_OPTIONS  = %i[minimum maximum within is tokenizer too_short too_long].freeze
 
   def initialize(options)

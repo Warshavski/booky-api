@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Booky::UrlSanitizer do
@@ -6,10 +8,10 @@ describe Booky::UrlSanitizer do
   describe '.sanitize' do
     def sanitize_url(url)
       # We want to try with multi-line content because is how error messages are formatted
-      described_class.sanitize(%Q{
+      described_class.sanitize(%(
          remote: Not Found
          fatal: repository '#{url}' not found
-      })
+      ))
     end
 
     where(:input, :output) do
@@ -161,10 +163,10 @@ describe Booky::UrlSanitizer do
 
   context 'when credentials contains special chars' do
     it 'should parse the URL without errors' do
-      url_sanitizer = described_class.new("https://foo:b?r@github.com/me/project.git")
+      url_sanitizer = described_class.new('https://foo:b?r@github.com/me/project.git')
 
-      expect(url_sanitizer.sanitized_url).to eq("https://github.com/me/project.git")
-      expect(url_sanitizer.full_url).to eq("https://foo:b%3Fr@github.com/me/project.git")
+      expect(url_sanitizer.sanitized_url).to eq('https://github.com/me/project.git')
+      expect(url_sanitizer.full_url).to eq('https://foo:b%3Fr@github.com/me/project.git')
     end
   end
 end

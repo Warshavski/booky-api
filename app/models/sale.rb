@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Sale
 #
 #   Represents a report on the sale of a book copies in a particular store

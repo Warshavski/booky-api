@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Shop
 #
 #   Represents a store that sells copies of books

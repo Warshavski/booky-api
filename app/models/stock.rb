@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Stock
 #
 #   Represents stocks of books in the store
