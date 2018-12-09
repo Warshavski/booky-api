@@ -56,7 +56,9 @@ RSpec.configure do |config|
   config.include ConfigurationHelpers
   config.include ObjectStorageHelpers
 
+  config.include ActiveJob::TestHelper
   config.include FactoryBot::Syntax::Methods
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
