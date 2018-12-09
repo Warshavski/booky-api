@@ -29,7 +29,7 @@ class User < ApplicationRecord
   #
   # NOTE:  devise :validatable above adds validations for :email and :password
   #
-  validates :username, presence: true
+  validates :username, presence: true, uniqueness: true
   validates :email, confirmation: true
   validates :bio, length: { maximum: 255 }, allow_blank: true
 

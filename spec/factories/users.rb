@@ -23,4 +23,19 @@ FactoryBot.define do
 
     factory :admin, traits: [:admin]
   end
+
+  factory :user_params, class: Hash do
+    initialize_with do
+      {
+        type: "user",
+        attributes: {
+          email: "wat@wat.wat",
+          email_confirmation: "wat@wat.wat",
+          password: "123456",
+          password_confirmation: "123456",
+          username: "wat"
+        }
+      }
+    end
+  end
 end
