@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Book
 #
 #   Represents core entity of the book shop
@@ -25,7 +27,6 @@ class Book < ApplicationRecord
 
   validates :pages_count, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :weight, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true
-
 
   validates :isbn_10, length: { is: 10, allow_nil: true }
   validates :isbn_13, length: { is: 13, allow_nil: true }

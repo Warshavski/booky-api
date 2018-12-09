@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Genre
 #
 #   Represents book genre
@@ -11,7 +13,7 @@ class Genre < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: { case_sensitive: false }
 
-  before_save -> { self.name.downcase! }
+  before_save -> { name.downcase! }
 
   # Search genre by pattern
   #
