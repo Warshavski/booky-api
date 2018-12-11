@@ -9,6 +9,9 @@ FactoryBot.define do
     confirmed_at        { Time.now }
     confirmation_token  { nil }
 
+    locked_at     { nil }
+    unlock_token  { nil }
+
     trait :admin do
       admin { true }
     end

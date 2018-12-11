@@ -8,7 +8,8 @@ Rails.application.routes.draw do
       devise_for :users,
                  controllers: {
                    registrations: 'api/v1/users/registrations',
-                   confirmations: 'api/v1/users/confirmations'
+                   confirmations: 'api/v1/users/confirmations',
+                   unlocks:       'api/v1/users/unlocks'
                  },
                  skip: %i[sessions password]
     end
