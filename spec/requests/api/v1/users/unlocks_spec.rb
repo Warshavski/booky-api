@@ -1,21 +1,23 @@
 require 'rails_helper'
 
-describe Api::V1::Users::ConfirmationsController do
-  let(:user) { create(:user, confirmation_token: 'wat', confirmed_at: nil) }
+describe Api::V1::Users::UnlocksController do
+  let(:user) { create(:user, locked_at: Time.now, unlock_token: 'wat') }
 
   describe '#new' do
     it 'responds with not found' do
-      get('/api/v1/users/confirmation/new')
+      get('/api/v1/users/unlock/new')
 
       expect(response).to have_http_status(:no_content)
     end
   end
 
   describe '#show' do
-    let(:confirmation_url) { '/api/v1/users/confirmation?confirmation_token' }
+    let(:unlock_url) { '/api/v1/users/unlock?unlock_token' }
 
     context 'valid token' do
-      before(:each) { get "#{confirmation_url}=#{user.confirmation_token}" }
+      before { allow_any_instance_of(described_class).to receive(:unlock_access).and_return(user) }
+
+      before(:each) { get "#{unlock_url}=#{user.unlock_token}" }
 
       it { expect(response).to have_http_status(:ok) }
 
@@ -34,14 +36,10 @@ describe Api::V1::Users::ConfirmationsController do
 
         expect(actual_keys).to match_array(expected_keys)
       end
-
-      it 'confirms user registration' do
-        expect(user.reload.confirmed_at).to_not be_nil
-      end
     end
 
     context 'invalid token' do
-      before(:each) { get "#{confirmation_url}=so" }
+      before(:each) { get "#{unlock_url}=so" }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
 
@@ -65,7 +63,7 @@ describe Api::V1::Users::ConfirmationsController do
     end
 
     context 'valid params' do
-      before(:each) { post '/api/v1/users/confirmation', params: { data: user_params } }
+      before(:each) { post '/api/v1/users/unlock', params: { data: user_params } }
 
       it { expect(response).to have_http_status(:ok) }
 
@@ -90,7 +88,7 @@ describe Api::V1::Users::ConfirmationsController do
       before { allow_any_instance_of(described_class).to receive(:successfully_sent?).and_return(false) }
 
       context 'bad request' do
-        before(:each) { post '/api/v1/users/confirmation' }
+        before(:each) { post '/api/v1/users/unlock' }
 
         it { expect(response).to have_http_status(:bad_request) }
 
@@ -103,7 +101,7 @@ describe Api::V1::Users::ConfirmationsController do
       end
 
       context 'unprocessable entity' do
-        before(:each) { post '/api/v1/users/confirmation', params: { data: user_params } }
+        before(:each) { post '/api/v1/users/unlock', params: { data: user_params } }
 
         it { expect(response).to have_http_status(:unprocessable_entity) }
       end
