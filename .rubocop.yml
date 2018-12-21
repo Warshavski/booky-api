@@ -6,7 +6,7 @@ AllCops:
     - lib/**/*.rake
   Exclude:
     - db/schema.rb
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
 
 #################### Style ####################
 
