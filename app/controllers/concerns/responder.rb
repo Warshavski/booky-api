@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Responder
 #
 #   Used to represent the requested data using a serializer
