@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Booky
   module Utils
     # Booky::Utils::StrongMemoize

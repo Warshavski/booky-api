@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ExceptionHandler
 #
 #   Used to handle ActiveRecord exceptions

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ShopsComposer
 #
 #   Used to represent shops with information about books
