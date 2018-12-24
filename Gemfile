@@ -89,6 +89,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-sqlimit'
+  gem 'rspec_junit_formatter'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'webmock'
