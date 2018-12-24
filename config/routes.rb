@@ -22,16 +22,18 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
-      resources :authors, except: %i[new edit]
-
-      resources :books, except: %i[new edit]
-
-      resources :publishers, except: %i[new edit] do
-        resources :shops, only: [:index]
+      namespace :admin do
+        resources :authors,     except: %i[new edit]
+        resources :books,       except: %i[new edit]
+        resources :publishers,  except: %i[new edit]
       end
 
       resources :shops, only: [] do
         resources :sales, only: [:create]
+      end
+
+      resources :publishers, only: [] do
+        resources :shops, only: [:index]
       end
     end
   end
