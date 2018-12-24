@@ -1,24 +1,56 @@
-# README
+# Booky (API)
+[![CircleCI](https://circleci.com/gh/Warshavski/booky-api/tree/master.svg?style=svg)](https://circleci.com/gh/Warshavski/booky-api/tree/master)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Books management application (API)
 
-Things you may want to cover:
+## Setting up
 
-* Ruby version
+#### Requirements
 
-* System dependencies
+- Ruby 2.5.3
+- Rails 5.1.6
+- Postgresql => 9.5
+- Redis 2.8+
 
-* Configuration
+#### Installation
 
-* Database creation
+**Clone the repo.**
+```bash
+git clone https://github.com/warshavski/booky-api.git
+```
 
-* Database initialization
+**cd into the directory and install the reqirements.**
+```bash
+cd booky-api && bundle install
+```
 
-* How to run the test suite
+**set up config files**
+```bash
+mv config/secrets.ci.yml config/secrets.yml
+mv config/database.ci.yml config/database.yml
+mv config/booky.ci.yml config/booky.yml
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+**set up the database**
+```bash
+rake db:create 
+rake db:migrate 
+rake db:seed
+```
 
-* Deployment instructions
+**Start the server**
+```bash
+rails s
+```
 
-* ...
+#### Running tests
+
+Running all tests.
+```bash
+bundle exec rspec
+```
+
+Running a specific test file
+```bash
+bundle exec rspec ./spec/path/to/file
+```
