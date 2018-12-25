@@ -1,7 +1,7 @@
 # Booky (API)
 [![CircleCI](https://circleci.com/gh/Warshavski/booky-api/tree/master.svg?style=svg)](https://circleci.com/gh/Warshavski/booky-api/tree/master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6b04956c14c0cf6de660/maintainability)](https://codeclimate.com/github/Warshavski/booky-api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/6b04956c14c0cf6de660/test_coverage)](https://codeclimate.com/github/Warshavski/booky-api/test_coverage)
 
 Books management application (API)
 
