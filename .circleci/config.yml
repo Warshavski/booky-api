@@ -1,6 +1,8 @@
 version: 2 # use CircleCI 2.0
 jobs: # a collection of steps
   build: # runs not using Workflows must have a `build` job as entry point
+    environment:
+      CC_TEST_REPORTER_ID: $CC_TEST_REPORTER_ID
     branches:
       only:
         - master
@@ -53,7 +55,12 @@ jobs: # a collection of steps
       - run:
           name: Database setup
           command: bin/rails db:schema:load --trace
-
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            # download test reporter as a static binary
+                     curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+                     chmod +x ./cc-test-reporter
       - run:
           name: Run rspec in parallel
           command: |
