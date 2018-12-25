@@ -1,5 +1,7 @@
 # Booky (API)
 [![CircleCI](https://circleci.com/gh/Warshavski/booky-api/tree/master.svg?style=svg)](https://circleci.com/gh/Warshavski/booky-api/tree/master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6b04956c14c0cf6de660/maintainability)](https://codeclimate.com/github/Warshavski/booky-api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/6b04956c14c0cf6de660/test_coverage)](https://codeclimate.com/github/Warshavski/booky-api/test_coverage)
 
 Books management application (API)
 
@@ -9,7 +11,7 @@ Books management application (API)
 
 - Ruby 2.5.3
 - Rails 5.1.6
-- Postgresql => 9.5
+- Postgresql 9.5+
 - Redis 2.8+
 
 #### Installation
@@ -26,9 +28,9 @@ cd booky-api && bundle install
 
 **set up config files**
 ```bash
-mv config/secrets.ci.yml config/secrets.yml
-mv config/database.ci.yml config/database.yml
-mv config/booky.ci.yml config/booky.yml
+mv config/secrets.yml.example config/secrets.yml
+mv config/database.yml.example config/database.yml
+mv config/booky.yml.example config/booky.yml
 ```
 
 **set up the database**
