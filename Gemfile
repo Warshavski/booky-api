@@ -21,6 +21,10 @@ gem 'mini_magick'
 # Flexible authentication solution for Rails with Warden.
 gem 'devise'
 
+# OAuth 2 provider for Ruby on Rails / Grape.
+# https://github.com/doorkeeper-gem/doorkeeper
+gem 'doorkeeper', '>= 5.0.1'
+
 # https://github.com/Netflix/fast_jsonapi
 # A lightning fast JSON:API serializer for Ruby Objects.
 gem 'fast_jsonapi'
