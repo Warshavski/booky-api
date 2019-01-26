@@ -3,6 +3,8 @@ require 'rails_helper'
 describe ApplicationController do
   let(:user) { create(:user) }
 
+  let!(:token) { create(:token, resource_owner_id: user.id) }
+
   describe 'response format' do
     controller(described_class) do
       def index
@@ -10,7 +12,9 @@ describe ApplicationController do
       end
     end
 
-    before { sign_in user }
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
 
     context 'when format is handled' do
       it 'returns 200 response' do
@@ -29,6 +33,37 @@ describe ApplicationController do
     end
   end
 
+  describe '#set_page_title_header' do
+    let(:controller) { described_class.new }
+
+    it 'URI encodes UTF-8 characters in the title' do
+      response = double(headers: {})
+      allow(controller).to receive(:response).and_return(response)
+
+      controller.send(:set_page_title_header)
+
+      expect(response.headers['Page-Title']).to eq('Booky')
+    end
+  end
+
+  describe '#current_user' do
+    it 'returns nil' do
+      allow(controller).to receive(:doorkeeper_token).and_return(nil)
+
+      current_user = controller.send(:current_user)
+
+      expect(current_user).to be nil
+    end
+
+    it 'returns authenticated user' do
+      allow(controller).to receive(:doorkeeper_token).and_return(token)
+
+      current_user = controller.send(:current_user)
+
+      expect(current_user).to eq user
+    end
+  end
+
   describe '#route_not_found' do
     it 'renders 404 if authenticated' do
       allow(controller).to receive(:current_user).and_return(user)
@@ -41,7 +76,7 @@ describe ApplicationController do
     it 'does redirect to login page via authenticate_user! if not authenticated' do
       allow(controller).to receive(:current_user).and_return(nil)
 
-      expect(controller).to receive(:authenticate_user!)
+      expect(controller).to receive(:doorkeeper_authorize!)
 
       controller.send(:route_not_found)
     end

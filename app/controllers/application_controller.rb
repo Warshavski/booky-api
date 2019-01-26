@@ -9,6 +9,7 @@ class ApplicationController < ActionController::API
   include ExceptionHandler
   include JsonApi::RestifyParams
 
+  before_action :destroy_session
   before_action :check_request_format
   before_action :set_page_title_header
 
@@ -24,7 +25,7 @@ class ApplicationController < ActionController::API
     if current_user
       not_found('endpoint does not exists')
     else
-      authenticate_user!
+      doorkeeper_authorize!
     end
   end
 
@@ -73,4 +74,17 @@ class ApplicationController < ActionController::API
   def specific_filters
     []
   end
+
+  private
+
+  def destroy_session
+    request.session_options[:skip] = true
+  end
+
+  def current_resource_owner
+    return nil unless doorkeeper_token
+    @current_resource_owner ||= User.find(doorkeeper_token.resource_owner_id)
+  end
+
+  alias current_user current_resource_owner
 end
