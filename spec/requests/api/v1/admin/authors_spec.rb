@@ -1,8 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe 'Authors management', type: :request do
+RSpec.describe Api::V1::Admin::AuthorsController, type: :request do
+  before do
+    subject.class.skip_before_action :authenticate_user!, raise: false
+    allow_any_instance_of(subject.class).to receive(:current_user).and_return(create(:user, :admin))
+  end
 
-  let!(:base_url) { '/api/v1/authors' }
+  let!(:base_url) { '/api/v1/admin/authors' }
 
   let(:author)        { create(:author) }
   let(:author_url)    { "#{base_url}/#{author.id}" }

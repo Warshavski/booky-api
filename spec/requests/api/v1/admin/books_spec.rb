@@ -2,8 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Books management', type: :request do
-  let(:base_url) { '/api/v1/books' }
+RSpec.describe Api::V1::Admin::BooksController, type: :request do
+  before do
+    subject.class.skip_before_action :authenticate_user!, raise: false
+    allow_any_instance_of(subject.class).to receive(:current_user).and_return(create(:user, :admin))
+  end
+
+  let(:base_url) { '/api/v1/admin/books' }
   let(:book_url) { "#{base_url}/#{book.id}" }
 
   let(:publisher)   { create(:publisher) }

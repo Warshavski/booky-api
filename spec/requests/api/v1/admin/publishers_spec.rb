@@ -1,8 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe 'Publishers management', type: :request do
+RSpec.describe Api::V1::Admin::PublishersController, type: :request do
+  before do
+    subject.class.skip_before_action :authenticate_user!, raise: false
+    allow_any_instance_of(subject.class).to receive(:current_user).and_return(create(:user, :admin))
+  end
 
-  let!(:base_url) { '/api/v1/publishers' }
+  let!(:base_url) { '/api/v1/admin/publishers' }
 
   let(:publisher)     { create(:publisher) }
   let(:publisher_url) { "#{base_url}/#{publisher.id}" }
