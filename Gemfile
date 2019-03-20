@@ -19,7 +19,7 @@ gem 'mini_magick'
 
 # https://github.com/plataformatec/devise
 # Flexible authentication solution for Rails with Warden.
-gem 'devise'
+gem 'devise', '>= 4.6.1'
 
 # OAuth 2 provider for Ruby on Rails / Grape.
 # https://github.com/doorkeeper-gem/doorkeeper
