@@ -8,7 +8,6 @@ module Api
       #   Used to manage books (CRUD)
       #
       class BooksController < ApplicationController
-
         set_default_serializer Books::CoreSerializer
 
         # GET : api/v1/admin/books
@@ -34,7 +33,7 @@ module Api
         def index
           books = filter_books(filter_params)
 
-          render_json books, is_collection: true, status: :ok
+          render_resource books, is_collection: true, status: :ok
         end
 
         # GET : api/v1/admin/books/{:id}
@@ -45,10 +44,10 @@ module Api
           book = filter_books.preload(:authors, :genres).find_by(id: params[:id])
 
           process_record(book) do |book_record|
-            render_json book_record,
-                        serializer: Books::DetailedSerializer,
-                        include: %i[authors genres],
-                        status: :ok
+            render_resource book_record,
+                            serializer: Books::DetailedSerializer,
+                            include: %i[authors genres],
+                            status: :ok
           end
         end
 
@@ -59,7 +58,7 @@ module Api
         def create
           book = Book.create!(books_params)
 
-          render_json book, status: :created
+          render_resource book, status: :created
         end
 
         # PATCH/PUT : api/v1/admin/books/{:id}

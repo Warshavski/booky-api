@@ -22,7 +22,7 @@ module Api
         def index
           publishers = filter_publishers(filter_params)
 
-          render_json publishers, is_collection: true, status: :ok
+          render_resource publishers, is_collection: true, status: :ok
         end
 
         # GET : api/v1/admin/publishers/{:id}
@@ -33,7 +33,7 @@ module Api
           publisher = filter_publishers.find_by(id: params[:id])
 
           process_record(publisher) do |p|
-            render_json p, status: :ok
+            render_resource p, status: :ok
           end
         end
 
@@ -44,7 +44,7 @@ module Api
         def create
           publisher = Publisher.create!(publishers_params)
 
-          render_json publisher, status: :created
+          render_resource publisher, status: :created
         end
 
         # PATCH/PUT : api/v1/admin/publishers/{:id}

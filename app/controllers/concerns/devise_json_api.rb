@@ -12,8 +12,8 @@ module DeviseJsonApi
 
     protected
 
-    def handle_error(resource)
-      render_errors(ErrorSerializer.serialize(resource, 422), :unprocessable_entity)
+    def process_error(resource)
+      render_error(ErrorSerializer.serialize(resource, 422), :unprocessable_entity)
     end
 
     # Helper for use after calling send_*_instructions methods on a resource.

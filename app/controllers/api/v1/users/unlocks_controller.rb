@@ -27,9 +27,9 @@ module Api::V1
         if resource.errors.empty?
           message = find_message(:unlocked, {})
 
-          render_json resource, meta: { message: message }, status: :ok
+          render_resource resource, meta: { message: message }, status: :ok
         else
-          handle_error(resource)
+          process_error(resource)
         end
       end
 
@@ -41,9 +41,9 @@ module Api::V1
         self.resource = resource_class.send_unlock_instructions(resource_params)
 
         if successfully_sent?(resource)
-          render_json resource, meta: { message: @message }, status: :ok
+          render_resource resource, meta: { message: @message }, status: :ok
         else
-          handle_error(resource)
+          process_error(resource)
         end
       end
 

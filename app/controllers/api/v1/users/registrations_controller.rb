@@ -47,7 +47,7 @@ module Api
           if user.persisted?
             handle_auth(user)
           else
-            handle_error(user)
+            process_error(user)
           end
         end
 
@@ -69,7 +69,7 @@ module Api
             expire_data_after_sign_in!
           end
 
-          render_json user, meta: { message: message }, status: :created
+          render_resource user, meta: { message: message }, status: :created
         end
 
         def handle_error(user)

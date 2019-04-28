@@ -28,9 +28,9 @@ module Api
           if resource.errors.empty?
             message = find_message(:confirmed, {})
 
-            render_json resource, meta: { message: message }, status: :ok
+            render_resource resource, meta: { message: message }, status: :ok
           else
-            handle_error(resource)
+            process_error(resource)
           end
         end
 
@@ -42,9 +42,9 @@ module Api
           self.resource = resource_class.send_confirmation_instructions(resource_params)
 
           if successfully_sent?(resource)
-            render_json resource, meta: { message: @message }, status: :ok
+            render_resource resource, meta: { message: @message }, status: :ok
           else
-            handle_error(resource)
+            process_error(resource)
           end
         end
       end
