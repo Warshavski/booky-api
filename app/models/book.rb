@@ -6,7 +6,7 @@
 #
 class Book < ApplicationRecord
   include Sortable
-  include Booky::SQL::Pattern
+  include Searchable
 
   belongs_to :publisher
 

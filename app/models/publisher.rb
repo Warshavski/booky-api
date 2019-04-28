@@ -6,7 +6,7 @@
 #
 class Publisher < ApplicationRecord
   include Sortable
-  include Booky::SQL::Pattern
+  include Searchable
 
   has_many :books, dependent: :destroy
 
