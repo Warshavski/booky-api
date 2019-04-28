@@ -31,6 +31,10 @@
 
 en:
   hello: "Hello world"
+  errors:
+    messages:
+      endpoint_not_found: 'Endpoint does not exists'
+      resource_not_found: 'Resource not found'
   restify:
     errors:
       missing:

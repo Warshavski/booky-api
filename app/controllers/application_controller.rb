@@ -24,13 +24,13 @@ class ApplicationController < ActionController::API
 
   def route_not_found
     if current_user
-      not_found('endpoint does not exists')
+      not_found(I18n.t(:'errors.messages.endpoint_not_found'))
     else
       doorkeeper_authorize!
     end
   end
 
-  def not_found(message = 'Record not found')
+  def not_found(message = I18n.t(:'errors.messages.resource_not_found'))
     render_error([{ status: 404, detail: message }], :not_found)
   end
 
@@ -50,12 +50,10 @@ class ApplicationController < ActionController::API
 
     @page_title.push(*titles.compact) if titles.any?
 
-    if titles.any? && !defined?(@breadcrumb_title)
-      @breadcrumb_title = @page_title.last
-    end
+    @breadcrumb_title = @page_title.last if titles.any? && !defined?(@breadcrumb_title)
 
     # Segments are separated by middot
-    @page_title.join(" · ")
+    @page_title.join(' · ')
   end
 
   # Optional query parameters :
