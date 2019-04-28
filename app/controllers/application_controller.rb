@@ -5,9 +5,10 @@
 #   Used as base controller
 #
 class ApplicationController < ActionController::API
-  include Responder
-  include ExceptionHandler
-  include JsonApi::RestifyParams
+  include RestifyParams
+
+  include Handlers::Response
+  include Handlers::Exception
 
   before_action :destroy_session
   before_action :check_request_format
@@ -29,6 +30,10 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def not_found(message = 'Record not found')
+    render_error([{ status: 404, detail: message }], :not_found)
+  end
+
   def json_request?
     request.format.json?
   end
@@ -37,7 +42,7 @@ class ApplicationController < ActionController::API
     #
     # Per https://tools.ietf.org/html/rfc5987, headers need to be ISO-8859-1, not UTF-8
     #
-    response.headers['Page-Title'] = URI.escape(page_title('Booky'))
+    response.headers['Page-Title'] = CGI.escape(page_title('Booky'))
   end
 
   def page_title(*titles)
@@ -83,6 +88,7 @@ class ApplicationController < ActionController::API
 
   def current_resource_owner
     return nil unless doorkeeper_token
+
     @current_resource_owner ||= User.find(doorkeeper_token.resource_owner_id)
   end
 

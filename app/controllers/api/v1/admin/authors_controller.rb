@@ -25,7 +25,7 @@ module Api
         def index
           authors = filter_authors(filter_params)
 
-          render_json authors, is_collection: true, status: :ok
+          render_resource authors, is_collection: true, status: :ok
         end
 
         # GET : api/v1/admin/authors/{:id}
@@ -36,7 +36,7 @@ module Api
           author = filter_authors.find_by(id: params[:id])
 
           process_record(author) do |a|
-            render_json a, status: :ok
+            render_resource a, status: :ok
           end
         end
 
@@ -47,7 +47,7 @@ module Api
         def create
           author = Author.create!(authors_params)
 
-          render_json author, status: :created
+          render_resource author, status: :created
         end
 
         # PATCH/PUT : api/v1/admin/authors/{:id}
