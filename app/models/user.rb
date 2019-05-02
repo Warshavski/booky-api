@@ -8,8 +8,7 @@ class User < ApplicationRecord
   include Avatarable
   include CaseSensible
   include Sortable
-
-  include Booky::SQL::Pattern
+  include Searchable
 
   #
   # Include default devise modules. Others available are:

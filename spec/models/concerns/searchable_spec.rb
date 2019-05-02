@@ -1,8 +1,9 @@
-require 'rails_helper'
-require 'booky/sql/pattern'
+# frozen_string_literal: true
 
-describe Booky::SQL::Pattern do
-  let(:dummy) { Class.new { include Booky::SQL::Pattern } }
+require 'rails_helper'
+
+describe Searchable do
+  let(:dummy) { Class.new { include Searchable } }
 
   describe '.to_pattern' do
     context 'when a query is shorter than 3 chars' do
@@ -99,7 +100,7 @@ describe Booky::SQL::Pattern do
       let(:query) { 'foo"really bar"' }
 
       it 'returns array containing two words with double quote' do
-        expect(select_fuzzy_words).to match_array(%W[foo"really bar"])
+        expect(select_fuzzy_words).to match_array(%w[foo"really bar"])
       end
     end
 
@@ -107,7 +108,7 @@ describe Booky::SQL::Pattern do
       let(:query) { '"really bar"baz' }
 
       it 'returns array containing two words with double quote' do
-        expect(select_fuzzy_words).to match_array(%W["really bar"baz])
+        expect(select_fuzzy_words).to match_array(%w["really bar"baz])
       end
     end
 
