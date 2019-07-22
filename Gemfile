@@ -34,7 +34,7 @@ gem 'fast_jsonapi'
 gem 'oj'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.5'
+gem 'rails', '~> 5.1.7'
 
 # https://github.com/binarylogic/settingslogic
 # Settingslogic is a simple configuration / settings solution that uses an ERB enabled YAML file.
