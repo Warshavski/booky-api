@@ -15,7 +15,7 @@ gem 'carrierwave'
 
 # https://github.com/minimagick/minimagick
 # Mini replacement for RMagick
-gem 'mini_magick'
+gem 'mini_magick', '>= 4.9.4'
 
 # https://github.com/plataformatec/devise
 # Flexible authentication solution for Rails with Warden.
