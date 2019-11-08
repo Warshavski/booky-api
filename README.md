@@ -9,7 +9,7 @@ Books management application (API)
 
 #### Requirements
 
-- Ruby 2.5.3
+- Ruby 2.6.5
 - Rails 5.1.6
 - Postgresql 9.5+
 - Redis 2.8+
