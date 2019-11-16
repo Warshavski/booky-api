@@ -61,7 +61,7 @@ gem 'rack-attack'
 
 # Rack Middleware for handling Cross-Origin Resource Sharing (CORS), which makes cross-origin AJAX possible.
 # https://github.com/cyu/rack-cors
-gem 'rack-cors', require: 'rack/cors'
+gem 'rack-cors', '>= 1.0.6', require: 'rack/cors'
 
 # Cache
 gem 'connection_pool'
