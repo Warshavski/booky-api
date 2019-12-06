@@ -42,7 +42,7 @@ gem 'settingslogic'
 
 # A Ruby/Rack web server built for concurrency
 # https://github.com/puma/puma
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.12'
 
 # A Ruby interface to the PostgreSQL RDBMS.
 # https://github.com/ged/ruby-pg
