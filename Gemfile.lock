@@ -149,7 +149,7 @@ GEM
     pry-rails (0.3.8)
       pry (>= 0.10.4)
     public_suffix (3.0.3)
-    puma (4.3.1)
+    puma (4.3.3)
       nio4r (~> 2.0)
     rack (2.0.8)
     rack-attack (5.4.2)
@@ -305,7 +305,7 @@ DEPENDENCIES
   oj
   pg
   pry-rails
-  puma (>= 3.12.2)
+  puma (>= 4.3.3)
   rack-attack
   rack-cors (>= 1.0.6)
   rails (~> 5.1.7)
