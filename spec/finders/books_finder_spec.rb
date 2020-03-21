@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe BooksFinder do
-
   describe '#execute' do
     let(:publisher) { create(:publisher) }
 
@@ -129,45 +130,6 @@ RSpec.describe BooksFinder do
         expect(result.count).to be(1)
       end
 
-      it 'filters books by limit' do
-        books_finder = described_class.new(limit: 5)
-        result = books_finder.execute
-
-        expect(result.count).to be(5)
-      end
-
-      it 'filters books by page' do
-        allow(Booky.config.pagination).to receive(:limit).and_return(5)
-
-        books_finder = described_class.new(page: 2)
-        result = books_finder.execute
-
-        expect(result.count).to be(5)
-        expect(result.first.title).to eq('v6')
-      end
-
-      it 'filters books by page and limit' do
-        books_finder = described_class.new(page: 1, limit: 5)
-        result = books_finder.execute
-
-        expect(result.count).to be(5)
-        expect(result.last.title).to eq('v5')
-      end
-
-      it 'does not finds any book by page of range' do
-        books_finder = described_class.new(page: 100)
-        result = books_finder.execute
-
-        expect(result.count).to be(0)
-      end
-
-      it 'does not returns any book by zero limit' do
-        books_finder = described_class.new(limit: 0)
-        result = books_finder.execute
-
-        expect(result.count).to be(0)
-      end
-
       it 'does not finds any book by given author' do
         author = create(:author)
 
@@ -236,38 +198,6 @@ RSpec.describe BooksFinder do
     end
 
     context 'filter and sort' do
-      it 'filters books by title and sorts by recently_created' do
-        books_finder = described_class.new(sort: 'created_desc', search: 'v')
-        result = books_finder.execute
-
-        expect(result.last.title).to eq('v1')
-        expect(result.count).to eq(10)
-      end
-
-      it 'filters books by title and sorts by last_created' do
-        books_finder = described_class.new(sort: 'created_asc', search: 'v')
-        result = books_finder.execute
-
-        expect(result.last.title).to eq('v10')
-        expect(result.count).to eq(10)
-      end
-
-      it 'filters books by title and sorts by title descending' do
-        books_finder = described_class.new(sort: 'title_desc', search: 'v')
-        result = books_finder.execute
-
-        expect(result.first.title).to eq('v9')
-        expect(result.count).to eq(10)
-      end
-
-      it 'filters books by title and sorts by title ascending' do
-        books_finder = described_class.new(sort: 'title_asc', search: 'v')
-        result = books_finder.execute
-
-        expect(result.first.title).to eq('v1')
-        expect(result.count).to eq(10)
-      end
-
       it 'filters books by publish year and sort by title desc' do
         books.first.update!(published_at: '2000-10-06')
         books.last.update!(published_at: '2000-12-24')
@@ -288,14 +218,6 @@ RSpec.describe BooksFinder do
 
         expect(result.first.title).to eq('v5')
         expect(result.count).to be(5)
-      end
-
-      it 'filters books by page and limit and sorts by title descending' do
-        books_finder = described_class.new(sort: 'title_desc', page: 2, limit: 5)
-        result = books_finder.execute
-
-        expect(result.last.title).to eq('v1')
-        expect(result.count).to eq(5)
       end
     end
   end

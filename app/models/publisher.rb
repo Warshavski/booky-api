@@ -10,14 +10,6 @@ class Publisher < ApplicationRecord
 
   has_many :books, dependent: :destroy
 
-  has_many :books_in_stock, -> { in_stock },
-           source: :books,
-           class_name: 'Book'
-
-  has_many :shops_with_books, -> { distinct },
-           through: :books_in_stock,
-           source: :shops
-
   validates :name, presence: true
 
   # Search publishers by pattern
@@ -29,9 +21,6 @@ class Publisher < ApplicationRecord
   # @return [ActiveRecord::Relation]
   #
   def self.search(query)
-    table = arel_table
-    pattern = "%#{Publisher.to_pattern(query)}%"
-
-    where(table[:name].matches(pattern)).reorder(name: :asc)
+    fuzzy_search(query, %i[name])
   end
 end

@@ -11,43 +11,55 @@ module Searchable
   REGEX_QUOTED_WORD = /(?<=\A| )"[^"]+"(?= |\z)/
 
   module ClassMethods
-
+    # Prepare and return query for partial search
+    #
+    # @param [String] query -
+    #   String query that used in partial search
+    #
+    # @return [String] Sanitized query
+    #
     def to_pattern(query)
       sanitized_query = sanitize_sql_like(query)
 
       if partial_matching?(query)
-        return "%#{sanitized_query}%"
+        "%#{sanitized_query}%"
+      else
+        sanitized_query
       end
-
-      sanitized_query
     end
 
-    def partial_matching?(query)
-      query.length >= MIN_CHARS_FOR_PARTIAL_MATCHING
-    end
-
-    def sanitize_sql_like(string, escape_character = '\\')
-      pattern = Regexp.union(escape_character, '%', '_')
-      string.gsub(pattern) { |x| [escape_character, x].join }
-    end
-
-    def fuzzy_search(query, columns)
-      matches = columns.map { |col| fuzzy_arel_match(col, query) }.compact.reduce(:or)
-
-      where(matches)
-    end
-
+    # Perform fuzzy matching by the given query against given column
     #
-    # column - The column name to search in.
-    # query - The text to search for.
-    # lower_exact_match - When set to `true` we'll fall back to using
-    #                     `LOWER(column) = query` instead of using `ILIKE`.
+    # @param [String] query
+    #   The text to search for.
+    #
+    # @param [Array<String>, Array<Symbol>] columns
+    #   The columns names to search in.
+    #
+    def fuzzy_search(query, columns)
+      return none if query.blank?
+
+      where(compose_matchers(columns, query).reduce(:or))
+    end
+
+    # Perform fuzzy matching by the given query against given column
+    #
+    # @param [String, Symbol] column -
+    #   The column name to search in.
+    #
+    # @param [String] query -
+    #   The text to search for.
+    #
+    # @param [Boolean] lower_exact_match -
+    #   (optional, default: false)
+    #   When set to `true`  we'll fall back to using
+    #   `LOWER(column) = query` instead of using `ILIKE`.
     #
     def fuzzy_arel_match(column, query, lower_exact_match: false)
-      query = query.squish
-      return nil unless query.present?
+      term = query.squish
+      return nil if term.blank?
 
-      words = select_fuzzy_words(query)
+      words = select_fuzzy_words(term)
 
       if words.any?
         words.map { |word| arel_table[column].matches(to_pattern(word)) }.reduce(:and)
@@ -56,24 +68,42 @@ module Searchable
         # No words of at least 3 chars, but we can search for an exact
         # case insensitive match with the query as a whole
         #
-        Arel::Nodes::NamedFunction.new('LOWER', [arel_table[column]]).eq(query)
+        Arel::Nodes::NamedFunction.new('LOWER', [arel_table[column]]).eq(term)
       else
-        arel_table[column].matches(sanitize_sql_like(query))
+        arel_table[column].matches(sanitize_sql_like(term))
       end
     end
 
     def select_fuzzy_words(query)
       quoted_words = query.scan(REGEX_QUOTED_WORD)
 
-      query = quoted_words.reduce(query) { |q, quoted_word| q.sub(quoted_word, '') }
-
-      words = query.split
+      term = quoted_words.reduce(query) { |q, quoted_word| q.sub(quoted_word, '') }
 
       quoted_words.map! { |quoted_word| quoted_word[1..-2] }
 
-      words.concat(quoted_words)
+      words = term.split.concat(quoted_words)
 
       words.select(&method(:partial_matching?))
+    end
+
+    private
+
+    def compose_matchers(columns, query)
+      columns.each_with_object([]) do |col, matchers|
+        matcher = fuzzy_arel_match(col, query)
+
+        matchers << matcher unless matcher.nil?
+      end
+    end
+
+    def sanitize_sql_like(string, escape_character =  '\\')
+      pattern = Regexp.union(escape_character, '%', '_')
+
+      string.gsub(pattern) { |x| [escape_character, x].join }
+    end
+
+    def partial_matching?(query)
+      query.length >= MIN_CHARS_FOR_PARTIAL_MATCHING
     end
   end
 end

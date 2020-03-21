@@ -27,19 +27,7 @@ class Author < ApplicationRecord
   # @return [ActiveRecord::Relation]
   #
   def self.search(query)
-    table = arel_table
-    pattern = "%#{Author.to_pattern(query)}%"
-
-    order = <<~SQL.squish
-      CASE
-        WHEN authors.last_name = %{query} THEN 0
-        WHEN authors.first_name = %{query} THEN 1
-        ELSE 3
-      END
-    SQL
-
-    where(table[:last_name].matches(pattern).or(table[:first_name].matches(pattern)))
-      .reorder(format(order, query: ActiveRecord::Base.connection.quote(query)), :last_name)
+    fuzzy_search(query, %i[first_name last_name])
   end
 
   # Sort books by sort method(field and direction)

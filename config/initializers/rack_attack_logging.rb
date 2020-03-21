@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Adds logging for all Rack Attack blocks and throttling events.
 #

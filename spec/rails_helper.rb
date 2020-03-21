@@ -6,7 +6,6 @@ SimpleCov.start
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'database_cleaner'
 require 'spec_helper'
-require 'support/restify_helper'
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
@@ -16,6 +15,10 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require 'rspec-parameterized'
 # Add additional requires below this line. Rails is not loaded until this point!
+
+require 'test_prof/recipes/rspec/before_all'
+require 'test_prof/recipes/rspec/let_it_be'
+require 'test_prof/recipes/rspec/factory_all_stub'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -51,12 +54,10 @@ Dir[Rails.root.join('spec/support/shared_examples/*.rb')].each(&method(:require)
 Dir[Rails.root.join('spec/support/**/*.rb')].each(&method(:require))
 
 RSpec.configure do |config|
-  config.include RestifyHelper
   config.include FixtureHelpers
   config.include ConfigurationHelpers
-  config.include ObjectStorageHelpers
+  config.include GraphqlHelpers
 
-  config.include ActiveJob::TestHelper
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::ControllerHelpers, type: :controller
 
@@ -69,10 +70,6 @@ RSpec.configure do |config|
     DatabaseCleaner.cleaning do
       example.run
     end
-  end
-
-  config.after do
-    BatchLoader::Executor.clear_current
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

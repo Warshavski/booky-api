@@ -35,7 +35,7 @@ RSpec.describe User, type: :model do
     end
 
     describe '.admins' do
-      let!(:user) { create(:user) }
+      let_it_be(:user) { create(:user) }
 
       it 'returns only user with admin privileges' do
         admin = create(:admin)
@@ -49,7 +49,7 @@ RSpec.describe User, type: :model do
     end
 
     describe '.banned' do
-      let!(:user) { create(:user) }
+      let_it_be(:user) { create(:user) }
 
       it 'returns only banned users' do
         banned_user = create(:user, banned_at: Time.now)
@@ -63,7 +63,7 @@ RSpec.describe User, type: :model do
     end
 
     describe '.active' do
-      let!(:banned_user) { create(:user, banned_at: Time.now) }
+      let_it_be(:banned_user) { create(:user, banned_at: Time.now) }
 
       it 'returns only active users' do
         active_user = create(:user)
@@ -76,41 +76,21 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe '.confirmed' do
-      let!(:unconfirmed_user) { create(:user, confirmed_at: nil) }
-
-      it 'returns only user confirmed users' do
-        user = create(:user)
-
-        expect(described_class.confirmed).to eq([user])
-      end
-
-      it 'returns nothing if confirmed user not present' do
-        expect(described_class.confirmed).to eq([])
-      end
-    end
-  end
-
-  describe '.filter' do
-    let(:user) { double }
-
-    it 'filters by active users by default' do
-      expect(described_class).to receive(:active).and_return([user])
-
-      expect(described_class.filter(nil)).to include(user)
-    end
-
-    it 'filters by admins' do
-      expect(described_class).to receive(:admins).and_return([user])
-
-      expect(described_class.filter('admins')).to include(user)
-    end
-
-    it 'filters by banned' do
-      expect(described_class).to receive(:banned).and_return([user])
-
-      expect(described_class.filter('banned')).to include(user)
-    end
+    # TODO : add after authentication configurations
+    #
+    # describe '.confirmed' do
+    #   let_it_be(:unconfirmed_user) { create(:user, confirmed_at: nil) }
+    #
+    #   it 'returns only user confirmed users' do
+    #     user = create(:user)
+    #
+    #     expect(described_class.confirmed).to eq([user])
+    #   end
+    #
+    #   it 'returns nothing if confirmed user not present' do
+    #     expect(described_class.confirmed).to eq([])
+    #   end
+    # end
   end
 
   describe '.find_for_database_authentication' do
@@ -122,35 +102,41 @@ RSpec.describe User, type: :model do
   end
 
   describe '#sort_by_attribute' do
-    before { described_class.delete_all }
+    let_it_be(:user) do
+      create(:user, created_at: Date.today, current_sign_in_at: Date.today, username: 'Alpha')
+    end
 
-    let!(:user) { create(:user, created_at: Date.today, current_sign_in_at: Date.today, username: 'Alpha') }
-    let!(:user1) { create(:user, created_at: Date.today - 1, current_sign_in_at: Date.today - 1, username: 'Omega') }
-    let!(:user2) { create(:user, created_at: Date.today - 2, username: 'Beta')}
+    let_it_be(:user1) do
+      create(:user, created_at: Date.today - 1.day, current_sign_in_at: Date.today - 1.day, username: 'Omega')
+    end
+
+    let_it_be(:user2) do
+      create(:user, created_at: Date.today - 2.days, username: 'Beta')
+    end
 
     context 'when sort by recent_sign_in' do
-      let(:users) { described_class.sort_by_attribute('recent_sign_in') }
+      subject { described_class.sort_by_attribute('recent_sign_in') }
 
       it 'sorts users by recent sign-in time' do
-        expect(users.first).to eq(user)
-        expect(users.second).to eq(user1)
+        expect(subject.first).to eq(user)
+        expect(subject.second).to eq(user1)
       end
 
       it 'pushes users who never signed in to the end' do
-        expect(users.third).to eq(user2)
+        expect(subject.third).to eq(user2)
       end
     end
 
     context 'when sort by oldest_sign_in' do
-      let(:users) { described_class.sort_by_attribute('oldest_sign_in') }
+      subject { described_class.sort_by_attribute('oldest_sign_in') }
 
       it 'sorts users by the oldest sign-in time' do
-        expect(users.first).to eq(user1)
-        expect(users.second).to eq(user)
+        expect(subject.first).to eq(user1)
+        expect(subject.second).to eq(user)
       end
 
       it 'pushes users who never signed in to the end' do
-        expect(users.third).to eq(user2)
+        expect(subject.third).to eq(user2)
       end
     end
 
@@ -168,58 +154,57 @@ RSpec.describe User, type: :model do
   end
 
   describe '.search' do
-    let!(:user)   { create(:user, username: 'usern', email: 'email@gmail.com') }
-    let!(:user2)  { create(:user, username: 'username', email: 'someemail@gmail.com') }
-    let!(:user3)  { create(:user, username: 'se', email: 'foo@gmail.com') }
+    subject { described_class.search(query) }
 
-    describe 'email matching' do
-      it 'returns users with a matching Email' do
-        expect(described_class.search(user.email)).to eq([user])
-      end
+    let_it_be(:user) { create(:user, username: 'watusername', email: 'email@example.com') }
 
-      it 'does not return users with a partially matching Email' do
-        expect(described_class.search(user.email[0..2])).not_to include(user, user2)
-      end
+    context 'with a matching email' do
+      let(:query) { user.email }
 
-      it 'returns users with a matching Email regardless of the casing' do
-        expect(described_class.search(user2.email.upcase)).to eq([user2])
-      end
+      it { is_expected.to eq([user]) }
     end
 
-    describe 'username matching' do
-      it 'returns users with a matching username' do
-        expect(described_class.search(user.username)).to eq([user, user2])
-      end
+    context 'with a partially matching email' do
+      let(:query) { user.email[0..2] }
 
-      it 'returns users with a partially matching username' do
-        expect(described_class.search(user.username[0..2])).to eq([user, user2])
-      end
-
-      it 'returns users with a matching username regardless of the casing' do
-        expect(described_class.search(user2.username.upcase)).to eq([user2])
-      end
-
-      it 'returns users with a exact matching username shorter than 3 chars' do
-        expect(described_class.search(user3.username)).to eq([user3])
-      end
-
-      it 'returns users with a exact matching username shorter than 3 chars regardless of the casing' do
-        expect(described_class.search(user3.username.upcase)).to eq([user3])
-      end
+      it { is_expected.to eq([user]) }
     end
 
-    it 'returns no matches for an empty string' do
-      expect(described_class.search('')).to be_empty
+    context 'with a matching email regardless of the casting' do
+      let(:query) { user.email.upcase }
+
+      it { is_expected.to eq([user]) }
     end
 
-    it 'returns no matches for nil' do
-      expect(described_class.search(nil)).to be_empty
+    context 'with a matching username' do
+      let(:query) { user.username }
+
+      it { is_expected.to eq([user]) }
+    end
+
+    context 'with a partially matching username' do
+      let(:query) { user.username[0..2] }
+
+      it { is_expected.to eq([user]) }
+    end
+
+    context 'with a matching username regardless of the casting' do
+      let(:query) { user.username.upcase }
+
+      it { is_expected.to eq([user]) }
+    end
+
+    context 'with a blank query' do
+      let(:query) { '' }
+
+      it { is_expected.to eq([]) }
     end
   end
 
   describe '.by_login' do
-    let(:username) { 'John' }
-    let!(:user) { create(:user, username: username) }
+    let_it_be(:username) { 'John' }
+
+    let_it_be(:user) { create(:user, username: username) }
 
     it 'finds user by email' do
       expect(described_class.by_login(user.email)).to eq(user)
@@ -230,7 +215,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'finds user by username match' do
-      expect(described_class.by_login(username)).to eq (user)
+      expect(described_class.by_login(username)).to eq(user)
     end
 
     it 'finds user by username lowercase' do

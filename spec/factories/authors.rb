@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :author, class: Author do
     first_name  { Faker::Name.first_name }
@@ -7,18 +9,5 @@ FactoryBot.define do
   factory :author_seq, class: Author do
     sequence(:first_name, (1..10).cycle) { |n| "fn-v#{n}" }
     sequence(:last_name, (1..10).cycle) { |n| "ln-v#{n}" }
-  end
-
-  factory :author_params, class: Hash do
-    initialize_with do
-      {
-        id: 1,
-        type: 'author',
-        attributes: {
-          first_name: Faker::Name.first_name,
-          last_name: Faker::Name.last_name
-        }
-      }
-    end
   end
 end

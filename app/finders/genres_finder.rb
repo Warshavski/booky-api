@@ -9,7 +9,6 @@
 #   params: optional search, filter and sort parameters
 #
 class GenresFinder < BaseFinder
-
   filter(:search) do |items, params|
     params[:search].present? ? items.search(params[:search]) : items
   end
