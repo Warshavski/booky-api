@@ -9,8 +9,6 @@
 #   params: optional search, filter and sort parameters
 #
 class PublishersFinder < BaseFinder
-  include PaginationFilters
-
   filter(:search) do |items, params|
     params[:search].present? ? items.search(params[:search]) : items
   end
@@ -19,8 +17,6 @@ class PublishersFinder < BaseFinder
   #
   # @option params [String]   :sort     sort type(attribute and sort direction)
   # @option params [String]   :search   search pattern(part of the name)
-  # @option params [Integer]  :page     page number
-  # @option params [Integer]  :limit    quantity of items per page
   #
   def initialize(params = {})
     super

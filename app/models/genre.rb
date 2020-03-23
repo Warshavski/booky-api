@@ -24,9 +24,6 @@ class Genre < ApplicationRecord
   # @return [ActiveRecord::Relation]
   #
   def self.search(query)
-    table = arel_table
-    pattern = "%#{Genre.to_pattern(query)}%"
-
-    where(table[:name].matches(pattern)).reorder(name: :asc)
+    fuzzy_search(query, %i[name])
   end
 end

@@ -9,8 +9,6 @@
 #   params: optional search, filter and sort parameters
 #
 class BooksFinder < BaseFinder
-  include PaginationFilters
-
   filter(:publisher_id) do |items, params|
     params[:publisher_id].present? ? items.where(publisher_id: params[:publisher_id]) : items
   end
@@ -65,8 +63,6 @@ class BooksFinder < BaseFinder
   # @option params [String]         :search         Search pattern(part of the name)
   # @option params [String]         :isbn           The International Standard Book Number (ISBN)
   # @option params [String]         :sort           Sort type(attribute and sort direction)
-  # @option params [Integer]        :page           Page number
-  # @option params [Integer]        :limit          Quantity of items per page
   #
   def initialize(params = {})
     super

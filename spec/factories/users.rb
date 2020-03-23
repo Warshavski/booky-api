@@ -1,4 +1,4 @@
-include ActionDispatch::TestProcess
+# frozen_string_literal: true
 
 FactoryBot.define do
   factory :user, class: User do
@@ -20,25 +20,6 @@ FactoryBot.define do
       after(:build) { |user, _| user.update!(banned_at: Time.now) }
     end
 
-    trait :with_avatar do
-      avatar { fixture_file_upload('spec/fixtures/dk.png') }
-    end
-
     factory :admin, traits: [:admin]
-  end
-
-  factory :user_params, class: Hash do
-    initialize_with do
-      {
-        type: "user",
-        attributes: {
-          email: "wat@wat.wat",
-          email_confirmation: "wat@wat.wat",
-          password: "123456",
-          password_confirmation: "123456",
-          username: "wat"
-        }
-      }
-    end
   end
 end

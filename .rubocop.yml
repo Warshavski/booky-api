@@ -1,22 +1,27 @@
-#inherit_from: .rubocop_todo.yml
 AllCops:
-  Include:
-    - Rakefile
-    - config.ru
-    - lib/**/*.rake
-  Exclude:
-    - db/schema.rb
   TargetRubyVersion: 2.5
+  Exclude:
+    - 'spec/**/*'
+    - 'db/**/*'
+    - 'app/views/**/*'
+    - 'config/**/*'
+    - 'bin/*'
+    - 'Rakefile'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
 
-#################### Style ####################
-
-AsciiComments:
-  Description: Use only ascii symbols in comments.
+Bundler/OrderedGems:
   Enabled: false
 
-AsciiIdentifiers:
-  Description: Use only ascii symbols in identifiers.
+Layout/AccessModifierIndentation:
+  EnforcedStyle: indent
+
+Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
-Metrics/LineLength:
-  Max: 120
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: space
+
+Layout/LineLength:
+  AllowURI: true
+  Enabled: false

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190126151916) do
+ActiveRecord::Schema.define(version: 2019_01_26_151916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,49 +110,6 @@ ActiveRecord::Schema.define(version: 20190126151916) do
     t.string "phone"
     t.string "address"
     t.string "postcode"
-  end
-
-  create_table "sales", force: :cascade do |t|
-    t.bigint "book_id", null: false
-    t.bigint "shop_id", null: false
-    t.integer "quantity", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["book_id"], name: "index_sales_on_book_id"
-    t.index ["shop_id"], name: "index_sales_on_shop_id"
-  end
-
-  create_table "shops", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "stocks", force: :cascade do |t|
-    t.bigint "book_id", null: false
-    t.bigint "shop_id", null: false
-    t.integer "quantity", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["book_id"], name: "index_stocks_on_book_id"
-    t.index ["shop_id"], name: "index_stocks_on_shop_id"
-  end
-
-  create_table "uploads", force: :cascade do |t|
-    t.bigint "size", null: false
-    t.string "path", limit: 511, null: false
-    t.string "checksum", limit: 64
-    t.string "model_type"
-    t.bigint "model_id"
-    t.string "uploader", null: false
-    t.string "mount_point"
-    t.string "secret"
-    t.integer "store"
-    t.datetime "created_at", null: false
-    t.index ["checksum"], name: "index_uploads_on_checksum"
-    t.index ["model_id", "model_type"], name: "index_uploads_on_model_id_and_model_type"
-    t.index ["model_type", "model_id"], name: "index_uploads_on_model_type_and_model_id"
-    t.index ["path"], name: "index_uploads_on_path"
   end
 
   create_table "users", force: :cascade do |t|

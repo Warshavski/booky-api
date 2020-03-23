@@ -5,7 +5,6 @@
 #   Represents a registered user
 #
 class User < ApplicationRecord
-  include Avatarable
   include CaseSensible
   include Sortable
   include Searchable
@@ -67,19 +66,6 @@ class User < ApplicationRecord
       end
     end
 
-    def filter(filter_name)
-      case filter_name.to_s
-      when 'admins'
-        admins
-      when 'banned'
-        banned
-      when 'confirmed'
-        confirmed
-      else
-        active
-      end
-    end
-
     # Searches users matching the given query.
     #
     # NOTE : This method uses ILIKE on PostgreSQL and LIKE on MySQL.
@@ -89,21 +75,7 @@ class User < ApplicationRecord
     # @return [ActiveRecord::Relation]
     #
     def search(query)
-      return none if query.blank?
-
-      query = query.downcase
-
-      order = <<~SQL.squish
-        CASE
-          WHEN users.username = %{query} THEN 0
-          WHEN users.email = %{query} THEN 1
-          ELSE 2
-        END
-      SQL
-
-      where(
-        fuzzy_arel_match(:username, query, lower_exact_match: true).or(arel_table[:email].eq(query))
-      ).reorder(format(order, query: ActiveRecord::Base.connection.quote(query)), :username)
+      fuzzy_search(query, %i[username email])
     end
 
     # Limits the result set to users _not_ in the given query/list of IDs.

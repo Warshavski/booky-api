@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ObjectStoreSettings
 #
 #   Set default values for object_store settings

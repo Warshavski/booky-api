@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails'
@@ -8,7 +10,9 @@ require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
-# require "sprockets/railtie"
+
+# required by GraphiQL rails
+require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -58,8 +62,7 @@ module Booky
         resource '/api/*',
                  credentials: false,
                  headers: :any,
-                 methods: :any,
-                 expose: %w[Link X-Total X-Total-Pages X-Per-Page X-Page X-Next-Page X-Prev-Page]
+                 methods: :any
       end
     end
 
@@ -75,8 +78,6 @@ module Booky
     caching_config_hash[:expires_in] = 2.weeks
 
     config.cache_store = :redis_store, caching_config_hash
-
-    config.middleware.use(BatchLoader::Middleware)
 
     # Configure sensitive parameters which will be filtered from the log file.
     #

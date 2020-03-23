@@ -39,15 +39,6 @@ RSpec.describe Book, type: :model do
     it { should { have_many(:sales) } }
   end
 
-  describe '.in_stock' do
-    let!(:stock_non_zero_qnt) { create(:stock) }
-    let!(:stock_zero_qnt) { create(:stock, quantity: 0) }
-
-    it 'returns only in stock' do
-      expect(described_class.in_stock).to eq([stock_non_zero_qnt.book])
-    end
-  end
-
   describe '.search' do
     let(:book) { create(:book, title: 'wat book') }
 

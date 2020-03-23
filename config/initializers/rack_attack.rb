@@ -1,6 +1,6 @@
-paths_to_be_protected = [
-  '/api/v1/books/'
-]
+# frozen_string_literal: true
+
+paths_to_be_protected = [Constants::GRAPHQL_ENDPOINT]
 
 #
 # Create one big regular expression that matches strings starting with any of the paths_to_be_protected.

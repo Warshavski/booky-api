@@ -13,13 +13,6 @@ class Book < ApplicationRecord
   has_and_belongs_to_many :authors
   has_and_belongs_to_many :genres
 
-  has_many :stocks
-  has_many :shops, through: :stocks
-
-  has_many :sales
-
-  scope :in_stock, -> { joins(:stocks).where('stocks.quantity > 0').distinct }
-
   scope :order_title_asc,   -> { reorder(title: :asc) }
   scope :order_title_desc,  -> { reorder(title: :desc) }
 
@@ -42,10 +35,7 @@ class Book < ApplicationRecord
   # @return [ActiveRecord::Relation]
   #
   def self.search(query)
-    table = arel_table
-    pattern = "%#{Book.to_pattern(query)}%"
-
-    where(table[:title].matches(pattern)).reorder(title: :asc)
+    fuzzy_search(query, %i[title])
   end
 
   # Sort books by sort method(field and direction)
