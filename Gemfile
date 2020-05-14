@@ -17,7 +17,7 @@ gem 'devise'
 
 # OAuth 2 provider for Ruby on Rails / Grape.
 # https://github.com/doorkeeper-gem/doorkeeper
-gem 'doorkeeper'
+gem 'doorkeeper', '~> 5.3.2'
 
 # A Ruby implementation of GraphQL.
 # https://github.com/rmosolgo/graphql-ruby
