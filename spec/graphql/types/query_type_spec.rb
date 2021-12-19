@@ -22,7 +22,7 @@ RSpec.describe Types::QueryType do
       BookySchema.execute(query).as_json
     end
 
-    it 'returns all items' do
+    it 'is expected to return all items' do
       expected_results = books.map { |item| { 'node' => { 'title' => item.title } } }
       actual_results = result.dig('data', 'books', 'edges')
 

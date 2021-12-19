@@ -1,46 +1,34 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
-  "https://github.com/#{repo_name}.git"
-end
+ruby '3.0.2'
 
-# Lazy loading associations for the ActiveRecord models
-# https://github.com/DmitryTsepelev/ar_lazy_preload
-gem 'ar_lazy_preload'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem 'rails', '~> 6.1.4', '>= 6.1.4.4'
+# Use sqlite3 as the database for Active Record
+gem 'sqlite3', '~> 1.4'
+# Use Puma as the app server
+gem 'puma', '~> 5.0'
 
-# Flexible authentication solution for Rails with Warden.
-# https://github.com/plataformatec/devise
-gem 'devise'
-
-# OAuth 2 provider for Ruby on Rails / Grape.
-# https://github.com/doorkeeper-gem/doorkeeper
-gem 'doorkeeper', '~> 5.3.2'
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 4.0'
 
 # A Ruby implementation of GraphQL.
 # https://github.com/rmosolgo/graphql-ruby
-gem 'graphql', '>= 1.10.4'
+gem 'graphql'
 
-# https://github.com/ohler55/oj
-# A fast JSON parser and Object marshaller as a Ruby gem.
-gem 'oj'
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.3'
-
-# Settingslogic is a simple configuration / settings solution that uses an ERB enabled YAML file.
-# https://github.com/binarylogic/settingslogic
-gem 'settingslogic'
-
-# A Ruby/Rack web server built for concurrency
-# https://github.com/puma/puma
-gem 'puma', '>= 4.3.5'
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.4.4', require: false
 
 # A Ruby interface to the PostgreSQL RDBMS.
 # https://github.com/ged/ruby-pg
 gem 'pg'
+
+# File Attachment toolkit for Ruby applications.
+# https://github.com/shrinerb/shrine
+gem 'shrine', '>= 3.3'
 
 # Rack middleware for blocking & throttling
 # https://github.com/kickstarter/rack-attack
@@ -50,32 +38,51 @@ gem 'rack-attack'
 # https://github.com/cyu/rack-cors
 gem 'rack-cors', '>= 1.0.6', require: 'rack/cors'
 
-# Cache
-gem 'connection_pool'
-gem 'redis'
-gem 'redis-namespace'
-gem 'redis-rails'
+# Abort requests that are taking too long
+# https://github.com/sharpstone/rack-timeout
+gem 'rack-timeout'
+
+# Exception tracking and logging from Ruby to Rollbar https://docs.rollbar.com/docs/ruby
+# https://github.com/rollbar/rollbar-gem
+gem 'rollbar'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'rspec-parameterized', require: false
-  gem 'rspec-rails'
-end
-
-group :development do
   # Help to kill N+1 queries and unused eager loading
   # https://github.com/flyerhzm/bullet
   gem 'bullet'
+
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+
+  # Shim to load environment variables from .env into ENV in development.
+  # https://github.com/bkeepers/dotenv
+  gem 'dotenv-rails'
+end
+
+# Static code analyzer and formatter. Keep your code clean.
+gem 'rubocop', require: false
+gem 'rubocop-rspec', require: false
+
+group :development do
+  # Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
+  # https://github.com/presidentbeef/brakeman
+  gem 'brakeman'
+  gem 'listen', '~> 3.3'
   gem 'graphiql-rails'
-  gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'pry-rails'
+
+  # Provide a quality report of your Ruby code.
+  # https://github.com/whitesmith/rubycritic
+  gem 'rubycritic', require: false
 end
 
 group :test do
   gem 'database_cleaner'
+
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'rspec-parameterized', require: false
+  gem 'rspec-rails'
   gem 'rspec-sqlimit'
   gem 'rspec_junit_formatter'
   gem 'shoulda-matchers', '>= 4.0.0'

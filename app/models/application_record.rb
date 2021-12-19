@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# ApplicationRecord
-#
-#   Base class for all models
+# Base application model
 #
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true

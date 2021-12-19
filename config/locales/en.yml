@@ -27,17 +27,7 @@
 #   'true': 'foo'
 #
 # To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
+# available at https://guides.rubyonrails.org/i18n.html.
 
 en:
   hello: "Hello world"
-  errors:
-    messages:
-      endpoint_not_found: 'Endpoint does not exists'
-      resource_not_found: 'Resource not found'
-  restify:
-    errors:
-      missing:
-        data: 'Parameters does not present by JSON:API format. Missing "data" key'
-        type: 'Parameters does not present by JSON:API format. Missing "type" key'
-        attributes: 'Parameters does not present by JSON:API format. Missing "attributes" key'

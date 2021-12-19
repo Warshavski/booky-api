@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter 'spec/factories'
+
+  add_filter 'spec/support/shared_contexts/bullet_context.rb'
+end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'database_cleaner'
@@ -20,6 +24,8 @@ require 'test_prof/recipes/rspec/before_all'
 require 'test_prof/recipes/rspec/let_it_be'
 require 'test_prof/recipes/rspec/factory_all_stub'
 
+require_relative 'support/shared_contexts/bullet_context'
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -33,14 +39,16 @@ require 'test_prof/recipes/rspec/factory_all_stub'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
-# If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.maintain_test_schema!
-
-Dir[Rails.root.join('spec/support/helpers/*.rb')].each(&method(:require))
-Dir[Rails.root.join('spec/support/**/*.rb')].each(&method(:require))
+# If you are not using ActiveRecord, you can remove these lines.
+begin
+  ActiveRecord::Migration.maintain_test_schema!
+rescue ActiveRecord::PendingMigrationError => e
+  puts e.to_s.strip
+  exit 1
+end
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -49,28 +57,19 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-Dir[Rails.root.join('spec/support/helpers/*.rb')].each(&method(:require))
-Dir[Rails.root.join('spec/support/shared_examples/*.rb')].each(&method(:require))
+RSpec::Matchers.define_negated_matcher :not_change, :change
+RSpec::Matchers.define_negated_matcher :not_yield_control, :yield_control
+
 Dir[Rails.root.join('spec/support/**/*.rb')].each(&method(:require))
+Dir[Rails.root.join('spec/support/helpers/*.rb')].each(&method(:require))
 
 RSpec.configure do |config|
-  config.include FixtureHelpers
-  config.include ConfigurationHelpers
-  config.include GraphqlHelpers
+  config.include ActiveJob::TestHelper
+  config.include ActiveSupport::Testing::TimeHelpers
+
+  config.include StubEnvHelpers
 
   config.include FactoryBot::Syntax::Methods
-  config.include Devise::Test::ControllerHelpers, type: :controller
-
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -99,7 +98,32 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.alias_example_to 'bulletify', bullet: true
+
+  # WARNING!
   #
+  # Dirty hack to prevent tests fall.
+  #
+  # TODO : Need to find better solution
+  #
+  config.before(:each, type: :request) do
+    allow_any_instance_of(ApplicationController).to receive(:json_content_type?).and_return(true)
+  end
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:example, :request_store) do
+    RequestStore.begin!
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning { example.run }
+  end
+
   config.around(:each, :use_clean_rails_memory_store_caching) do |example|
     caching_store = Rails.cache
     Rails.cache = ActiveSupport::Cache::MemoryStore.new
@@ -109,11 +133,19 @@ RSpec.configure do |config|
     Rails.cache = caching_store
   end
 
-  config.around(:each, :clean_booky_redis_cache) do |example|
+  config.around(:each, :clean_elplano_redis_cache) do |example|
     redis_cache_cleanup!
 
     example.run
 
     redis_cache_cleanup!
+  end
+
+  config.around(:each, :clean_elplano_redis_sessions) do |example|
+    redis_sessions_cleanup!
+
+    example.run
+
+    redis_sessions_cleanup!
   end
 end

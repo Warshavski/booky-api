@@ -19,11 +19,7 @@
 
 /public/uploads
 
-# Ignore some config files
-/config/secrets.yml
-/config/booky.yml
-/config/database.yml
-/config/redis.cache.yml
+/storage/uploads
 
 .byebug_history
 
@@ -31,3 +27,12 @@
 .idea/
 
 coverage
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+.env
+REVISION
+
+# Ignore generated API documentation
+/doc/api

@@ -5,13 +5,11 @@
 #   Represents book genre
 #
 class Genre < ApplicationRecord
-  include Sortable
   include Searchable
 
   has_and_belongs_to_many :books
 
-  validates :name, presence: true
-  validates :name, uniqueness: { case_sensitive: false }
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
 
   before_save -> { name.downcase! }
 

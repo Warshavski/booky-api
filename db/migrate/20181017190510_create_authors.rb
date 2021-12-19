@@ -4,13 +4,14 @@ class CreateAuthors < ActiveRecord::Migration[5.1]
       t.string :first_name, null: false
       t.string :last_name,  null: false
 
-      t.text :biography
+      t.text :biography, null: true
 
-      t.date :born_in
-      t.date :died_in
+      t.date :born_in, null: true
+      t.date :died_in, null: true
 
-      t.column :created_at, 'timestamp with time zone', null: false
-      t.column :updated_at, 'timestamp with time zone', null: false
+      t.timestamps
     end
+
+    add_index :authors, %i[first_name last_name]
   end
 end
