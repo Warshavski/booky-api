@@ -5,10 +5,9 @@
 #   Represents a publisher of books
 #
 class Publisher < ApplicationRecord
-  include Sortable
   include Searchable
 
-  has_many :books, dependent: :destroy
+  has_many :books, dependent: :restrict_with_exception
 
   validates :name, presence: true
 

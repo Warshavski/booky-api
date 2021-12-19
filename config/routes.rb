@@ -6,11 +6,6 @@ Rails.application.routes.draw do
   # @see AboutController
   root to: 'about#show', defaults: { format: 'json' }
 
-  use_doorkeeper do
-    # No need to register client application
-    skip_controllers :applications, :authorized_applications
-  end
-
   # @see GraphqlController
   post Constants::GRAPHQL_ENDPOINT, to: 'graphql#execute'
 

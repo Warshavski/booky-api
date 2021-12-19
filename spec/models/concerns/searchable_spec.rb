@@ -2,179 +2,173 @@
 
 require 'rails_helper'
 
-describe Searchable do
-  let(:dummy) { Class.new { include Searchable } }
+RSpec.describe Searchable do
+  let_it_be(:dummy) { Class.new { include Searchable } }
 
   describe '.to_pattern' do
-    context 'when a query is shorter than 3 chars' do
-      it 'returns exact matching pattern' do
-        expect(dummy.to_pattern('wa')).to eq('wa')
+    subject { dummy.to_pattern(query) }
+
+    context 'when a query is a shorter than 3 chars' do
+      context 'exact matching pattern' do
+        let(:query) { 'wa' }
+
+        it { is_expected.to eq(query) }
       end
 
-      it 'returns sanitized exact matching pattern' do
-        expect(dummy.to_pattern('w_')).to eq('w\_')
+      context 'sanitized exact matching pattern' do
+        let(:query) { 'w_' }
+
+        it { is_expected.to eq('w\_') }
       end
     end
 
     context 'when a query is equal to 3 chars' do
-      it 'returns partial matching pattern' do
-        expect(dummy.to_pattern('wat')).to eq('%wat%')
+      context 'partial matching pattern' do
+        let(:query) { 'wat' }
+
+        it { is_expected.to eq('%wat%') }
       end
 
-      it 'returns sanitized partial matching pattern' do
-        expect(dummy.to_pattern('wa_')).to eq('%wa\_%')
+      context 'sanitized partial matching pattern' do
+        let(:query) { 'wa_' }
+
+        it { is_expected.to eq('%wa\_%') }
       end
     end
 
     context 'when a query is longer than 3 chars' do
-      it 'returns partial matching pattern' do
-        expect(dummy.to_pattern('watso')).to eq('%watso%')
+      context 'partial matching pattern' do
+        let(:query) { 'query' }
+
+        it { is_expected.to eq('%query%') }
       end
 
-      it 'returns sanitized partial matching pattern' do
-        expect(dummy.to_pattern('wat_')).to eq('%wat\_%')
+      context 'sanitized partial matching pattern' do
+        let(:query) { 'que_ry' }
+
+        it { is_expected.to eq('%que\_ry%') }
       end
     end
   end
 
   describe '.select_fuzzy_words' do
-    subject(:select_fuzzy_words) { User.select_fuzzy_words(query) }
+    subject { Book.select_fuzzy_words(query) }
 
     context 'with a word equal to 3 chars' do
-      let(:query) { 'foo' }
+      let(:query) { 'wat' }
 
-      it 'returns array containing a word' do
-        expect(select_fuzzy_words).to match_array(['foo'])
-      end
+      it { is_expected.to match_array([query]) }
     end
 
     context 'with a word shorter than 3 chars' do
-      let(:query) { 'fo' }
+      let(:query) { 'wa' }
 
-      it 'returns empty array' do
-        expect(select_fuzzy_words).to match_array([])
-      end
+      it { is_expected.to match_array([]) }
     end
 
     context 'with two words both equal to 3 chars' do
-      let(:query) { 'foo baz' }
+      let(:query) { 'wat hey' }
 
-      it 'returns array containing two words' do
-        expect(select_fuzzy_words).to match_array(%w[foo baz])
-      end
+      it { is_expected.to match_array(%w[wat hey]) }
     end
 
     context 'with two words divided by two spaces both equal to 3 chars' do
-      let(:query) { 'foo  baz' }
+      let(:query) { 'wat  hey' }
 
-      it 'returns array containing two words' do
-        expect(select_fuzzy_words).to match_array(%w[foo baz])
-      end
+      it { is_expected.to match_array(%w[wat hey]) }
     end
 
     context 'with two words equal to 3 chars and shorter than 3 chars' do
-      let(:query) { 'foo ba' }
+      let(:query) { 'wat so' }
 
-      it 'returns array containing a word' do
-        expect(select_fuzzy_words).to match_array(['foo'])
-      end
+      it { is_expected.to match_array(['wat']) }
     end
 
     context 'with a multi-word surrounded by double quote' do
-      let(:query) { '"really bar"' }
+      let(:query) { '"fantastic wat"' }
 
-      it 'returns array containing a multi-word' do
-        expect(select_fuzzy_words).to match_array(['really bar'])
-      end
+      it { is_expected.to match_array(['fantastic wat']) }
     end
 
-    context 'with a multi-word surrounded by double quote and two words' do
-      let(:query) { 'foo "really bar" baz' }
+    context 'with multi-word surrounded by double quote and two words' do
+      let(:query) { 'wat "fantastic" hey' }
 
-      it 'returns array containing a multi-word and tow words' do
-        expect(select_fuzzy_words).to match_array(['foo', 'really bar', 'baz'])
-      end
+      it { is_expected.to match_array(%w[wat hey fantastic]) }
     end
 
-    context 'with a multi-word surrounded by double quote missing a space before the first double quote' do
-      let(:query) { 'foo"really bar"' }
+    context 'with multi-word surrounded by double quote missing a space before the first double quote' do
+      let(:query) { 'wat"fantastic hey"' }
 
-      it 'returns array containing two words with double quote' do
-        expect(select_fuzzy_words).to match_array(%w[foo"really bar"])
-      end
+      it { is_expected.to match_array(%w[wat"fantastic hey"]) }
     end
 
     context 'with a multi-word surrounded by double quote missing a space after the second double quote' do
-      let(:query) { '"really bar"baz' }
+      let(:query) { '"fantastic wat"hey' }
 
-      it 'returns array containing two words with double quote' do
-        expect(select_fuzzy_words).to match_array(%w["really bar"baz])
-      end
+      it { is_expected.to match_array(%w["fantastic wat"hey]) }
     end
 
     context 'with two multi-word surrounded by double quote and two words' do
-      let(:query) { 'foo "really bar" baz "awesome feature"' }
+      let(:query) { 'wat "fantastic app" hey "awesome feature"' }
 
-      it 'returns array containing two multi-words and tow words' do
-        expect(select_fuzzy_words).to match_array(['foo', 'really bar', 'baz', 'awesome feature'])
-      end
+      it { is_expected.to match_array(['wat', 'fantastic app', 'hey', 'awesome feature']) }
     end
   end
 
   describe '.fuzzy_arel_match' do
-    subject(:fuzzy_arel_match) { User.fuzzy_arel_match(:username, query) }
+    subject { Book.fuzzy_arel_match(:title, query) }
 
     context 'with a word equal to 3 chars' do
-      let(:query) { 'foo' }
+      let(:query) { 'wat' }
 
-      it 'returns a single ILIKE condition' do
-        expect(fuzzy_arel_match.to_sql).to match(/username.*I?LIKE '\%foo\%'/)
+      it 'is expected to return a single ILIKE condition' do
+        expect(subject.to_sql).to match(/title.*I?LIKE '\%wat\%'/)
       end
     end
 
     context 'with a word shorter than 3 chars' do
-      let(:query) { 'fo' }
+      let(:query) { 'so' }
 
-      it 'returns a single equality condition' do
-        expect(fuzzy_arel_match.to_sql).to match(/username.*I?LIKE 'fo'/)
+      it 'is expected to return a single equality condition' do
+        expect(subject.to_sql).to match(/title.*I?LIKE 'so'/)
       end
 
       it 'uses LOWER instead of ILIKE when LOWER is enabled' do
-        rel = User.fuzzy_arel_match(:username, query, lower_exact_match: true)
+        rel = Book.fuzzy_arel_match(:title, query, lower_exact_match: true)
 
-        expect(rel.to_sql).to match(/LOWER\(.*username.*\).*=.*'fo'/)
+        expect(rel.to_sql).to match(/LOWER\(.*title.*\).*=.*'so/)
       end
     end
 
     context 'with two words both equal to 3 chars' do
-      let(:query) { 'foo baz' }
+      let(:query) { 'wat hey' }
 
-      it 'returns a joining LIKE condition using a AND' do
-        expect(fuzzy_arel_match.to_sql).to match(/username.+I?LIKE '\%foo\%' AND .*username.*I?LIKE '\%baz\%'/)
+      it 'is expected to return a joining LIKE condition using AND' do
+        expect(subject.to_sql).to match(/title.+I?LIKE '\%wat\%' AND .*title.*I?LIKE '\%hey\%/)
       end
     end
 
-    context 'with two words both shorter than 3 chars' do
-      let(:query) { 'fo ba' }
+    context 'with two words both  shorter than 3 chars' do
+      let(:query) { 'so wa' }
 
-      it 'returns a single ILIKE condition' do
-        expect(fuzzy_arel_match.to_sql).to match(/username.*I?LIKE 'fo ba'/)
+      it 'is expected to return a single ILIKE condition' do
+        expect(subject.to_sql).to match(/title.*I?LIKE 'so wa'/)
       end
     end
 
     context 'with two words, one shorter 3 chars' do
-      let(:query) { 'foo ba' }
+      let(:query) { 'wat so' }
 
-      it 'returns a single ILIKE condition using the longer word' do
-        expect(fuzzy_arel_match.to_sql).to match(/username.+I?LIKE '\%foo\%'/)
+      it 'is expected to return a single ILIKE condition using the longer word' do
+        expect(subject.to_sql).to match(/title.+I?LIKE '\%wat\%'/)
       end
     end
 
     context 'with a multi-word surrounded by double quote and two words' do
-      let(:query) { 'foo "really bar" baz' }
+      let(:query) { 'wat "fantastic app" hey' }
 
-      it 'returns a joining LIKE condition using a AND' do
-        expect(fuzzy_arel_match.to_sql).to match(/username.+I?LIKE '\%foo\%' AND .*username.*I?LIKE '\%baz\%' AND .*username.*I?LIKE '\%really bar\%'/)
+      it 'is expected to return a joining LIKE condition using AND' do
+        expect(subject.to_sql).to match(/title.+I?LIKE '\%wat\%' AND .*title.*I?LIKE '\%hey\%' AND .*title.*I?LIKE '\%fantastic app\%'/)
       end
     end
   end
