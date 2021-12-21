@@ -4,6 +4,8 @@
 #
 #   Provides additions for search implementation
 #
+# TODO : move this to finders(queries) concerns
+#
 module Searchable
   extend ActiveSupport::Concern
 

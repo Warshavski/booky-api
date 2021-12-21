@@ -146,6 +146,7 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
+    oj (3.13.10)
     parallel (1.21.0)
     parser (3.0.3.2)
       ast (~> 2.4.1)
@@ -288,7 +289,6 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     test-prof (1.0.7)
     thor (1.1.0)
     thread_safe (0.3.6)
@@ -325,6 +325,7 @@ DEPENDENCIES
   graphiql-rails
   graphql
   listen (~> 3.3)
+  oj
   pg
   pry-rails
   puma (~> 5.0)
@@ -343,7 +344,6 @@ DEPENDENCIES
   shoulda-matchers (>= 4.0.0)
   shrine (>= 3.3)
   simplecov
-  sqlite3 (~> 1.4)
   test-prof
   tzinfo-data
 

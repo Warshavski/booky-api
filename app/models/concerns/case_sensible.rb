@@ -4,6 +4,8 @@
 #
 #   Concern for querying columns with specific case sensitivity handling.
 #
+# TODO : move this to finders(queries) concerns
+#
 module CaseSensible
   extend ActiveSupport::Concern
 
