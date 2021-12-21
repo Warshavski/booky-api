@@ -8,5 +8,7 @@ module Types
   # @see https://graphql-ruby.org/type_definitions/unions.html
   #
   class BaseUnion < GraphQL::Schema::Union
+    edge_type_class(Types::BaseEdge)
+    connection_type_class(Types::BaseConnection)
   end
 end

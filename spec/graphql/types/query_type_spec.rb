@@ -19,7 +19,7 @@ RSpec.describe Types::QueryType do
     end
 
     subject(:result) do
-      BookySchema.execute(query).as_json
+      BookyApiSchema.execute(query).as_json
     end
 
     it 'is expected to return all items' do

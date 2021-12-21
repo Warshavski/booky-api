@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe BookySchema.types['Publisher'] do
+RSpec.describe BookyApiSchema.types['Publisher'] do
   it 'is expected to have the correct fields' do
     expected_fields = %i[
       id created_at updated_at
