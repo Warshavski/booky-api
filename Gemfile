@@ -67,6 +67,10 @@ end
 gem 'rubocop', require: false
 gem 'rubocop-rspec', require: false
 
+# TODO : add when it will support Ruby 3
+# gem 'debase'
+# gem 'ruby-debug-ide'
+
 group :development do
   # Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
   # https://github.com/presidentbeef/brakeman
