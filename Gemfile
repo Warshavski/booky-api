@@ -20,7 +20,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 # Application server
 # https://github.com/puma/puma
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.6'
 
 # A Ruby interface to the PostgreSQL RDBMS.
 # https://github.com/ged/ruby-pg
