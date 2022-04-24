@@ -8,6 +8,7 @@
 /.bundle
 
 # Ignore the default SQLite database.
+.db
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
@@ -32,6 +33,9 @@ coverage
 /config/master.key
 
 .env
+/.env.local
+/.env.*.local
+docker-compose.override.yml
 REVISION
 
 # Ignore generated API documentation
