@@ -8,8 +8,6 @@
 # @see https://graphql-ruby.org/schema/definition.html
 #
 class BookyApiSchema < GraphQL::Schema
-  use GraphQL::Pagination::Connections
-
   mutation(Types::MutationType)
   query(Types::QueryType)
 

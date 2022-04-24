@@ -61,15 +61,15 @@ group :development, :test do
   # Shim to load environment variables from .env into ENV in development.
   # https://github.com/bkeepers/dotenv
   gem 'dotenv-rails'
+
+  # Remote debug
+  gem 'debase', '~> 0.2.5.beta2'
+  gem 'ruby-debug-ide', '~> 0.7.2'
 end
 
 # Static code analyzer and formatter. Keep your code clean.
 gem 'rubocop', require: false
 gem 'rubocop-rspec', require: false
-
-# TODO : add when it will support Ruby 3
-# gem 'debase'
-# gem 'ruby-debug-ide'
 
 group :development do
   # Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.

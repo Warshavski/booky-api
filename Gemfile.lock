@@ -88,6 +88,9 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    debase (0.2.5.beta2)
+      debase-ruby_core_source (>= 0.10.12)
+    debase-ruby_core_source (0.10.15)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.5.0)
@@ -143,6 +146,8 @@ GEM
     minitest (5.15.0)
     msgpack (1.5.1)
     nio4r (2.5.8)
+    nokogiri (1.13.4-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.13.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.13.4-x86_64-darwin)
@@ -259,6 +264,8 @@ GEM
       parser (>= 3.1.1.0)
     rubocop-rspec (2.10.0)
       rubocop (~> 1.19)
+    ruby-debug-ide (0.7.3)
+      rake (>= 0.8.1)
     ruby-progressbar (1.11.0)
     ruby_parser (3.19.1)
       sexp_processor (~> 4.16)
@@ -314,6 +321,7 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin-21
   x86_64-darwin-20
   x86_64-linux
@@ -324,6 +332,7 @@ DEPENDENCIES
   bullet
   byebug
   database_cleaner
+  debase (~> 0.2.5.beta2)
   dotenv-rails
   factory_bot_rails
   faker
@@ -345,6 +354,7 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop
   rubocop-rspec
+  ruby-debug-ide (~> 0.7.2)
   rubycritic
   shoulda-matchers (>= 4.0.0)
   shrine (>= 3.3)

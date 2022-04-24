@@ -101,15 +101,10 @@ RSpec.configure do |config|
 
   config.alias_example_to 'bulletify', bullet: true
 
-  # WARNING!
-  #
-  # Dirty hack to prevent tests fall.
-  #
-  # TODO : Need to find better solution
-  #
-  config.before(:each, type: :request) do
-    allow_any_instance_of(ApplicationController).to receive(:json_content_type?).and_return(true)
-  end
+  DatabaseCleaner.url_allowlist = %w[
+    postgres://postgres@localhost
+    postgres://postgres:postgres@postgres:5432
+  ]
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
