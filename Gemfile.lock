@@ -101,6 +101,38 @@ GEM
       railties (>= 3.2)
     down (5.3.1)
       addressable (~> 2.8)
+    dry-configurable (0.15.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.6)
+    dry-container (0.9.0)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 0.13, >= 0.13.0)
+    dry-core (0.7.1)
+      concurrent-ruby (~> 1.0)
+    dry-inflector (0.2.1)
+    dry-initializer (3.1.1)
+    dry-logic (1.2.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.5, >= 0.5)
+    dry-schema (1.9.1)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 0.13, >= 0.13.0)
+      dry-core (~> 0.5, >= 0.5)
+      dry-initializer (~> 3.0)
+      dry-logic (~> 1.0)
+      dry-types (~> 1.5)
+    dry-types (1.5.1)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.3)
+      dry-core (~> 0.5, >= 0.5)
+      dry-inflector (~> 0.1, >= 0.1.2)
+      dry-logic (~> 1.0, >= 1.0.2)
+    dry-validation (1.8.0)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.7, >= 0.7.1)
+      dry-core (~> 0.5, >= 0.5)
+      dry-initializer (~> 3.0)
+      dry-schema (~> 1.9, >= 1.9.1)
     equalizer (0.0.11)
     erubi (1.10.0)
     factory_bot (6.2.1)
@@ -129,6 +161,7 @@ GEM
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    interactor (3.1.2)
     kwalify (0.7.2)
     launchy (2.5.0)
       addressable (~> 2.7)
@@ -334,10 +367,12 @@ DEPENDENCIES
   database_cleaner
   debase (~> 0.2.5.beta2)
   dotenv-rails
+  dry-validation
   factory_bot_rails
   faker
   graphiql-rails
   graphql
+  interactor
   listen (~> 3.3)
   oj
   pg

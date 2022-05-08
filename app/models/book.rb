@@ -21,16 +21,4 @@ class Book < ApplicationRecord
 
   validates :isbn10, length: { is: 10, allow_nil: true }
   validates :isbn13, length: { is: 13, allow_nil: true }
-
-  # Search books by pattern
-  #
-  # NOTE: this method uses ILIKE in PostgreSQL and LIKE in MySQL.
-  #
-  # @param [String] query search pattern
-  #
-  # @return [ActiveRecord::Relation]
-  #
-  def self.search(query)
-    fuzzy_search(query, %i[title])
-  end
 end

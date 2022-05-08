@@ -6,7 +6,9 @@ module Types
     #
     #   Represents book author model
     #
-    class AuthorType < BaseModelObject
+    class AuthorType < BaseObject
+      implements Interfaces::ModelInterface
+
       field :first_name,  String, null: false
       field :last_name,   String, null: false
       field :biography,   String, null: true

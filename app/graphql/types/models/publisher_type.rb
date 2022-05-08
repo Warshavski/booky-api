@@ -6,7 +6,9 @@ module Types
     #
     #   Represents book publisher model
     #
-    class PublisherType < BaseModelObject
+    class PublisherType < BaseObject
+      implements Interfaces::ModelInterface
+
       field :name,          String, null: false
       field :description,   String, null: true
       field :email,         String, null: true

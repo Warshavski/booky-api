@@ -18,6 +18,10 @@ gem 'graphql'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
+# https://github.com/dry-rb/dry-validation
+# Validation library with type-safe schemas and rules https://dry-rb.org/gems/dry-validation
+gem 'dry-validation'
+
 # Application server
 # https://github.com/puma/puma
 gem 'puma', '~> 5.6'
@@ -49,6 +53,10 @@ gem 'rack-timeout'
 # Exception tracking and logging from Ruby to Rollbar https://docs.rollbar.com/docs/ruby
 # https://github.com/rollbar/rollbar-gem
 gem 'rollbar'
+
+# Interactors are used to encapsulate your application's business logic.
+# https://github.com/collectiveidea/interactor
+gem 'interactor'
 
 group :development, :test do
   # Help to kill N+1 queries and unused eager loading
