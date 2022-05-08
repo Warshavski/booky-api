@@ -12,6 +12,26 @@ module Resolvers
              description: 'Search query for title.',
              required: false
 
+    argument :publisher_id, GraphQL::Types::BigInt,
+             description: 'Filter books by publisher.',
+             required: false
+
+    argument :author_id, GraphQL::Types::BigInt,
+             description: 'Filter books by author.',
+             required: false
+
+    argument :genre_ids, [GraphQL::Types::BigInt],
+             description: 'Filter books by genres.',
+             required: false
+
+    argument :publish_date, GraphQL::Types::String,
+             description: 'Filter books by publication date(year or exact date).',
+             required: false
+
+    argument :isbn, GraphQL::Types::String,
+             description: 'Filter books by isbn(isbn-13 or isbn-10.',
+             required: false
+
     def resolve(**args)
       BooksQuery.call(params: args)
     end

@@ -2,7 +2,7 @@
 
 # Sortable
 #
-#   Provides sorting logic to the finder.
+#   Provides sorting logic to the query.
 #
 # Sorting for resource attributes comes 'from the box', no additional configuration needed
 #

@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.bigint "book_id"
     t.bigint "author_id"
     t.index ["author_id"], name: "index_authors_books_on_author_id"
-    t.index ["book_id", "author_id"], name: "index_authors_books_on_book_id_and_author_id"
+    t.index ["book_id", "author_id"], name: "index_authors_books_on_book_id_and_author_id", unique: true
     t.index ["book_id"], name: "index_authors_books_on_book_id"
   end
 

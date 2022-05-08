@@ -10,7 +10,17 @@ RSpec.describe Resolvers::BooksResolver do
   describe '#resolve' do
     subject { resolver.resolve(**params) }
 
-    let(:params) { { search: 'wat', sort: '-title,id' } }
+    let(:params) do
+      {
+        search: 'wat',
+        sort: '-title,id',
+        publisher_id: 1,
+        author_id: 2,
+        genre_ids: [3, 4],
+        publish_date: '2019',
+        isbn: '1234567890'
+      }
+    end
 
     shared_examples 'books query call' do
       it 'is expected to call books query with given params' do
