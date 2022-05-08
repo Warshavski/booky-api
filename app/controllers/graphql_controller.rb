@@ -30,7 +30,7 @@ class GraphqlController < ApplicationController
       operation_name: params[:operationName]
     }
 
-    result = BookyApiSchema.execute(params[:query], args)
+    result = BookyApiSchema.execute(params[:query], **args)
 
     render json: result
   rescue StandardError => e
@@ -61,7 +61,7 @@ class GraphqlController < ApplicationController
 
   def ensure_string(variables_param)
     if variables_param.present?
-      JSON.parse(variables_param) || {}
+      Oj.parse(variables_param) || {}
     else
       {}
     end

@@ -104,6 +104,7 @@ RSpec.configure do |config|
   DatabaseCleaner.url_allowlist = %w[
     postgres://postgres@localhost
     postgres://postgres:postgres@postgres:5432
+    postgres://postgres:postgres@localhost:5432
   ]
 
   config.before(:suite) do

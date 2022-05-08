@@ -10,9 +10,7 @@ Rails.application.routes.draw do
   # @see GraphqlController
   post Constants::GRAPHQL_ENDPOINT, to: 'graphql#execute'
 
-  if Rails.env.development?
-    mount GraphiQL::Rails::Engine,
-          at: '/graphiql',
-          graphql_path: Constants::GRAPHQL_ENDPOINT
-  end
+  mount GraphiQL::Rails::Engine,
+        at: '/graphiql',
+        graphql_path: Constants::GRAPHQL_ENDPOINT
 end

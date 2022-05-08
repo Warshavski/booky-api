@@ -4,13 +4,13 @@
 #
 #   Provides additions for search implementation
 #
-# TODO : move this to finders(queries) concerns
-#
 module Searchable
   extend ActiveSupport::Concern
 
   MIN_CHARS_FOR_PARTIAL_MATCHING = 3
   REGEX_QUOTED_WORD = /(?<=\A| )"[^"]+"(?= |\z)/
+
+  private_constant :MIN_CHARS_FOR_PARTIAL_MATCHING, :REGEX_QUOTED_WORD
 
   # Search methods
   #
@@ -33,6 +33,8 @@ module Searchable
     end
 
     # Perform fuzzy matching by the given query against given column
+    #
+    # NOTE: this method uses ILIKE in PostgreSQL and LIKE in MySQL.
     #
     # @param [String] query
     #   The text to search for.

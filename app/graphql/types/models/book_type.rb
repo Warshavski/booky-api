@@ -6,7 +6,9 @@ module Types
     #
     #   Represents book model
     #
-    class BookType < BaseModelObject
+    class BookType < BaseObject
+      implements Interfaces::ModelInterface
+
       field :title,         String,   null: false
       field :description,   String,   null: true
       field :isbn13,        String,   null: true

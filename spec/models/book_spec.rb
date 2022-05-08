@@ -30,20 +30,4 @@ RSpec.describe Book, type: :model do
 
     it { is_expected.to have_and_belong_to_many(:genres) }
   end
-
-  describe '.search' do
-    let_it_be(:book) { create(:book, title: 'wat book') }
-
-    it 'returns book with a matching title' do
-      expect(described_class.search(book.title)).to eq([book])
-    end
-
-    it 'returns book with a partially matching title' do
-      expect(described_class.search(book.title[0..2])).to eq([book])
-    end
-
-    it 'returns book with a matching title regardless of the casing' do
-      expect(described_class.search(book.title.upcase)).to eq([book])
-    end
-  end
 end

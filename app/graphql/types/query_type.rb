@@ -19,7 +19,8 @@ module Types
     field :books,
           Types::Models::BookType.connection_type,
           null: true,
-          description: 'Returns a list of books in the library'
+          description: 'Returns a list of books in the library',
+          resolver: Resolvers::BooksResolver
 
     field :genres,
           Types::Models::GenreType.connection_type,
@@ -33,10 +34,6 @@ module Types
 
     def authors
       Author.all
-    end
-
-    def books
-      Book.all
     end
 
     def genres
