@@ -5,17 +5,24 @@
 #   Used as base class for all queries and contains common logic
 #     (sorting and common filtration flow)
 #
-# TODO : refactor it with DSL for finders
-#
 class ApplicationQuery
   include Sortable
+  include Filterable
+
+  class << self
+    attr_reader :default_scope
+
+    def options(options)
+      @default_scope = options[:default_scope]
+    end
+  end
 
   specify_sort :default, attributes: :id, direction: :desc
 
   attr_reader :context, :params
 
   def initialize(context: nil, params: {})
-    @context = context
+    @context = context || self.class.default_scope
     @params = params
   end
 
@@ -24,7 +31,7 @@ class ApplicationQuery
   end
 
   def execute
-    raise NotImplementedError
+    filter(context).then(&method(:sort))
   end
 
   private
