@@ -9,8 +9,11 @@ class Book < ApplicationRecord
 
   belongs_to :publisher
 
-  has_and_belongs_to_many :authors
-  has_and_belongs_to_many :genres
+  has_many :books_authors, dependent: :destroy
+  has_many :authors, through: :books_authors
+
+  has_many :books_genres, dependent: :destroy
+  has_many :genres, through: :books_genres
 
   validates :title, :published_at, :pages_count, presence: true
 

@@ -5,33 +5,35 @@ module Resolvers
     # Resolvers::Lists::BooksResolver
     #
     class BooksResolver < GraphQL::Schema::Resolver
+      description 'Collection of Books.'
+
       argument :sort, GraphQL::Types::String,
-               description: 'Sort books by this criteria.',
-               required: false
+               required: false,
+               description: 'Sort books by this criteria.'
 
       argument :search, GraphQL::Types::String,
-               description: 'Search query for title.',
-               required: false
+               required: false,
+               description: 'Search query for title.'
 
-      argument :publisher_id, GraphQL::Types::BigInt,
-               description: 'Filter books by publisher.',
-               required: false
+      argument :publisher_id, ID,
+               required: false,
+               description: 'Filter books by publisher.'
 
-      argument :author_id, GraphQL::Types::BigInt,
-               description: 'Filter books by author.',
-               required: false
+      argument :author_id, ID,
+               required: false,
+               description: 'Filter books by author.'
 
-      argument :genre_ids, [GraphQL::Types::BigInt],
-               description: 'Filter books by genres.',
-               required: false
+      argument :genre_ids, [ID],
+               required: false,
+               description: 'Filter books by genres.'
 
       argument :publish_date, GraphQL::Types::String,
-               description: 'Filter books by publication date(year or exact date).',
-               required: false
+               required: false,
+               description: 'Filter books by publication date(year or exact date).'
 
       argument :isbn, GraphQL::Types::String,
-               description: 'Filter books by isbn(isbn-13 or isbn-10.',
-               required: false
+               required: false,
+               description: 'Filter books by isbn(isbn-13 or isbn-10.'
 
       def resolve(**args)
         BooksQuery.call(params: args)

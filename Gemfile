@@ -77,6 +77,8 @@ end
 
 # Static code analyzer and formatter. Keep your code clean.
 gem 'rubocop', require: false
+gem 'rubocop-graphql', require: false
+gem 'rubocop-rails', require: false
 gem 'rubocop-rspec', require: false
 
 group :development do

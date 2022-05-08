@@ -8,7 +8,8 @@ RSpec.describe Author, type: :model do
   end
 
   describe 'associations' do
-    it { should { have_and_belong_to_many(:books) } }
+    it { is_expected.to have_many(:books_authors).dependent(:destroy) }
+    it { is_expected.to have_many(:books).through(:books_authors) }
   end
 
   # describe '.search' do

@@ -9,6 +9,8 @@ module Types
     class GenreType < BaseObject
       implements Interfaces::ModelInterface
 
+      description 'Books genre'
+
       field :name, String,
             null: false,
             description: 'Name of the genre.'
@@ -17,7 +19,9 @@ module Types
             null: true,
             description: 'Description of the genre.'
 
-      field :books, Types::Models::BookType.connection_type, null: true
+      field :books, Types::Models::BookType.connection_type,
+            null: true,
+            description: 'Books list of this genre'
     end
   end
 end

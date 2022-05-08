@@ -11,6 +11,8 @@ module Types
   # @see https://graphql-ruby.org/queries/executing_queries.html
   #
   class QueryType < Types::BaseObject
+    description 'Query entry point. Root-level queries list.'
+
     field :authors,
           Types::Models::AuthorType.connection_type,
           null: true,

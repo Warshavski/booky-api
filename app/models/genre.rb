@@ -7,7 +7,8 @@
 class Genre < ApplicationRecord
   include Searchable
 
-  has_and_belongs_to_many :books
+  has_many :books_genres, dependent: :destroy
+  has_many :books, through: :books_genres
 
   before_save -> { name.downcase! }
 end

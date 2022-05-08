@@ -9,14 +9,31 @@ module Types
     class AuthorType < BaseObject
       implements Interfaces::ModelInterface
 
-      field :first_name,  String, null: false
-      field :last_name,   String, null: false
-      field :biography,   String, null: true
+      description 'Book author.'
 
-      field :born_in, ::GraphQL::Types::ISO8601Date, null: true
-      field :died_in, ::GraphQL::Types::ISO8601Date, null: true
+      field :first_name, String,
+            description: 'Author first name.',
+            null: false
 
-      field :books, [Types::Models::BookType], null: true
+      field :last_name, String,
+            description: 'Author last name.',
+            null: false
+
+      field :biography, String,
+            description: 'Author biography.',
+            null: true
+
+      field :born_in, ::GraphQL::Types::ISO8601Date,
+            description: 'Author birthday date.',
+            null: true
+
+      field :died_in, ::GraphQL::Types::ISO8601Date,
+            description: 'Author date of death.',
+            null: true
+
+      field :books, [Types::Models::BookType],
+            description: 'Collection of books written by the author.',
+            null: true
     end
   end
 end

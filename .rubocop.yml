@@ -1,5 +1,9 @@
+require:
+  - rubocop-rails
+  - rubocop-graphql
+
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.0
   Exclude:
     - 'spec/**/*'
     - 'db/**/*'
@@ -25,3 +29,7 @@ Layout/SpaceInsideHashLiteralBraces:
 Layout/LineLength:
   AllowURI: true
   Enabled: false
+
+GraphQL/ExtractInputType:
+  Include:
+    - 'graphql/mutations/**/*.rb'

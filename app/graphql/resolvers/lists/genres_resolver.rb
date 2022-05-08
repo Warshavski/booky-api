@@ -5,6 +5,8 @@ module Resolvers
     # Resolvers::Lists::GenresResolver
     #
     class GenresResolver < GraphQL::Schema::Resolver
+      description 'Collection of Genres.'
+
       argument :sort, GraphQL::Types::String,
                description: "Sort criteria(example: '-name,id').",
                required: false

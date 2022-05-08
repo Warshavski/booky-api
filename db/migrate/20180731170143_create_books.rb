@@ -8,8 +8,8 @@ class CreateBooks < ActiveRecord::Migration[5.1]
       t.integer :pages_count, null: false, default: 0
       t.text    :description, null: true
 
-      t.string :isbn13, limit: 13, null: true, index: true
-      t.string :isbn10, limit: 10, null: true, index: true
+      t.string :isbn13, limit: 13, null: true, index: { unique: true }
+      t.string :isbn10, limit: 10, null: true, index: { unique: true }
 
       t.date :published_at, null: false, index: true
 

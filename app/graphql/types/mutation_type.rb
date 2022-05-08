@@ -12,6 +12,8 @@ module Types
   # @see https://graphql-ruby.org/mutations/mutation_root.html
   #
   class MutationType < Types::BaseObject
+    description 'Mutations root-level.'
+
     field :create_genre,
           mutation: Mutations::Genres::Create,
           description: 'Creates a new genre.'

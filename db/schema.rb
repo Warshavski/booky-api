@@ -26,14 +26,6 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.index ["first_name", "last_name"], name: "index_authors_on_first_name_and_last_name"
   end
 
-  create_table "authors_books", id: false, force: :cascade do |t|
-    t.bigint "book_id"
-    t.bigint "author_id"
-    t.index ["author_id"], name: "index_authors_books_on_author_id"
-    t.index ["book_id", "author_id"], name: "index_authors_books_on_book_id_and_author_id", unique: true
-    t.index ["book_id"], name: "index_authors_books_on_book_id"
-  end
-
   create_table "books", force: :cascade do |t|
     t.bigint "publisher_id"
     t.string "title", null: false
@@ -45,17 +37,25 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.date "published_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["isbn10"], name: "index_books_on_isbn10"
-    t.index ["isbn13"], name: "index_books_on_isbn13"
+    t.index ["isbn10"], name: "index_books_on_isbn10", unique: true
+    t.index ["isbn13"], name: "index_books_on_isbn13", unique: true
     t.index ["published_at"], name: "index_books_on_published_at"
     t.index ["publisher_id"], name: "index_books_on_publisher_id"
     t.index ["title"], name: "index_books_on_title"
   end
 
+  create_table "books_authors", id: false, force: :cascade do |t|
+    t.bigint "book_id"
+    t.bigint "author_id"
+    t.index ["author_id"], name: "index_books_authors_on_author_id"
+    t.index ["book_id", "author_id"], name: "index_books_authors_on_book_id_and_author_id", unique: true
+    t.index ["book_id"], name: "index_books_authors_on_book_id"
+  end
+
   create_table "books_genres", id: false, force: :cascade do |t|
     t.bigint "book_id"
     t.bigint "genre_id"
-    t.index ["book_id", "genre_id"], name: "index_books_genres_on_book_id_and_genre_id"
+    t.index ["book_id", "genre_id"], name: "index_books_genres_on_book_id_and_genre_id", unique: true
     t.index ["book_id"], name: "index_books_genres_on_book_id"
     t.index ["genre_id"], name: "index_books_genres_on_genre_id"
   end
@@ -80,9 +80,9 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.index ["name"], name: "index_publishers_on_name"
   end
 
-  add_foreign_key "authors_books", "authors"
-  add_foreign_key "authors_books", "books"
   add_foreign_key "books", "publishers"
+  add_foreign_key "books_authors", "authors"
+  add_foreign_key "books_authors", "books"
   add_foreign_key "books_genres", "books"
   add_foreign_key "books_genres", "genres"
 end

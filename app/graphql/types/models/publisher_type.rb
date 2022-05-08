@@ -9,14 +9,35 @@ module Types
     class PublisherType < BaseObject
       implements Interfaces::ModelInterface
 
-      field :name,          String, null: false
-      field :description,   String, null: true
-      field :email,         String, null: true
-      field :phone,         String, null: true
-      field :address,       String, null: true
-      field :postcode,      String, null: true
+      description 'Books publisher'
 
-      field :books, Types::Models::BookType.connection_type, null: true
+      field :name, String,
+            null: false,
+            description: 'Publisher name.'
+
+      field :description, String,
+            null: true,
+            description: 'Publisher description.'
+
+      field :email, String,
+            null: true,
+            description: 'Contact email address of the publisher.'
+
+      field :phone, String,
+            null: true,
+            description: 'Contact phone number of the publisher.'
+
+      field :address, String,
+            null: true,
+            description: 'Address of the publisher.'
+
+      field :postcode, String,
+            null: true,
+            description: 'Postal code of the publisher.'
+
+      field :books, Types::Models::BookType.connection_type,
+            null: true,
+            description: 'List of book owned by this publisher.'
     end
   end
 end

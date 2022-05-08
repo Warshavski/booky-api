@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Genre, type: :model do
   describe 'associations' do
-    it { should { have_and_belong_to_many(:books) } }
+    it { is_expected.to have_many(:books_genres).dependent(:destroy) }
+    it { is_expected.to have_many(:books).through(:books_genres) }
   end
 
   describe 'before_save' do

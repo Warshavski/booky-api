@@ -7,5 +7,7 @@ module Types
     include Types::BaseInterface
     # Add the `id` field
     include GraphQL::Types::Relay::NodeBehaviors
+
+    description ''
   end
 end

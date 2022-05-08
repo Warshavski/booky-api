@@ -26,8 +26,10 @@ RSpec.describe Book, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:publisher) }
 
-    it { is_expected.to have_and_belong_to_many(:authors) }
+    it { is_expected.to have_many(:books_authors).dependent(:destroy) }
+    it { is_expected.to have_many(:authors).through(:books_authors) }
 
-    it { is_expected.to have_and_belong_to_many(:genres) }
+    it { is_expected.to have_many(:books_genres).dependent(:destroy) }
+    it { is_expected.to have_many(:genres).through(:books_genres) }
   end
 end

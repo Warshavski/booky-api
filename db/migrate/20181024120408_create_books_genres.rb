@@ -5,6 +5,6 @@ class CreateBooksGenres < ActiveRecord::Migration[5.1]
       t.references :genre,  foreign_key: true
     end
 
-    add_index :books_genres, %i[book_id genre_id]
+    add_index :books_genres, %i[book_id genre_id], unique: true
   end
 end

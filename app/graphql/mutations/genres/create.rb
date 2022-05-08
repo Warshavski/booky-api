@@ -5,6 +5,8 @@ module Mutations
     # Mutations::Genres::Create
     #
     class Create < BaseMutation
+      description 'Create new Genre.'
+
       null true
 
       argument :name, GraphQL::Types::String,
@@ -15,7 +17,7 @@ module Mutations
                required: false,
                description: 'Description of the genre.'
 
-      field :genre, Types::Models::GenreType
+      field :genre, Types::Models::GenreType, description: 'Book genre.'
 
       def resolve(name:, description: nil)
         input = { name: name, description: description }
