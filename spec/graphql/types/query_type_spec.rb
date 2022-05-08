@@ -4,14 +4,29 @@ require 'rails_helper'
 
 RSpec.describe Types::QueryType do
   describe 'books' do
-    let!(:books) { create_pair(:book) }
+    let!(:books) { create_pair(:book, :with_authors, :with_genres) }
 
     let(:query) do
       %(query {
         books {
           edges {
             node {
+              id
               title
+              description
+              pagesCount
+              weight
+              isbn10
+              isbn13
+              createdAt
+              updatedAt
+              publishedAt
+              authors {
+                id
+              }
+              genres {
+                id
+              }
             }
           }
         }
@@ -23,8 +38,78 @@ RSpec.describe Types::QueryType do
     end
 
     it 'is expected to return all items' do
-      expected_results = books.map { |item| { 'node' => { 'title' => item.title } } }
+      expected_results = books.map do |item|
+        {
+          'node' => {
+            'id' => item.id.to_s,
+            'title' => item.title,
+            'description' => item.description,
+            'pagesCount' => item.pages_count,
+            'weight' => item.weight,
+            'isbn10' => item.isbn10,
+            'isbn13' => item.isbn13,
+            'createdAt' => item.created_at.iso8601,
+            'updatedAt' => item.updated_at.iso8601,
+            'publishedAt' => item.published_at.iso8601,
+            'authors' => item.authors.map { |a| { 'id' => a.id.to_s } },
+            'genres' => item.genres.map { |a| { 'id' => a.id.to_s } }
+          }
+        }
+      end
+
       actual_results = result.dig('data', 'books', 'edges')
+
+      expect(actual_results).to match_array(expected_results)
+    end
+  end
+
+  describe 'book' do
+    let!(:book) { create(:book, :with_authors, :with_genres) }
+
+    let(:query) do
+      %(query {
+        book(id:#{book.id}) {
+          id
+          title
+          description
+          pagesCount
+          weight
+          isbn10
+          isbn13
+          createdAt
+          updatedAt
+          publishedAt
+          authors {
+            id
+          }
+          genres {
+            id
+          }
+        }
+      })
+    end
+
+    subject(:result) do
+      BookyApiSchema.execute(query).as_json
+    end
+
+    it 'is expected to return all items' do
+      expected_results = {
+        'id' => book.id.to_s,
+        'title' => book.title,
+        'description' => book.description,
+        'pagesCount' => book.pages_count,
+        'weight' => book.weight,
+        'isbn10' => book.isbn10,
+        'isbn13' => book.isbn13,
+        'createdAt' => book.created_at.iso8601,
+        'updatedAt' => book.updated_at.iso8601,
+        'publishedAt' => book.published_at.iso8601,
+        'authors' => book.authors.map { |a| { 'id' => a.id.to_s } },
+        'genres' => book.genres.map { |a| { 'id' => a.id.to_s } }
+      }
+
+      actual_results = result.dig('data', 'book')
 
       expect(actual_results).to match_array(expected_results)
     end
@@ -38,6 +123,7 @@ RSpec.describe Types::QueryType do
         genres {
           edges {
             node {
+              id
               name
               description
               createdAt
@@ -56,6 +142,7 @@ RSpec.describe Types::QueryType do
       expected_results = genres.map do |item|
         {
           'node' => {
+            'id' => item.id.to_s,
             'name' => item.name,
             'description' => item.description,
             'createdAt' => item.created_at.iso8601,
@@ -65,6 +152,80 @@ RSpec.describe Types::QueryType do
       end
 
       actual_results = result.dig('data', 'genres', 'edges')
+
+      expect(actual_results).to match_array(expected_results)
+    end
+  end
+
+  describe 'genre' do
+    let!(:genre) { create(:genre) }
+    let!(:book) { create(:book, :with_authors, genres: [genre]) }
+
+    let(:query) do
+      %(query {
+        genre(id:#{genre.id}) {
+          id
+          name
+          description
+          createdAt
+          updatedAt
+          books {
+            edges {
+              node {
+                id
+                title
+                description
+                pagesCount
+                weight
+                isbn10
+                isbn13
+                createdAt
+                updatedAt
+                publishedAt
+                authors {
+                  id
+                }
+              }
+            }
+          }
+        }
+      })
+    end
+
+    subject(:result) do
+      BookyApiSchema.execute(query).as_json
+    end
+
+    it 'is expected to return all items' do
+      expected_results =
+        {
+          'id' => genre.id.to_s,
+          'name' => genre.name,
+          'description' => genre.description,
+          'createdAt' => genre.created_at.iso8601,
+          'updatedAt' => genre.updated_at.iso8601,
+          'books' => {
+            'edges' => [
+              {
+                'node' => {
+                  'id' => book.id.to_s,
+                  'title' => book.title,
+                  'description' => book.description,
+                  'pagesCount' => book.pages_count,
+                  'weight' => book.weight,
+                  'isbn10' => book.isbn10,
+                  'isbn13' => book.isbn13,
+                  'createdAt' => book.created_at.iso8601,
+                  'updatedAt' => book.updated_at.iso8601,
+                  'publishedAt' => book.published_at.iso8601,
+                  'authors' => book.authors.map { |a| { 'id' => a.id.to_s } }
+                }
+              }
+            ]
+          }
+        }
+
+      actual_results = result.dig('data', 'genre')
 
       expect(actual_results).to match_array(expected_results)
     end

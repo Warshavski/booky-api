@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Resolvers::BooksResolver do
+RSpec.describe Resolvers::Lists::BooksResolver do
   subject(:resolver) { described_class.new(object: nil, context: context, field: nil) }
 
   let_it_be(:context) do

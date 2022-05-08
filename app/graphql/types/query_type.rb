@@ -16,17 +16,27 @@ module Types
           null: true,
           description: 'Returns a list of books authors'
 
+    field :book, Types::Models::BookType,
+          null: false,
+          description: 'Returns book selected by provided ID',
+          resolver: Resolvers::BookResolver
+
     field :books,
           Types::Models::BookType.connection_type,
           null: true,
           description: 'Returns a list of books in the library',
-          resolver: Resolvers::BooksResolver
+          resolver: Resolvers::Lists::BooksResolver
 
     field :genres,
           Types::Models::GenreType.connection_type,
           null: true,
           description: 'Returns a list of books genres',
-          resolver: Resolvers::GenresResolver
+          resolver: Resolvers::Lists::GenresResolver
+
+    field :genre, Types::Models::GenreType,
+          null: false,
+          description: 'Returns genre selected by provided ID',
+          resolver: Resolvers::GenreResolver
 
     field :publishers,
           Types::Models::PublisherType.connection_type,
