@@ -35,3 +35,13 @@ en:
       rules:
         name:
           taken: 'has already been taken'
+
+  errors:
+    messages:
+      resources:
+        not_found: "Couldn't find %{model} with id = %{id}"
+
+      requests:
+        internal_server_error: '(ノಠ益ಠ)ノ彡┻━┻'
+        request_timeout: '┑(ツ)┍'
+        throttled: 'ಠ_ಠ Too many requests. Please, try again later.'

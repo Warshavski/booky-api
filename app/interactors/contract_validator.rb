@@ -5,10 +5,6 @@
 #   Used to perform call contract and compose errors
 #
 class ContractValidator
-  HTTP_STATUS_CODE = 400
-
-  private_constant :HTTP_STATUS_CODE
-
   def self.call(klass:, context:)
     new(klass, context).validate
   end
@@ -24,27 +20,9 @@ class ContractValidator
 
     return unless contract_result.failure?
 
-    errors = present_errors(contract_result)
+    errors =
+      Errors::ContractErrorsSerializer.new(contract_result).serialize
+
     @interactor_context.fail!(errors: errors)
-  end
-
-  private
-
-  def present_errors(contract_result)
-    errors = contract_result.errors.to_h
-
-    errors.each_with_object([]) do |(attribute, messages), result|
-      messages.each do |error_message|
-        result << compose_error(attribute, error_message)
-      end
-    end
-  end
-
-  def compose_error(attribute, message)
-    {
-      code: HTTP_STATUS_CODE,
-      path: [:parameter, attribute],
-      message: message
-    }
   end
 end

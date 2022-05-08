@@ -33,10 +33,6 @@ class GraphqlController < ApplicationController
     result = BookyApiSchema.execute(params[:query], **args)
 
     render json: result
-  rescue StandardError => e
-    raise e unless Rails.env.development?
-
-    handle_error_in_development(e)
   end
 
   private
@@ -65,20 +61,5 @@ class GraphqlController < ApplicationController
     else
       {}
     end
-  end
-
-  def handle_error_in_development(error)
-    logger.error error.message
-    logger.error error.backtrace.join("\n")
-
-    body = {
-      error: {
-        message: error.message,
-        backtrace: error.backtrace
-      },
-      data: {}
-    }
-
-    render json: body, status: 500
   end
 end
