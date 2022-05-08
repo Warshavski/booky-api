@@ -2,9 +2,14 @@
 
 require 'simplecov'
 SimpleCov.start do
-  add_filter 'spec/factories'
+  add_filter '/vendor/ruby/'
+  add_filter '/bin/'
+  add_filter 'db/fixtures/development/'
+  add_filter 'config/initializers'
 
-  add_filter 'spec/support/shared_contexts/bullet_context.rb'
+  add_filter 'spec/factories'
+  add_filter 'spec/support/shared_contexts'
+  add_filter 'spec/support/helpers'
 end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
