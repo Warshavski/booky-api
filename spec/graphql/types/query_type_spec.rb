@@ -342,4 +342,120 @@ RSpec.describe Types::QueryType do
       expect(actual_results).to match_array(expected_results)
     end
   end
+
+  describe 'publishers' do
+    let!(:publishers) { create_pair(:publisher, :with_books) }
+
+    let(:query) do
+      %(query {
+        publishers {
+          edges {
+            node {
+              id
+              name
+              description
+              email
+              phone
+              address
+              postcode
+              books {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+              createdAt
+              updatedAt
+            }
+          }
+        }
+      })
+    end
+
+    subject(:result) do
+      BookyApiSchema.execute(query).as_json
+    end
+
+    it 'is expected to return all items' do
+      expected_results = publishers.map do |publisher|
+        {
+          'node' => {
+            'id' => publisher.id.to_s,
+            'name' => publisher.name,
+            'description' => publisher.description,
+            'email' => publisher.email,
+            'phone' => publisher.phone,
+            'address' => publisher.address,
+            'postcode' => publisher.postcode,
+            'books' => {
+              'edges' => publisher.books.map do |book|
+                { 'node' => { 'id' => book.id.to_s } }
+              end
+            },
+            'createdAt' => publisher.created_at.iso8601,
+            'updatedAt' => publisher.updated_at.iso8601
+          }
+        }
+      end
+
+      actual_results = result.dig('data', 'publishers', 'edges')
+
+      expect(actual_results).to match_array(expected_results)
+    end
+  end
+
+  describe 'publisher' do
+    let!(:publisher) { create(:publisher, :with_books) }
+
+    let(:query) do
+      %(query {
+        publisher(id:#{publisher.id}) {
+          id
+          name
+          description
+          email
+          phone
+          address
+          postcode
+          books {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+          createdAt
+          updatedAt
+        }
+      })
+    end
+
+    subject(:result) do
+      BookyApiSchema.execute(query).as_json
+    end
+
+    it 'is expected to return all items' do
+      expected_results =  {
+        'id' => publisher.id.to_s,
+        'name' => publisher.name,
+        'description' => publisher.description,
+        'email' => publisher.email,
+        'phone' => publisher.phone,
+        'address' => publisher.address,
+        'postcode' => publisher.postcode,
+        'books' => {
+          'edges' => publisher.books.map do |book|
+            { 'node' => { 'id' => book.id.to_s } }
+          end
+        },
+        'createdAt' => publisher.created_at.iso8601,
+        'updatedAt' => publisher.updated_at.iso8601
+      }
+
+      actual_results = result.dig('data', 'publisher')
+
+      expect(actual_results).to match_array(expected_results)
+    end
+  end
 end
