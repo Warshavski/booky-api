@@ -3,6 +3,118 @@
 require 'rails_helper'
 
 RSpec.describe Types::QueryType do
+  describe 'authors' do
+    let!(:authors) { create_pair(:author, :with_books) }
+
+    let(:query) do
+      %(query {
+        authors {
+          edges {
+            node {
+              id
+              firstName
+              lastName
+              biography
+              bornIn
+              diedIn
+              books {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+              createdAt
+              updatedAt
+            }
+          }
+        }
+      })
+    end
+
+    subject(:result) do
+      BookyApiSchema.execute(query).as_json
+    end
+
+    it 'is expected to return all items' do
+      expected_results = authors.map do |author|
+        {
+          'node' => {
+            'id' => author.id.to_s,
+            'firstName' => author.first_name,
+            'lastName' => author.last_name,
+            'biography' => author.biography,
+            'bornIn' => author.born_in&.iso8601,
+            'diedIn' => author.died_in&.iso8601,
+            'books' => {
+              'edges' => author.books.map do |book|
+                { 'node' => { 'id' => book.id.to_s } }
+              end
+            },
+            'createdAt' => author.created_at.iso8601,
+            'updatedAt' => author.updated_at.iso8601
+          }
+        }
+      end
+
+      actual_results = result.dig('data', 'authors', 'edges')
+
+      expect(actual_results).to match_array(expected_results)
+    end
+  end
+
+  describe 'author' do
+    let!(:author) { create(:author, :with_books) }
+
+    let(:query) do
+      %(query {
+        author(id:#{author.id}) {
+          id
+          firstName
+          lastName
+          biography
+          bornIn
+          diedIn
+          books {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+          createdAt
+          updatedAt
+        }
+      })
+    end
+
+    subject(:result) do
+      BookyApiSchema.execute(query).as_json
+    end
+
+    it 'is expected to return all items' do
+      expected_results =  {
+        'id' => author.id.to_s,
+        'firstName' => author.first_name,
+        'lastName' => author.last_name,
+        'biography' => author.biography,
+        'bornIn' => author.born_in&.iso8601,
+        'diedIn' => author.died_in&.iso8601,
+        'books' => {
+          'edges' => author.books.map do |book|
+            { 'node' => { 'id' => book.id.to_s } }
+          end
+        },
+        'createdAt' => author.created_at.iso8601,
+        'updatedAt' => author.updated_at.iso8601
+      }
+
+      actual_results = result.dig('data', 'author')
+
+      expect(actual_results).to match_array(expected_results)
+    end
+  end
+
   describe 'books' do
     let!(:books) { create_pair(:book, :with_authors, :with_genres) }
 

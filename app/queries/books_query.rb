@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# BooksFinder
+# BooksQuery
 #
-#   Used to search, filter, and sort collection of books
+#   Used to search, filter, and sort collection of books (@see Book)
 #
 # Arguments:
 #
