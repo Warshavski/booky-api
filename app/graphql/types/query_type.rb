@@ -15,44 +15,42 @@ module Types
 
     field :author, Types::Models::AuthorType,
           null: true,
-          description: 'Returns author selected by provided ID.',
-          resolver: Resolvers::AuthorResolver
+          resolver: Resolvers::AuthorResolver,
+          description: 'Returns author selected by provided ID.'
 
-    field :authors,
-          Types::Models::AuthorType.connection_type,
+    field :authors, Types::Models::AuthorType.connection_type,
           null: true,
-          description: 'Returns a list of books authors.',
-          resolver: Resolvers::Lists::AuthorsResolver
+          resolver: Resolvers::Lists::AuthorsResolver,
+          description: 'Returns a list of books authors.'
 
     field :book, Types::Models::BookType,
           null: false,
-          description: 'Returns book selected by provided ID.',
-          resolver: Resolvers::BookResolver
+          resolver: Resolvers::BookResolver,
+          description: 'Returns book selected by provided ID.'
 
-    field :books,
-          Types::Models::BookType.connection_type,
+    field :books, Types::Models::BookType.connection_type,
           null: true,
-          description: 'Returns a list of books in the library.',
-          resolver: Resolvers::Lists::BooksResolver
+          resolver: Resolvers::Lists::BooksResolver,
+          description: 'Returns a list of books in the library.'
 
     field :genre, Types::Models::GenreType,
           null: false,
-          description: 'Returns genre selected by provided ID.',
-          resolver: Resolvers::GenreResolver
+          resolver: Resolvers::GenreResolver,
+          description: 'Returns genre selected by provided ID.'
 
-    field :genres,
-          Types::Models::GenreType.connection_type,
+    field :genres, Types::Models::GenreType.connection_type,
           null: true,
-          description: 'Returns a list of books genres.',
-          resolver: Resolvers::Lists::GenresResolver
+          resolver: Resolvers::Lists::GenresResolver,
+          description: 'Returns a list of books genres.'
 
-    field :publishers,
-          Types::Models::PublisherType.connection_type,
+    field :publisher, Types::Models::PublisherType,
           null: true,
+          resolver: Resolvers::PublisherResolver,
+          description: 'Returns genre selected by provided ID.'
+
+    field :publishers, Types::Models::PublisherType.connection_type,
+          null: true,
+          resolver: Resolvers::Lists::PublishersResolver,
           description: 'Returns a list of the books publishers.'
-
-    def publishers
-      Publisher.all
-    end
   end
 end
