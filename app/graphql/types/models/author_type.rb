@@ -31,7 +31,7 @@ module Types
             description: 'Author date of death.',
             null: true
 
-      field :books, [Types::Models::BookType],
+      field :books, Types::Models::BookType.connection_type,
             description: 'Collection of books written by the author.',
             null: true
     end
