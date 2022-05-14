@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_publishers_on_name"
+    t.index ["name"], name: "index_publishers_on_name", unique: true
   end
 
   add_foreign_key "books", "publishers"

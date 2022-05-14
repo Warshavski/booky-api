@@ -7,20 +7,19 @@ RSpec.shared_context :contract_validation do
     default_params.deep_merge(cfg[:with] || {}).tap do |p|
       without = cfg[:without]
 
-      if without.is_a? Array
+      if without.is_a?(Array) && without[0].is_a?(Hash)
         p = p.dig(*without[0..-2])
         without = without.last
       end
 
-      p.delete(without)
+      Array.wrap(without).each { |k| p.delete(k) }
     end
   end
 
-  let(:config)            { nil }
-  let(:options)           { {} }
-  let(:validation_result) { described_class.new.(params) }
+  let(:config) { nil }
 
-  subject { validation_result.success? }
+  subject(:result) { described_class.new.call(params) }
+  subject { result.success? }
 
   shared_examples :valid do |_config|
     let(:config) { _config }

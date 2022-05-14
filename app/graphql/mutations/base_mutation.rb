@@ -11,6 +11,9 @@ module Mutations
   #
   # @see https://graphql-ruby.org/mutations/mutation_classes.html
   #
+  # NOTE : every mutation should has defined "graphql_name"
+  #        this parameter is required for proper mutation "mount"
+  #
   class BaseMutation < GraphQL::Schema::RelayClassicMutation
     argument_class      Types::BaseArgument
     field_class         Types::BaseField
@@ -19,10 +22,11 @@ module Mutations
 
     field :errors, [Types::Errors::InputErrorType],
           null: false,
-          description: 'Errors encountered during execution of the mutation.'
+          description: 'Errors encountered during execution of a mutation.'
 
     def execute(interactor_klass, input:, root:)
-      result = interactor_klass.call(params: input)
+      interactor_params = input.is_a?(Types::BaseInputObject) ? input.to_h : input
+      result = interactor_klass.call(params: interactor_params)
 
       if result.success?
         { root => result.object, errors: [] }
