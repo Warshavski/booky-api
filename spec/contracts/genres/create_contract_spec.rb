@@ -15,13 +15,10 @@ RSpec.describe Genres::CreateContract do
   it_behaves_like :valid
   it_behaves_like :valid, without: :description
 
-  it_behaves_like :invalid, with: { name: 0 }
-  it_behaves_like :invalid, with: { name: nil }
-  it_behaves_like :invalid, with: { name: '' }
-
-  it_behaves_like :invalid, with: { description: 0 }
-  it_behaves_like :invalid, with: { description: nil }
-  it_behaves_like :invalid, with: { description: '' }
+  it_behaves_like :invalid, without: :name
+  it_behaves_like :invalid, with: { name: 0, description: 0 }
+  it_behaves_like :invalid, with: { name: '', description: '' }
+  it_behaves_like :invalid, with: { name: nil, description: nil }
 
   context 'when genre already exist' do
     before { create(:genre, name: default_params[:name]) }

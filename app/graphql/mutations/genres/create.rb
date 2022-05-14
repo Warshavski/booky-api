@@ -5,24 +5,19 @@ module Mutations
     # Mutations::Genres::Create
     #
     class Create < BaseMutation
+      graphql_name 'CreateGenre'
+
       description 'Create new Genre.'
 
       null true
 
-      argument :name, GraphQL::Types::String,
-               required: true,
-               description: 'Name of the genre, such as sci-fi, thriller, e.t.c.'
-
-      argument :description, GraphQL::Types::String,
-               required: false,
-               description: 'Description of the genre.'
+      argument :attributes, Types::Inputs::GenreAttributes,
+               required: true, description: 'Genre attributes.'
 
       field :genre, Types::Models::GenreType, description: 'Book genre.'
 
-      def resolve(name:, description: nil)
-        input = { name: name, description: description }
-
-        execute(::Genres::Create, input: input, root: :genre)
+      def resolve(attributes:)
+        execute(::Genres::Create, input: attributes, root: :genre)
       end
     end
   end
