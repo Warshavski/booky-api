@@ -10,7 +10,7 @@ module Authors
       optional(:biography).filled(:string)
       optional(:born_in).filled(:date)
       optional(:died_in).filled(:date)
-      optional(:book_ids).value(:array?).each(:int?)
+      optional(:book_ids).value(:array?).each(:str?, format?: DIGITS_REGEXP)
     end
 
     rule(:born_in, :died_in) do
