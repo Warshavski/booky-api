@@ -25,6 +25,9 @@ module Types
 
     description 'Mutations root-level.'
 
+    mount_mutation Mutations::Authors::Create, description: 'Creates a new author.'
+    mount_mutation Mutations::Authors::Update, description: 'Updates an existing author.'
+
     mount_mutation Mutations::Genres::Create,     description: 'Creates a new genre.'
     mount_mutation Mutations::Publishers::Create, description: 'Creates a new publisher.'
   end
