@@ -12,7 +12,7 @@ RSpec.describe Authors::MutationContract do
       biography: 'bio description lorem...',
       born_in: '1900-02-01',
       died_in: '1980-01-21',
-      book_ids: [1, 2, 3]
+      book_ids: %w[1 2 3]
     }
   end
 
@@ -32,5 +32,5 @@ RSpec.describe Authors::MutationContract do
   it_behaves_like :invalid, with: { died_in: Date.current + 1.day }
   it_behaves_like :invalid, with: { died_in: Date.current - 2.day, born_in: Date.current - 1.day }
 
-  it_behaves_like :invalid, with: { book_ids: ['0', nil, '', 'wat'] }
+  it_behaves_like :invalid, with: { book_ids: [1, nil, '', 'wat'] }
 end
