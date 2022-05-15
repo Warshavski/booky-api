@@ -4,10 +4,10 @@ FactoryBot.define do
   factory :book, class: Book do
     association :publisher, factory: :publisher
 
-    title { Faker::Book.title }
+    title { "#{Faker::Book.title}-#{Faker::Number.number(digits: 3)}" }
 
     pages_count { Faker::Number.positive.to_i }
-    published_at { Faker::Date.backward }
+    published_in { Faker::Date.backward }
 
     isbn10 { Faker::Number.number(digits: 10) }
     isbn13 { Faker::Number.number(digits: 13) }

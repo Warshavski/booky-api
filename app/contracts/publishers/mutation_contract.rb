@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 module Publishers
-  # Publishers::CreateContract
+  # Publishers::MutationContract
   #
-  class CreateContract < ApplicationContract
-    DIGITS_REGEXP = /^\d+$/
-
+  class MutationContract < ApplicationContract
     params do
       required(:name).filled(:str?)
       optional(:email).filled(:str?, format?: URI::MailTo::EMAIL_REGEXP)

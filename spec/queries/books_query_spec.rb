@@ -5,7 +5,7 @@ RSpec.describe BooksQuery do
     subject { described_class.call(params: params) }
 
     let_it_be(:book)                  { create(:book, :with_genres) }
-    let_it_be(:book_with_author)      { create(:book, :with_authors, published_at: '2000-12-23') }
+    let_it_be(:book_with_author)      { create(:book, :with_authors, published_in: '2000-12-23') }
     let_it_be(:expected_search_book)  { create(:book, :with_genres, title: 'wat') }
 
     let(:params) { {} }
@@ -53,13 +53,13 @@ RSpec.describe BooksQuery do
     end
 
     context 'when exact publish date is set' do
-      let(:params) { { publish_date: book_with_author.published_at } }
+      let(:params) { { publish_date: book_with_author.published_in } }
 
       it { is_expected.to eq([book_with_author]) }
     end
 
     context 'when publish year is set' do
-      let(:params) { { publish_date: book_with_author.published_at.year } }
+      let(:params) { { publish_date: book_with_author.published_in.year } }
 
       it { is_expected.to eq([book_with_author]) }
     end

@@ -1,28 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Book, type: :model do
-  describe 'validations' do
-    subject { build(:book) }
-
-    it { is_expected.to validate_presence_of(:title) }
-
-    it { is_expected.to validate_presence_of(:published_at) }
-
-    it { is_expected.to validate_presence_of(:pages_count) }
-
-    it { is_expected.to validate_numericality_of(:pages_count).only_integer.is_greater_than_or_equal_to(1) }
-
-    it { is_expected.to validate_numericality_of(:weight).is_greater_than_or_equal_to(0.0).allow_nil }
-
-    it { is_expected.to validate_length_of(:isbn10).is_equal_to(10) }
-
-    it { is_expected.to validate_length_of(:isbn13).is_equal_to(13) }
-
-    it { is_expected.to validate_uniqueness_of(:isbn10).case_insensitive.allow_nil }
-
-    it { is_expected.to validate_uniqueness_of(:isbn13).case_insensitive.allow_nil }
-  end
-
   describe 'associations' do
     it { is_expected.to belong_to(:publisher) }
 
@@ -31,5 +9,38 @@ RSpec.describe Book, type: :model do
 
     it { is_expected.to have_many(:books_genres).dependent(:destroy) }
     it { is_expected.to have_many(:genres).through(:books_genres) }
+  end
+
+  describe '.by_isbn' do
+    subject { described_class.by_isbn(isbn10: isbn10, isbn13: isbn13) }
+
+    let_it_be(:isbn10_book) do
+      create(:book, isbn10: '0987654321', isbn13: '1234567890123')
+    end
+
+    let_it_be(:isbn13_book) do
+      create(:book, isbn10: '1234567890', isbn13: '0987654321123')
+    end
+
+    context 'when both params match with books' do
+      let(:isbn10) { isbn10_book.isbn10 }
+      let(:isbn13) { isbn13_book.isbn13 }
+
+      it { is_expected.to match_array([isbn10_book, isbn13_book]) }
+    end
+
+    context 'when only isbn10 match with book' do
+      let(:isbn10) { isbn10_book.isbn10 }
+      let(:isbn13) { 'wat' }
+
+      it { is_expected.to match_array([isbn10_book]) }
+    end
+
+    context 'when only isbn13 match with book' do
+      let(:isbn10) { 'wat' }
+      let(:isbn13) { isbn13_book.isbn13 }
+
+      it { is_expected.to match_array([isbn13_book]) }
+    end
   end
 end

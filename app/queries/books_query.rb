@@ -31,15 +31,15 @@ class BooksQuery < ApplicationQuery
     publish_date = ApplicationRecord.sanitize_sql_like(filter_value.to_s)
 
     if publish_date.length > 4
-      items.where(published_at: publish_date)
+      items.where(published_in: publish_date)
     else
       # looks legit
-      items.where('published_at between ? and ?', "#{publish_date}-01-01", "#{publish_date}-12-31")
+      items.where('published_in between ? and ?', "#{publish_date}-01-01", "#{publish_date}-12-31")
     end
   end
 
   specify_filter(:isbn) do |items, filter_value|
-    items.where(isbn10: filter_value).or(items.where(isbn13: filter_value))
+    items.by_isbn(isbn10: filter_value, isbn13: filter_value)
   end
 
   # @param [Hash] params (optional, default: {}) specify_filter and sort parameters

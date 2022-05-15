@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Publishers::CreateContract do
+RSpec.describe Publishers::MutationContract do
   include_context :contract_validation
 
   let(:default_params) do

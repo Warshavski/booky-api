@@ -49,12 +49,13 @@ RSpec.describe Publishers::Create do
         expected_errors = [
           { code: 400, message: "is missing", path: [:parameter, :name] },
           { code: 400, message: "is in invalid format", path: [:parameter, :email] },
-          { code: 400, message: "is in invalid format", path: [:parameter, :phone] },
           { code: 400, message: "must be filled", path: [:parameter, :address]},
-          { code: 400, message: "is in invalid format", path: [:parameter, :postcode]},
-          { code: 400, message: "must be filled", path: [:parameter, :description]}
+          { code: 400, message: "must be filled", path: [:parameter, :description]},
+          { code: 400, message: "must contains only digits", path: [:parameter, :phone] },
+          { code: 400, message: "must contains only digits", path: [:parameter, :postcode] }
         ]
-        expect(subject.errors).to match(expected_errors)
+
+        expect(subject.errors).to match_array(expected_errors)
       end
     end
   end
