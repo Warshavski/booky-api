@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Genres::CreateContract do
+RSpec.describe Genres::MutationContract do
   include_context :contract_validation
 
   let(:default_params) do

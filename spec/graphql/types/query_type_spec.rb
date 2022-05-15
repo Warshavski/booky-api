@@ -132,7 +132,7 @@ RSpec.describe Types::QueryType do
               isbn13
               createdAt
               updatedAt
-              publishedAt
+              publishedIn
               authors {
                 id
               }
@@ -162,7 +162,7 @@ RSpec.describe Types::QueryType do
             'isbn13' => item.isbn13,
             'createdAt' => item.created_at.iso8601,
             'updatedAt' => item.updated_at.iso8601,
-            'publishedAt' => item.published_at.iso8601,
+            'publishedIn' => item.published_in.iso8601,
             'authors' => item.authors.map { |a| { 'id' => a.id.to_s } },
             'genres' => item.genres.map { |a| { 'id' => a.id.to_s } }
           }
@@ -190,7 +190,7 @@ RSpec.describe Types::QueryType do
           isbn13
           createdAt
           updatedAt
-          publishedAt
+          publishedIn
           authors {
             id
           }
@@ -216,7 +216,7 @@ RSpec.describe Types::QueryType do
         'isbn13' => book.isbn13,
         'createdAt' => book.created_at.iso8601,
         'updatedAt' => book.updated_at.iso8601,
-        'publishedAt' => book.published_at.iso8601,
+        'publishedIn' => book.published_in.iso8601,
         'authors' => book.authors.map { |a| { 'id' => a.id.to_s } },
         'genres' => book.genres.map { |a| { 'id' => a.id.to_s } }
       }
@@ -293,7 +293,7 @@ RSpec.describe Types::QueryType do
                 isbn13
                 createdAt
                 updatedAt
-                publishedAt
+                publishedIn
                 authors {
                   id
                 }
@@ -329,7 +329,7 @@ RSpec.describe Types::QueryType do
                   'isbn13' => book.isbn13,
                   'createdAt' => book.created_at.iso8601,
                   'updatedAt' => book.updated_at.iso8601,
-                  'publishedAt' => book.published_at.iso8601,
+                  'publishedIn' => book.published_in.iso8601,
                   'authors' => book.authors.map { |a| { 'id' => a.id.to_s } }
                 }
               }

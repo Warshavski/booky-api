@@ -29,17 +29,17 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
   create_table "books", force: :cascade do |t|
     t.bigint "publisher_id"
     t.string "title", null: false
-    t.decimal "weight"
+    t.integer "weight", default: 0, null: false
     t.integer "pages_count", default: 0, null: false
     t.text "description"
     t.string "isbn13", limit: 13
     t.string "isbn10", limit: 10
-    t.date "published_at", null: false
+    t.date "published_in", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["isbn10"], name: "index_books_on_isbn10", unique: true
     t.index ["isbn13"], name: "index_books_on_isbn13", unique: true
-    t.index ["published_at"], name: "index_books_on_published_at"
+    t.index ["published_in"], name: "index_books_on_published_in"
     t.index ["publisher_id"], name: "index_books_on_publisher_id"
     t.index ["title"], name: "index_books_on_title"
   end

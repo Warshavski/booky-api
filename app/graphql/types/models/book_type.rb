@@ -41,7 +41,7 @@ module Types
             null: false,
             description: ''
 
-      field :published_at, ::GraphQL::Types::ISO8601Date,
+      field :published_in, ::GraphQL::Types::ISO8601Date,
             null: false,
             description: 'Book publication date'
 

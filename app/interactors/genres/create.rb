@@ -4,7 +4,7 @@ module Genres
   # Genres::Create
   #
   class Create < ApplicationInteractor
-    contract Genres::CreateContract
+    contract Genres::MutationContract
 
     def call
       context.object = Genre.create!(context.params)

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Genres
-  # Genres::CreateContract
+  # Genres::MutationContract
   #
-  class CreateContract < ApplicationContract
+  class MutationContract < ApplicationContract
     params do
-      required(:name).filled(:str?)
-      optional(:description).filled(:str?)
+      required(:name).filled(:string)
+      optional(:description).filled(:string)
     end
 
     rule(:name) do

@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :genre, class: Genre do
-    name { "#{Faker::Book.genre}-#{rand(100)}" }
+    name { "#{Faker::Book.genre}-#{Faker::Number.number(digits: 3)}" }
   end
 end

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe BookyApiSchema.types['Book'] do
   it 'is expected to have the correct fields' do
     expected_fields = %i[
-      id created_at updated_at published_at
+      id created_at updated_at published_in
       isbn10 isbn13 weight pages_count
       description title publisher authors genres
     ]

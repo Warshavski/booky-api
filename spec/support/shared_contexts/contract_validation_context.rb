@@ -30,6 +30,19 @@ RSpec.shared_context :contract_validation do
   shared_examples :invalid do |_config|
     let(:config) { _config }
 
-    it { is_expected.not_to be }
+    it 'is expected to fall with errors' do
+      is_expected.not_to be
+
+      if config.present?
+        actual_error_keys = result.errors.to_h.keys
+
+        expected_error_keys = %i[with without].each_with_object([]) do |opt, keys|
+          opt_keys = config[opt].is_a?(Hash) ? config[opt].keys : config[opt]
+          keys.push(*opt_keys)
+        end
+
+        expect(actual_error_keys).to include(*expected_error_keys)
+      end
+    end
   end
 end

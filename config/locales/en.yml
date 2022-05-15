@@ -35,6 +35,22 @@ en:
       rules:
         name:
           taken: 'has already been taken'
+        born_in:
+          invalid: 'invalid date'
+        published_in:
+          invalid: 'invalid date'
+        died_in:
+          invalid: 'invalid date'
+        postcode:
+          format?: 'must contains only digits'
+        phone:
+          format?: 'must contains only digits'
+        isbn10:
+          format?: 'must contains only digits'
+          taken: 'book with given isbn already exists'
+        isbn13:
+          format?: 'must contains only digits'
+          taken: 'book with given isbn already exists'
 
   errors:
     messages:
