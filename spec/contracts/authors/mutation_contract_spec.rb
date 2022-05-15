@@ -11,12 +11,14 @@ RSpec.describe Authors::MutationContract do
       last_name: 'last_name',
       biography: 'bio description lorem...',
       born_in: '1900-02-01',
-      died_in: '1980-01-21'
+      died_in: '1980-01-21',
+      book_ids: [1, 2, 3]
     }
   end
 
   it_behaves_like :valid
-  it_behaves_like :valid, without: %i[biography born_in died_in]
+  it_behaves_like :valid, without: %i[biography born_in died_in book_ids]
+  it_behaves_like :valid, with: { book_ids: [] }
 
   it_behaves_like :invalid, without: :first_name
   it_behaves_like :invalid, without: :last_name
@@ -29,4 +31,6 @@ RSpec.describe Authors::MutationContract do
   it_behaves_like :invalid, with: { born_in: Date.current + 1.day }
   it_behaves_like :invalid, with: { died_in: Date.current + 1.day }
   it_behaves_like :invalid, with: { died_in: Date.current - 2.day, born_in: Date.current - 1.day }
+
+  it_behaves_like :invalid, with: { book_ids: ['0', nil, '', 'wat'] }
 end

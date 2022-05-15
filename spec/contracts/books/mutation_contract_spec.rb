@@ -33,7 +33,6 @@ RSpec.describe Books::MutationContract do
   it_behaves_like :invalid, with: { published_in: 'date' }
   it_behaves_like :invalid, with: { published_in: Date.current + 1.day }
 
-
   context 'when book with given isbn10 exist' do
     before { create(:book, isbn10: default_params[:isbn10]) }
 

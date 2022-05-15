@@ -24,14 +24,23 @@ module Mutations
           null: false,
           description: 'Errors encountered during execution of a mutation.'
 
-    def execute(interactor_klass, input:, root:)
-      interactor_params = input.is_a?(Types::BaseInputObject) ? input.to_h : input
-      result = interactor_klass.call(params: interactor_params)
+    def execute(interactor_klass, input:, root:, id: nil)
+      result = interactor_klass.call(prepare_params(input, id))
 
       if result.success?
         { root => result.object, errors: [] }
       else
         { root => nil, errors: result.errors }
+      end
+    end
+
+    private
+
+    def prepare_params(input, id)
+      params = input.is_a?(Types::BaseInputObject) ? input.to_h : input
+
+      { params: params }.tap do |p|
+        p.merge!(id: id) if id.present?
       end
     end
   end
