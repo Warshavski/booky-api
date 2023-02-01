@@ -42,7 +42,10 @@ class BooksQuery < ApplicationQuery
     items.by_isbn(isbn10: filter_value, isbn13: filter_value)
   end
 
-  # @param [Hash] params (optional, default: {}) specify_filter and sort parameters
+  # @overload #initialize(context, params)
+  #
+  # @param context [Book]  scope of the books (default: Book.all)
+  # @param params [Hash] (optional, default: {}) specify_filter and sort parameters
   #
   # @option params [Integer]        :publisher_id   Publisher identity
   # @option params [Integer]        :author_id      Book author identity
@@ -51,8 +54,4 @@ class BooksQuery < ApplicationQuery
   # @option params [String]         :search         Search pattern(part of the name)
   # @option params [String]         :isbn           The International Standard Book Number (ISBN)
   # @option params [String]         :sort           Sort type(attribute and sort direction)
-  #
-  def initialize(context:, params: {})
-    super(context: context, params: params)
-  end
 end

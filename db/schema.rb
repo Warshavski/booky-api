@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_24_120408) do
-
+ActiveRecord::Schema[7.0].define(version: 2018_10_24_120408) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,8 +20,8 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.text "biography"
     t.date "born_in"
     t.date "died_in"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["first_name", "last_name"], name: "index_authors_on_first_name_and_last_name"
   end
 
@@ -35,8 +34,8 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.string "isbn13", limit: 13
     t.string "isbn10", limit: 10
     t.date "published_in", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["isbn10"], name: "index_books_on_isbn10", unique: true
     t.index ["isbn13"], name: "index_books_on_isbn13", unique: true
     t.index ["published_in"], name: "index_books_on_published_in"
@@ -63,8 +62,8 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
   create_table "genres", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["name"], name: "index_genres_on_name", unique: true
   end
 
@@ -75,8 +74,8 @@ ActiveRecord::Schema.define(version: 2018_10_24_120408) do
     t.string "address"
     t.string "postcode"
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["name"], name: "index_publishers_on_name", unique: true
   end
 

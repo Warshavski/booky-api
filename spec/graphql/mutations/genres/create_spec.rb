@@ -20,7 +20,7 @@ RSpec.describe Mutations::Genres::Create do
         result_stub = double('result', success?: true, object: genre_stub)
 
         expect(Genres::Create).to(
-          receive(:call).with(params: params).and_return(result_stub)
+          receive(:call).with({ params: params }).and_return(result_stub)
         )
 
         expected_result = { genre: genre_stub, errors: [] }
@@ -34,7 +34,7 @@ RSpec.describe Mutations::Genres::Create do
         result_stub = double('result', success?: false, errors: errors_stub)
 
         expect(Genres::Create).to(
-          receive(:call).with(params: params).and_return(result_stub)
+          receive(:call).with({ params: params }).and_return(result_stub)
         )
 
         expected_result = { genre: nil, errors: errors_stub }
