@@ -29,7 +29,7 @@ RSpec.describe Mutations::Authors::Create do
         result_stub = double('result', success?: true, object: author_stub)
 
         expect(Authors::Create).to(
-          receive(:call).with(params: params).and_return(result_stub)
+          receive(:call).with({ params: params }).and_return(result_stub)
         )
 
         expected_result = { author: author_stub, errors: [] }
@@ -43,7 +43,7 @@ RSpec.describe Mutations::Authors::Create do
         result_stub = double('result', success?: false, errors: errors_stub)
 
         expect(Authors::Create).to(
-          receive(:call).with(params: params).and_return(result_stub)
+          receive(:call).with({ params: params }).and_return(result_stub)
         )
 
         expected_result = { author: nil, errors: errors_stub }

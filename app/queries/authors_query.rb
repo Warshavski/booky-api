@@ -19,8 +19,6 @@ class AuthorsQuery < ApplicationQuery
     items.fuzzy_search(filter_value, %i[first_name last_name])
   end
 
-  # @param [Hash] params (optional, default: {}) filter and sort parameters
-  #
   # @option params [Integer]  :book_id  Book identifier written by the author
   # @option params [String]   :search   Search pattern(part of the first or last name)
   # @option params [String]   :sort     Sort type(attribute and sort direction)

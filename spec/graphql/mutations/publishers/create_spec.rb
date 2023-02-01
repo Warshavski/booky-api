@@ -29,7 +29,7 @@ RSpec.describe Mutations::Publishers::Create do
         result_stub = double('result', success?: true, object: publisher_stub)
 
         expect(Publishers::Create).to(
-          receive(:call).with(params: params).and_return(result_stub)
+          receive(:call).with({ params: params }).and_return(result_stub)
         )
 
         expected_result = { publisher: publisher_stub, errors: [] }
@@ -43,7 +43,7 @@ RSpec.describe Mutations::Publishers::Create do
         result_stub = double('result', success?: false, errors: errors_stub)
 
         expect(Publishers::Create).to(
-          receive(:call).with(params: params).and_return(result_stub)
+          receive(:call).with({ params: params }).and_return(result_stub)
         )
 
         expected_result = { publisher: nil, errors: errors_stub }

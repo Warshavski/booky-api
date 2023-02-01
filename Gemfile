@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '~> 6.1.4', '>= 6.1.4.4'
+gem 'rails', '~> 7.0.4'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
