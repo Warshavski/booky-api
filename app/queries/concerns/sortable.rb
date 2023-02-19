@@ -81,8 +81,6 @@ module Sortable
     items
   end
 
-  private
-
   def each_sort(&block)
     fetch_sort_parameters.each do |parameters_mapping|
       parameters_mapping.flatten.then(&block)

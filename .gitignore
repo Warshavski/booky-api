@@ -27,6 +27,23 @@
 # Ignore IDE files
 .idea/
 
+# Ignore bundler config.
+/.bundler
+/.vscode
+/.idea
+/.ruby-gemset
+
+# Ignore all logfiles and tempfiles.
+.DS_Store
+.~*
+~$*
+tags
+*.xlsx
+*.gz
+.db
+.es
+.rbenv-vars
+
 coverage
 
 # Ignore master key for decrypting credentials and more.
@@ -36,6 +53,9 @@ coverage
 /.env.local
 /.env.*.local
 docker-compose.override.yml
+docker-compose.override.yaml
+Dockerfile.m1
+
 REVISION
 
 # Ignore generated API documentation

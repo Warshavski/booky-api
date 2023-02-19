@@ -5,12 +5,6 @@
 #   Entry point for GraphQL API
 #
 class GraphqlController < ApplicationController
-  # NOTE: If accessing from outside this domain, nullify the session
-  #       This allows for outside API access while preventing CSRF attacks,
-  #       but you'll have to authenticate your user separately
-  #
-  # protect_from_forgery with: :null_session
-
   # GraphQL entry point
   #
   # "query" and "variables" -
@@ -18,6 +12,7 @@ class GraphqlController < ApplicationController
   #
   # "context" -
   #   is an arbitrary hash, which will be available during the query execution everywhere;
+  #
   #   Example: current_user: current_user,
   #
   # "operation_name" -
@@ -26,13 +21,17 @@ class GraphqlController < ApplicationController
   def execute
     args = {
       variables: prepare_variables(params[:variables]),
-      context: {},
+      context: {}, # current_user: current_user,
       operation_name: params[:operationName]
     }
 
     result = BookyApiSchema.execute(params[:query], **args)
 
     render json: result
+  rescue StandardError => e
+    raise e unless Rails.env.development?
+
+    handle_error_in_development(e)
   end
 
   private
@@ -61,5 +60,20 @@ class GraphqlController < ApplicationController
     else
       {}
     end
+  end
+
+  def handle_error_in_development(error)
+    logger.error error.message
+    logger.error error.backtrace.join("\n")
+
+    body = {
+      error: {
+        message: error.message,
+        backtrace: error.backtrace
+      },
+      data: {}
+    }
+
+    render json: body, status: :internal_server_error
   end
 end
