@@ -40,6 +40,14 @@ interaction:
       RAILS_ENV: test
     command: bundle exec rspec
 
+  # A shortcut to run rubocop
+  rubocop:
+    description: Run rubocop commands
+    service: rails
+    environment:
+      RAILS_ENV: test
+    command: bundle exec rubocop
+
   migrate:
     description: Run DB migrate commands
     service: rails

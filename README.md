@@ -9,12 +9,11 @@ Books management application (API)
 
 #### Requirements
 
-- Ruby 2.6.5
-- Rails 5.1.6
-- Postgresql 9.5+
-- Redis 2.8+
+- Ruby 3.0.2
+- Rails 6.1+
+- Postgresql 13+
 
-#### Installation
+### Installation
 
 **Clone the repo.**
 ```bash
@@ -24,13 +23,6 @@ git clone https://github.com/warshavski/booky-api.git
 **cd into the directory and install the reqirements.**
 ```bash
 cd booky-api && bundle install
-```
-
-**set up config files**
-```bash
-mv config/secrets.yml.example config/secrets.yml
-mv config/database.yml.example config/database.yml
-mv config/booky.yml.example config/booky.yml
 ```
 
 **set up the database**
@@ -55,4 +47,26 @@ bundle exec rspec
 Running a specific test file
 ```bash
 bundle exec rspec ./spec/path/to/file
+```
+
+### Docker
+
+**Setup the project**
+```bash
+make setup
+```
+
+**Start the application server**
+```bash
+make up
+```
+
+**Run specs**
+```bash
+make test
+```
+
+**Run console**
+```bash
+make console
 ```
