@@ -17,7 +17,7 @@ class ApplicationQuery
     end
   end
 
-  specify_sort :default, attributes: :id, direction: :desc
+  sorting :default, attributes: :id, direction: :desc
 
   attr_reader :context, :params
 

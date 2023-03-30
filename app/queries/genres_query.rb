@@ -11,7 +11,7 @@
 class GenresQuery < ApplicationQuery
   options default_scope: Genre.all
 
-  specify_filter(:search) do |items, filter_value|
+  filtering(:search) do |items, filter_value|
     items.fuzzy_search(filter_value, %i[name])
   end
 

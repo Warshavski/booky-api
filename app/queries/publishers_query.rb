@@ -11,7 +11,7 @@
 class PublishersQuery < ApplicationQuery
   options default_scope: Publisher.all
 
-  specify_filter(:search) do |items, filter_value|
+  filtering(:search) do |items, filter_value|
     items.fuzzy_search(filter_value, %i[name])
   end
 

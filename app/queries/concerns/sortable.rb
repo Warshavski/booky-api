@@ -11,7 +11,7 @@
 #   class UsersFinder
 #     include Sortable
 #
-#     specify_sort :name do |scope, direction|
+#     sorting :name do |scope, direction|
 #       scope.order(name: direction, id: :desc)
 #     end
 #   end
@@ -21,7 +21,7 @@
 #   class UsersFinder
 #     include Sortable
 #
-#     specify_sort :default, attributes: %i[id name], direction: :desc
+#     sorting :default, attributes: %i[id name], direction: :desc
 #   end
 #
 # The sorting block will be called once for each sort attribute/direction requested.
@@ -48,7 +48,7 @@ module Sortable
       subclass.configurations = configurations.dup if configurations.present?
     end
 
-    def specify_sort(trigger, attributes: nil, direction: nil, &block)
+    def sorting(trigger, attributes: nil, direction: nil, &block)
       configurations[trigger] = pack_configuration(attributes, direction, &block)
     end
 
@@ -68,7 +68,7 @@ module Sortable
   end
 
   included do
-    specify_sort :default, attributes: :id, direction: :asc
+    sorting :default, attributes: :id, direction: :asc
   end
 
   def sort(items)

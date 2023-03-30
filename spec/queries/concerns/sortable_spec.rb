@@ -7,13 +7,13 @@ RSpec.describe Sortable do
     class FakeFinder
       include Sortable
 
-      specify_sort :wat do |scope, direction|
+      sorting :wat do |scope, direction|
         scope.order(title: direction, id: direction)
       end
 
-      specify_sort :so, attributes: :description, direction: :asc
+      sorting :so, attributes: :description, direction: :asc
 
-      specify_sort :hey, attributes: :description
+      sorting :hey, attributes: :description
 
       attr_reader :params
 

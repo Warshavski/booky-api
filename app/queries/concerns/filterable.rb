@@ -10,7 +10,7 @@ module Filterable
   class_methods do
     attr_reader :filter_functions
 
-    def specify_filter(trigger, &block)
+    def filtering(trigger, &block)
       (@filter_functions ||= HashWithIndifferentAccess.new)[trigger] = block
     end
   end
