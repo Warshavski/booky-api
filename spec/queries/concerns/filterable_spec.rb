@@ -7,11 +7,11 @@ RSpec.describe Filterable do
     class FakeQuery
       include Filterable
 
-      specify_filter(:wat) do |items, filter_value|
+      filtering(:wat) do |items, filter_value|
         items.where(title: filter_value)
       end
 
-      specify_filter(:so) do |items, filter_value|
+      filtering(:so) do |items, filter_value|
         items.where(description: filter_value)
       end
 

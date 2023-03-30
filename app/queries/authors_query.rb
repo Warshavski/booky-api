@@ -11,11 +11,11 @@
 class AuthorsQuery < ApplicationQuery
   options default_scope: Author.all
 
-  specify_filter(:book_id) do |items, filter_value|
+  filtering(:book_id) do |items, filter_value|
     items.joins(:books).merge(Book.where(id: filter_value))
   end
 
-  specify_filter(:search) do |items, filter_value|
+  filtering(:search) do |items, filter_value|
     items.fuzzy_search(filter_value, %i[first_name last_name])
   end
 
