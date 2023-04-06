@@ -38,6 +38,10 @@ gem 'oj'
 # https://github.com/shrinerb/shrine
 gem 'shrine', '>= 3.3'
 
+# Catch unsafe migrations in development
+# https://github.com/ankane/strong_migrations
+gem 'strong_migrations'
+
 # Rack middleware for blocking & throttling
 # https://github.com/kickstarter/rack-attack
 gem 'rack-attack'
