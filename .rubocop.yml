@@ -1,9 +1,10 @@
 require:
   - rubocop-rails
   - rubocop-graphql
+  - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.0.2
   Exclude:
     - 'spec/**/*'
     - 'db/**/*'
